@@ -4,7 +4,9 @@ A 5-reel × 3-row, 243-ways video slot. Dark medieval dragon-dynasty theme: obsi
 
 Browser-based, single app: **Vite + TypeScript (strict) + PixiJS v8 + GSAP + Howler**. No external art or audio — every symbol and effect is drawn procedurally and every sound is synthesised with the Web Audio API. Mock balance only; no wallet, no real money.
 
-> Build status: **Stage 1 of 5 — maths module, tests, simulator, RTP tuned.** Stages 2–5 (rendering, animation, features, polish) follow. See [PLAN.md](PLAN.md).
+> Build status: **Stage 2 of 5 — static reels rendering real outcomes.** Stages 3–5 (animation, features, polish) follow. See [PLAN.md](PLAN.md).
+>
+> `pnpm dev` then open the URL; add `?dev` for the dev overlay (FPS, seed/nonce entry, "find me a scatter / wild / big win" buttons — all of which still go through the maths).
 
 ---
 
@@ -102,6 +104,13 @@ Big 15–50×  1 in 193 · Mega 50–100×  1 in 746 · Epic 100–500×  1 in 7
 ```
 
 ---
+
+## Rendering
+
+- **Asset manifest** ([`src/assets/manifest.ts`](src/assets/manifest.ts)) is the only place art is looked up. Every symbol is `{ kind: 'procedural', paint }` today; swap an entry to `{ kind: 'texture', url }` to drop in real art without touching game code.
+- Symbols are painted once with Pixi Graphics and **baked to textures** at boot (plus a pre-smeared motion-blur variant), so the reels render plain sprites — no live vector drawing and no filters in the spin loop.
+- The stage is a letterboxed design box (1600×900 landscape / 900×1600 portrait) with a full-cover backdrop composed per orientation; the DOM HUD reflows with CSS.
+- The reel view is a window onto the actual reel strip: at rest its visible rows are `strip[stop..stop+2]` — exactly the cells the maths evaluated (tested).
 
 ## Scripts
 

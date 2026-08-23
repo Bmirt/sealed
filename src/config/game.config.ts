@@ -12,7 +12,8 @@ export const GAME_CONFIG: GameConfig = {
   version: '1.0.0',
   layout: { reels: 5, rows: 3 },
   coinsPerBet: 20,
-  betLevels: [0.2, 0.5, 1, 2, 5, 10, 20, 50, 100],
+  // Every level × 100 must divide by coinsPerBet so coin values are whole cents.
+  betLevels: [0.2, 0.4, 1, 2, 5, 10, 20, 50, 100],
   defaultBetIndex: 2,
   symbols: SYMBOLS,
   wild: { id: 'W', reels: [false, true, true, true, true] },

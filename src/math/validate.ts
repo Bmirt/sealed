@@ -25,6 +25,11 @@ export function validateConfig(config: GameConfig): ValidationIssue[] {
   if (reels !== 5 || rows !== 3) push('layout', 'expected 5 reels × 3 rows');
   if (!Number.isInteger(config.coinsPerBet) || config.coinsPerBet <= 0) push('coinsPerBet', 'must be a positive integer');
   if (config.betLevels.length === 0) push('betLevels', 'must not be empty');
+  config.betLevels.forEach((bet, i) => {
+    const cents = Math.round(bet * 100);
+    if (cents <= 0) push(`betLevels[${i}]`, 'must be positive');
+    else if (cents % config.coinsPerBet !== 0) push(`betLevels[${i}]`, `${bet} × 100 cents is not divisible by coinsPerBet (${config.coinsPerBet})`);
+  });
   if (config.defaultBetIndex < 0 || config.defaultBetIndex >= config.betLevels.length) push('defaultBetIndex', 'out of range');
 
   // Symbols & codes.
