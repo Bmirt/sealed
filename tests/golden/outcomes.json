@@ -1,0 +1,9830 @@
+{
+ "configVersion": "1.0.0",
+ "cases": [
+  {
+   "id": "base-0",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-base",
+    "nonce": 0,
+    "kind": "base",
+    "base": {
+     "stops": [
+      61,
+      65,
+      44,
+      18,
+      73
+     ],
+     "grid": [
+      [
+       6,
+       6,
+       6
+      ],
+      [
+       4,
+       7,
+       7
+      ],
+      [
+       2,
+       0,
+       4
+      ],
+      [
+       9,
+       1,
+       2
+      ],
+      [
+       7,
+       3,
+       4
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 0,
+      "positions": [],
+      "pay": 0
+     },
+     "lineWinCoins": 0,
+     "multiplier": 1,
+     "totalWinCoins": 0,
+     "triggersSpins": 0
+    },
+    "feature": null,
+    "totalWinCoins": 0,
+    "capped": false
+   }
+  },
+  {
+   "id": "base-1",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-base",
+    "nonce": 1,
+    "kind": "base",
+    "base": {
+     "stops": [
+      52,
+      27,
+      75,
+      56,
+      77
+     ],
+     "grid": [
+      [
+       7,
+       7,
+       10
+      ],
+      [
+       5,
+       5,
+       0
+      ],
+      [
+       1,
+       9,
+       4
+      ],
+      [
+       5,
+       7,
+       8
+      ],
+      [
+       5,
+       6,
+       8
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 1,
+      "positions": [
+       [
+        0,
+        2
+       ]
+      ],
+      "pay": 0
+     },
+     "lineWinCoins": 0,
+     "multiplier": 1,
+     "totalWinCoins": 0,
+     "triggersSpins": 0
+    },
+    "feature": null,
+    "totalWinCoins": 0,
+    "capped": false
+   }
+  },
+  {
+   "id": "base-2",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-base",
+    "nonce": 2,
+    "kind": "base",
+    "base": {
+     "stops": [
+      56,
+      14,
+      75,
+      76,
+      42
+     ],
+     "grid": [
+      [
+       1,
+       3,
+       8
+      ],
+      [
+       5,
+       6,
+       6
+      ],
+      [
+       1,
+       9,
+       4
+      ],
+      [
+       9,
+       4,
+       7
+      ],
+      [
+       10,
+       2,
+       9
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 1,
+      "positions": [
+       [
+        4,
+        0
+       ]
+      ],
+      "pay": 0
+     },
+     "lineWinCoins": 0,
+     "multiplier": 1,
+     "totalWinCoins": 0,
+     "triggersSpins": 0
+    },
+    "feature": null,
+    "totalWinCoins": 0,
+    "capped": false
+   }
+  },
+  {
+   "id": "base-3",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-base",
+    "nonce": 3,
+    "kind": "base",
+    "base": {
+     "stops": [
+      76,
+      64,
+      71,
+      13,
+      80
+     ],
+     "grid": [
+      [
+       5,
+       5,
+       0
+      ],
+      [
+       3,
+       4,
+       7
+      ],
+      [
+       5,
+       5,
+       6
+      ],
+      [
+       5,
+       8,
+       8
+      ],
+      [
+       7,
+       5,
+       6
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 0,
+      "positions": [],
+      "pay": 0
+     },
+     "lineWinCoins": 0,
+     "multiplier": 1,
+     "totalWinCoins": 0,
+     "triggersSpins": 0
+    },
+    "feature": null,
+    "totalWinCoins": 0,
+    "capped": false
+   }
+  },
+  {
+   "id": "base-4",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-base",
+    "nonce": 4,
+    "kind": "base",
+    "base": {
+     "stops": [
+      79,
+      53,
+      69,
+      34,
+      21
+     ],
+     "grid": [
+      [
+       3,
+       8,
+       8
+      ],
+      [
+       7,
+       10,
+       6
+      ],
+      [
+       10,
+       3,
+       5
+      ],
+      [
+       6,
+       4,
+       0
+      ],
+      [
+       5,
+       2,
+       6
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 2,
+      "positions": [
+       [
+        1,
+        1
+       ],
+       [
+        2,
+        0
+       ]
+      ],
+      "pay": 0
+     },
+     "lineWinCoins": 0,
+     "multiplier": 1,
+     "totalWinCoins": 0,
+     "triggersSpins": 0
+    },
+    "feature": null,
+    "totalWinCoins": 0,
+    "capped": false
+   }
+  },
+  {
+   "id": "base-5",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-base",
+    "nonce": 5,
+    "kind": "base",
+    "base": {
+     "stops": [
+      50,
+      74,
+      29,
+      7,
+      28
+     ],
+     "grid": [
+      [
+       1,
+       7,
+       7
+      ],
+      [
+       7,
+       0,
+       2
+      ],
+      [
+       4,
+       5,
+       5
+      ],
+      [
+       4,
+       7,
+       8
+      ],
+      [
+       7,
+       4,
+       1
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 0,
+      "positions": [],
+      "pay": 0
+     },
+     "lineWinCoins": 0,
+     "multiplier": 1,
+     "totalWinCoins": 0,
+     "triggersSpins": 0
+    },
+    "feature": null,
+    "totalWinCoins": 0,
+    "capped": false
+   }
+  },
+  {
+   "id": "base-6",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-base",
+    "nonce": 6,
+    "kind": "base",
+    "base": {
+     "stops": [
+      32,
+      37,
+      12,
+      54,
+      13
+     ],
+     "grid": [
+      [
+       6,
+       6,
+       2
+      ],
+      [
+       5,
+       1,
+       2
+      ],
+      [
+       10,
+       3,
+       5
+      ],
+      [
+       7,
+       1,
+       5
+      ],
+      [
+       5,
+       8,
+       5
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 1,
+      "positions": [
+       [
+        2,
+        0
+       ]
+      ],
+      "pay": 0
+     },
+     "lineWinCoins": 0,
+     "multiplier": 1,
+     "totalWinCoins": 0,
+     "triggersSpins": 0
+    },
+    "feature": null,
+    "totalWinCoins": 0,
+    "capped": false
+   }
+  },
+  {
+   "id": "base-7",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-base",
+    "nonce": 7,
+    "kind": "base",
+    "base": {
+     "stops": [
+      69,
+      7,
+      67,
+      62,
+      65
+     ],
+     "grid": [
+      [
+       6,
+       2,
+       1
+      ],
+      [
+       10,
+       5,
+       5
+      ],
+      [
+       8,
+       8,
+       10
+      ],
+      [
+       0,
+       9,
+       4
+      ],
+      [
+       8,
+       0,
+       6
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 2,
+      "positions": [
+       [
+        1,
+        0
+       ],
+       [
+        2,
+        2
+       ]
+      ],
+      "pay": 0
+     },
+     "lineWinCoins": 0,
+     "multiplier": 1,
+     "totalWinCoins": 0,
+     "triggersSpins": 0
+    },
+    "feature": null,
+    "totalWinCoins": 0,
+    "capped": false
+   }
+  },
+  {
+   "id": "base-8",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-base",
+    "nonce": 8,
+    "kind": "base",
+    "base": {
+     "stops": [
+      19,
+      6,
+      9,
+      45,
+      70
+     ],
+     "grid": [
+      [
+       7,
+       8,
+       8
+      ],
+      [
+       2,
+       10,
+       5
+      ],
+      [
+       0,
+       6,
+       6
+      ],
+      [
+       3,
+       6,
+       5
+      ],
+      [
+       1,
+       8,
+       5
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 1,
+      "positions": [
+       [
+        1,
+        1
+       ]
+      ],
+      "pay": 0
+     },
+     "lineWinCoins": 0,
+     "multiplier": 1,
+     "totalWinCoins": 0,
+     "triggersSpins": 0
+    },
+    "feature": null,
+    "totalWinCoins": 0,
+    "capped": false
+   }
+  },
+  {
+   "id": "base-9",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-base",
+    "nonce": 9,
+    "kind": "base",
+    "base": {
+     "stops": [
+      0,
+      71,
+      33,
+      56,
+      37
+     ],
+     "grid": [
+      [
+       8,
+       8,
+       8
+      ],
+      [
+       8,
+       8,
+       7
+      ],
+      [
+       7,
+       9,
+       1
+      ],
+      [
+       5,
+       7,
+       8
+      ],
+      [
+       2,
+       5,
+       8
+      ]
+     ],
+     "wins": [
+      {
+       "symbol": "L4",
+       "length": 5,
+       "ways": 6,
+       "payPerWay": 22,
+       "win": 132,
+       "positions": [
+        [
+         0,
+         0
+        ],
+        [
+         0,
+         1
+        ],
+        [
+         0,
+         2
+        ],
+        [
+         1,
+         0
+        ],
+        [
+         1,
+         1
+        ],
+        [
+         2,
+         1
+        ],
+        [
+         3,
+         2
+        ],
+        [
+         4,
+         2
+        ]
+       ]
+      }
+     ],
+     "scatter": {
+      "count": 0,
+      "positions": [],
+      "pay": 0
+     },
+     "lineWinCoins": 132,
+     "multiplier": 1,
+     "totalWinCoins": 132,
+     "triggersSpins": 0
+    },
+    "feature": null,
+    "totalWinCoins": 132,
+    "capped": false
+   }
+  },
+  {
+   "id": "base-10",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-base",
+    "nonce": 10,
+    "kind": "base",
+    "base": {
+     "stops": [
+      31,
+      4,
+      25,
+      33,
+      26
+     ],
+     "grid": [
+      [
+       6,
+       6,
+       6
+      ],
+      [
+       1,
+       0,
+       2
+      ],
+      [
+       7,
+       0,
+       4
+      ],
+      [
+       2,
+       6,
+       4
+      ],
+      [
+       8,
+       3,
+       7
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 0,
+      "positions": [],
+      "pay": 0
+     },
+     "lineWinCoins": 0,
+     "multiplier": 1,
+     "totalWinCoins": 0,
+     "triggersSpins": 0
+    },
+    "feature": null,
+    "totalWinCoins": 0,
+    "capped": false
+   }
+  },
+  {
+   "id": "base-11",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-base",
+    "nonce": 11,
+    "kind": "base",
+    "base": {
+     "stops": [
+      13,
+      59,
+      25,
+      77,
+      15
+     ],
+     "grid": [
+      [
+       7,
+       7,
+       2
+      ],
+      [
+       0,
+       8,
+       8
+      ],
+      [
+       7,
+       0,
+       4
+      ],
+      [
+       4,
+       7,
+       5
+      ],
+      [
+       5,
+       6,
+       5
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 0,
+      "positions": [],
+      "pay": 0
+     },
+     "lineWinCoins": 0,
+     "multiplier": 1,
+     "totalWinCoins": 0,
+     "triggersSpins": 0
+    },
+    "feature": null,
+    "totalWinCoins": 0,
+    "capped": false
+   }
+  },
+  {
+   "id": "base-12",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-base",
+    "nonce": 12,
+    "kind": "base",
+    "base": {
+     "stops": [
+      79,
+      5,
+      69,
+      60,
+      5
+     ],
+     "grid": [
+      [
+       3,
+       8,
+       8
+      ],
+      [
+       0,
+       2,
+       10
+      ],
+      [
+       10,
+       3,
+       5
+      ],
+      [
+       9,
+       3,
+       0
+      ],
+      [
+       7,
+       8,
+       3
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 2,
+      "positions": [
+       [
+        1,
+        2
+       ],
+       [
+        2,
+        0
+       ]
+      ],
+      "pay": 0
+     },
+     "lineWinCoins": 0,
+     "multiplier": 1,
+     "totalWinCoins": 0,
+     "triggersSpins": 0
+    },
+    "feature": null,
+    "totalWinCoins": 0,
+    "capped": false
+   }
+  },
+  {
+   "id": "base-13",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-base",
+    "nonce": 13,
+    "kind": "base",
+    "base": {
+     "stops": [
+      69,
+      30,
+      37,
+      59,
+      0
+     ],
+     "grid": [
+      [
+       6,
+       2,
+       1
+      ],
+      [
+       2,
+       4,
+       3
+      ],
+      [
+       1,
+       9,
+       2
+      ],
+      [
+       6,
+       9,
+       3
+      ],
+      [
+       6,
+       1,
+       6
+      ]
+     ],
+     "wins": [
+      {
+       "symbol": "H3",
+       "length": 4,
+       "ways": 2,
+       "payPerWay": 40,
+       "win": 80,
+       "positions": [
+        [
+         0,
+         1
+        ],
+        [
+         1,
+         0
+        ],
+        [
+         2,
+         1
+        ],
+        [
+         2,
+         2
+        ],
+        [
+         3,
+         1
+        ]
+       ]
+      }
+     ],
+     "scatter": {
+      "count": 0,
+      "positions": [],
+      "pay": 0
+     },
+     "lineWinCoins": 80,
+     "multiplier": 1,
+     "totalWinCoins": 80,
+     "triggersSpins": 0
+    },
+    "feature": null,
+    "totalWinCoins": 80,
+    "capped": false
+   }
+  },
+  {
+   "id": "base-14",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-base",
+    "nonce": 14,
+    "kind": "base",
+    "base": {
+     "stops": [
+      41,
+      11,
+      59,
+      46,
+      66
+     ],
+     "grid": [
+      [
+       7,
+       1,
+       2
+      ],
+      [
+       6,
+       4,
+       5
+      ],
+      [
+       7,
+       7,
+       8
+      ],
+      [
+       6,
+       5,
+       0
+      ],
+      [
+       0,
+       6,
+       2
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 0,
+      "positions": [],
+      "pay": 0
+     },
+     "lineWinCoins": 0,
+     "multiplier": 1,
+     "totalWinCoins": 0,
+     "triggersSpins": 0
+    },
+    "feature": null,
+    "totalWinCoins": 0,
+    "capped": false
+   }
+  },
+  {
+   "id": "base-15",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-base",
+    "nonce": 15,
+    "kind": "base",
+    "base": {
+     "stops": [
+      48,
+      16,
+      20,
+      56,
+      10
+     ],
+     "grid": [
+      [
+       5,
+       5,
+       1
+      ],
+      [
+       6,
+       1,
+       6
+      ],
+      [
+       8,
+       8,
+       0
+      ],
+      [
+       5,
+       7,
+       8
+      ],
+      [
+       8,
+       7,
+       6
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 0,
+      "positions": [],
+      "pay": 0
+     },
+     "lineWinCoins": 0,
+     "multiplier": 1,
+     "totalWinCoins": 0,
+     "triggersSpins": 0
+    },
+    "feature": null,
+    "totalWinCoins": 0,
+    "capped": false
+   }
+  },
+  {
+   "id": "base-16",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-base",
+    "nonce": 16,
+    "kind": "base",
+    "base": {
+     "stops": [
+      41,
+      41,
+      71,
+      35,
+      77
+     ],
+     "grid": [
+      [
+       7,
+       1,
+       2
+      ],
+      [
+       6,
+       6,
+       4
+      ],
+      [
+       5,
+       5,
+       6
+      ],
+      [
+       4,
+       0,
+       5
+      ],
+      [
+       5,
+       6,
+       8
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 0,
+      "positions": [],
+      "pay": 0
+     },
+     "lineWinCoins": 0,
+     "multiplier": 1,
+     "totalWinCoins": 0,
+     "triggersSpins": 0
+    },
+    "feature": null,
+    "totalWinCoins": 0,
+    "capped": false
+   }
+  },
+  {
+   "id": "base-17",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-base",
+    "nonce": 17,
+    "kind": "base",
+    "base": {
+     "stops": [
+      70,
+      10,
+      79,
+      2,
+      39
+     ],
+     "grid": [
+      [
+       2,
+       1,
+       3
+      ],
+      [
+       6,
+       6,
+       4
+      ],
+      [
+       8,
+       4,
+       3
+      ],
+      [
+       6,
+       7,
+       7
+      ],
+      [
+       8,
+       6,
+       3
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 0,
+      "positions": [],
+      "pay": 0
+     },
+     "lineWinCoins": 0,
+     "multiplier": 1,
+     "totalWinCoins": 0,
+     "triggersSpins": 0
+    },
+    "feature": null,
+    "totalWinCoins": 0,
+    "capped": false
+   }
+  },
+  {
+   "id": "base-18",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-base",
+    "nonce": 18,
+    "kind": "base",
+    "base": {
+     "stops": [
+      48,
+      23,
+      80,
+      18,
+      53
+     ],
+     "grid": [
+      [
+       5,
+       5,
+       1
+      ],
+      [
+       4,
+       0,
+       6
+      ],
+      [
+       4,
+       3,
+       7
+      ],
+      [
+       9,
+       1,
+       2
+      ],
+      [
+       6,
+       8,
+       7
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 0,
+      "positions": [],
+      "pay": 0
+     },
+     "lineWinCoins": 0,
+     "multiplier": 1,
+     "totalWinCoins": 0,
+     "triggersSpins": 0
+    },
+    "feature": null,
+    "totalWinCoins": 0,
+    "capped": false
+   }
+  },
+  {
+   "id": "base-19",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-base",
+    "nonce": 19,
+    "kind": "base",
+    "base": {
+     "stops": [
+      0,
+      15,
+      39,
+      55,
+      12
+     ],
+     "grid": [
+      [
+       8,
+       8,
+       8
+      ],
+      [
+       6,
+       6,
+       1
+      ],
+      [
+       2,
+       6,
+       6
+      ],
+      [
+       1,
+       5,
+       7
+      ],
+      [
+       6,
+       5,
+       8
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 0,
+      "positions": [],
+      "pay": 0
+     },
+     "lineWinCoins": 0,
+     "multiplier": 1,
+     "totalWinCoins": 0,
+     "triggersSpins": 0
+    },
+    "feature": null,
+    "totalWinCoins": 0,
+    "capped": false
+   }
+  },
+  {
+   "id": "buy-0",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-buy",
+    "nonce": 0,
+    "kind": "buyFree",
+    "base": {
+     "stops": [
+      67,
+      30,
+      10,
+      25,
+      41
+     ],
+     "grid": [
+      [
+       6,
+       6,
+       6
+      ],
+      [
+       2,
+       4,
+       3
+      ],
+      [
+       6,
+       6,
+       10
+      ],
+      [
+       5,
+       10,
+       3
+      ],
+      [
+       3,
+       10,
+       2
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 3,
+      "positions": [
+       [
+        2,
+        2
+       ],
+       [
+        3,
+        1
+       ],
+       [
+        4,
+        1
+       ]
+      ],
+      "pay": 40
+     },
+     "lineWinCoins": 40,
+     "multiplier": 1,
+     "totalWinCoins": 40,
+     "triggersSpins": 10
+    },
+    "feature": {
+     "tier": "free",
+     "spinsAwarded": 10,
+     "meter": {
+      "start": 1,
+      "winsPerStep": 3,
+      "step": 1,
+      "cap": 10
+     },
+     "spins": [
+      {
+       "index": 0,
+       "stops": [
+        71,
+        35,
+        24,
+        68,
+        27
+       ],
+       "grid": [
+        [
+         1,
+         2,
+         5
+        ],
+        [
+         4,
+         5,
+         1
+        ],
+        [
+         3,
+         1,
+         10
+        ],
+        [
+         1,
+         10,
+         8
+        ],
+        [
+         2,
+         6,
+         10
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H2",
+         "length": 4,
+         "ways": 1,
+         "payPerWay": 50,
+         "win": 50,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           1
+          ],
+          [
+           3,
+           0
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 3,
+        "positions": [
+         [
+          2,
+          2
+         ],
+         [
+          3,
+          1
+         ],
+         [
+          4,
+          2
+         ]
+        ],
+        "pay": 40
+       },
+       "lineWinCoins": 90,
+       "multiplier": 1,
+       "totalWinCoins": 90,
+       "triggersSpins": 10,
+       "spinsRemainingAfter": 19,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 1,
+       "retriggerSpins": 10
+      },
+      {
+       "index": 1,
+       "stops": [
+        50,
+        52,
+        3,
+        55,
+        33
+       ],
+       "grid": [
+        [
+         6,
+         2,
+         10
+        ],
+        [
+         7,
+         4,
+         9
+        ],
+        [
+         7,
+         4,
+         1
+        ],
+        [
+         2,
+         4,
+         3
+        ],
+        [
+         9,
+         8,
+         2
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          0,
+          2
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 1,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 18,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 2,
+       "stops": [
+        2,
+        60,
+        1,
+        1,
+        33
+       ],
+       "grid": [
+        [
+         2,
+         1,
+         8
+        ],
+        [
+         0,
+         4,
+         1
+        ],
+        [
+         0,
+         1,
+         7
+        ],
+        [
+         8,
+         10,
+         4
+        ],
+        [
+         9,
+         8,
+         2
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H2",
+         "length": 3,
+         "ways": 1,
+         "payPerWay": 16,
+         "win": 16,
+         "positions": [
+          [
+           0,
+           1
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           1
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          3,
+          1
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 16,
+       "multiplier": 1,
+       "totalWinCoins": 16,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 17,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 2,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 3,
+       "stops": [
+        57,
+        44,
+        76,
+        4,
+        77
+       ],
+       "grid": [
+        [
+         1,
+         1,
+         2
+        ],
+        [
+         3,
+         4,
+         9
+        ],
+        [
+         2,
+         0,
+         1
+        ],
+        [
+         3,
+         4,
+         2
+        ],
+        [
+         0,
+         3,
+         1
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H2",
+         "length": 3,
+         "ways": 2,
+         "payPerWay": 16,
+         "win": 32,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           0,
+           1
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           2
+          ]
+         ]
+        },
+        {
+         "symbol": "H3",
+         "length": 4,
+         "ways": 1,
+         "payPerWay": 40,
+         "win": 40,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           0
+          ],
+          [
+           3,
+           2
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 72,
+       "multiplier": 1,
+       "totalWinCoins": 72,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 16,
+       "meterBefore": 1,
+       "meterAfter": 2,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 4,
+       "stops": [
+        15,
+        68,
+        28,
+        47,
+        0
+       ],
+       "grid": [
+        [
+         2,
+         2,
+         0
+        ],
+        [
+         2,
+         1,
+         6
+        ],
+        [
+         0,
+         9,
+         2
+        ],
+        [
+         5,
+         2,
+         3
+        ],
+        [
+         7,
+         3,
+         1
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H3",
+         "length": 4,
+         "ways": 4,
+         "payPerWay": 40,
+         "win": 160,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           0,
+           1
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           2,
+           1
+          ],
+          [
+           2,
+           2
+          ],
+          [
+           3,
+           1
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 160,
+       "multiplier": 2,
+       "totalWinCoins": 320,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 15,
+       "meterBefore": 2,
+       "meterAfter": 2,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 5,
+       "stops": [
+        57,
+        32,
+        5,
+        79,
+        83
+       ],
+       "grid": [
+        [
+         1,
+         1,
+         2
+        ],
+        [
+         2,
+         0,
+         6
+        ],
+        [
+         1,
+         3,
+         1
+        ],
+        [
+         5,
+         2,
+         2
+        ],
+        [
+         4,
+         1,
+         0
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 2,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 14,
+       "meterBefore": 2,
+       "meterAfter": 2,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 6,
+       "stops": [
+        0,
+        7,
+        81,
+        38,
+        29
+       ],
+       "grid": [
+        [
+         3,
+         0,
+         2
+        ],
+        [
+         2,
+         0,
+         1
+        ],
+        [
+         2,
+         9,
+         8
+        ],
+        [
+         4,
+         2,
+         1
+        ],
+        [
+         10,
+         1,
+         3
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H1",
+         "length": 3,
+         "ways": 1,
+         "payPerWay": 20,
+         "win": 20,
+         "positions": [
+          [
+           0,
+           1
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           1
+          ]
+         ]
+        },
+        {
+         "symbol": "H3",
+         "length": 4,
+         "ways": 2,
+         "payPerWay": 40,
+         "win": 80,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           2,
+           0
+          ],
+          [
+           2,
+           1
+          ],
+          [
+           3,
+           1
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          4,
+          0
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 100,
+       "multiplier": 2,
+       "totalWinCoins": 200,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 13,
+       "meterBefore": 2,
+       "meterAfter": 2,
+       "winsTowardStep": 2,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 7,
+       "stops": [
+        35,
+        39,
+        70,
+        84,
+        45
+       ],
+       "grid": [
+        [
+         4,
+         8,
+         4
+        ],
+        [
+         3,
+         10,
+         3
+        ],
+        [
+         2,
+         4,
+         6
+        ],
+        [
+         9,
+         8,
+         3
+        ],
+        [
+         7,
+         3,
+         2
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          1,
+          1
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 2,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 12,
+       "meterBefore": 2,
+       "meterAfter": 2,
+       "winsTowardStep": 2,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 8,
+       "stops": [
+        66,
+        71,
+        12,
+        15,
+        3
+       ],
+       "grid": [
+        [
+         1,
+         3,
+         0
+        ],
+        [
+         7,
+         10,
+         6
+        ],
+        [
+         8,
+         4,
+         8
+        ],
+        [
+         5,
+         9,
+         9
+        ],
+        [
+         9,
+         8,
+         1
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          1,
+          1
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 2,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 11,
+       "meterBefore": 2,
+       "meterAfter": 2,
+       "winsTowardStep": 2,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 9,
+       "stops": [
+        71,
+        55,
+        86,
+        29,
+        84
+       ],
+       "grid": [
+        [
+         1,
+         2,
+         5
+        ],
+        [
+         2,
+         1,
+         1
+        ],
+        [
+         2,
+         6,
+         9
+        ],
+        [
+         0,
+         0,
+         10
+        ],
+        [
+         1,
+         0,
+         7
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H2",
+         "length": 3,
+         "ways": 2,
+         "payPerWay": 16,
+         "win": 32,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           2
+          ]
+         ]
+        },
+        {
+         "symbol": "H3",
+         "length": 3,
+         "ways": 2,
+         "payPerWay": 12,
+         "win": 24,
+         "positions": [
+          [
+           0,
+           1
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           2,
+           0
+          ],
+          [
+           2,
+           2
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          3,
+          2
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 56,
+       "multiplier": 2,
+       "totalWinCoins": 112,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 10,
+       "meterBefore": 2,
+       "meterAfter": 3,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 10,
+       "stops": [
+        46,
+        26,
+        44,
+        54,
+        82
+       ],
+       "grid": [
+        [
+         1,
+         2,
+         4
+        ],
+        [
+         7,
+         0,
+         1
+        ],
+        [
+         0,
+         9,
+         0
+        ],
+        [
+         7,
+         2,
+         4
+        ],
+        [
+         0,
+         4,
+         1
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H2",
+         "length": 3,
+         "ways": 1,
+         "payPerWay": 16,
+         "win": 16,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           1
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 16,
+       "multiplier": 3,
+       "totalWinCoins": 48,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 9,
+       "meterBefore": 3,
+       "meterAfter": 3,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 11,
+       "stops": [
+        5,
+        39,
+        44,
+        45,
+        33
+       ],
+       "grid": [
+        [
+         6,
+         4,
+         4
+        ],
+        [
+         3,
+         10,
+         3
+        ],
+        [
+         0,
+         9,
+         0
+        ],
+        [
+         2,
+         0,
+         5
+        ],
+        [
+         9,
+         8,
+         2
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          1,
+          1
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 3,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 8,
+       "meterBefore": 3,
+       "meterAfter": 3,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 12,
+       "stops": [
+        77,
+        60,
+        19,
+        20,
+        40
+       ],
+       "grid": [
+        [
+         7,
+         3,
+         0
+        ],
+        [
+         0,
+         4,
+         1
+        ],
+        [
+         1,
+         6,
+         0
+        ],
+        [
+         3,
+         7,
+         1
+        ],
+        [
+         4,
+         1,
+         9
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H1",
+         "length": 3,
+         "ways": 1,
+         "payPerWay": 20,
+         "win": 20,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           2,
+           2
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 20,
+       "multiplier": 3,
+       "totalWinCoins": 60,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 7,
+       "meterBefore": 3,
+       "meterAfter": 3,
+       "winsTowardStep": 2,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 13,
+       "stops": [
+        27,
+        30,
+        47,
+        7,
+        74
+       ],
+       "grid": [
+        [
+         0,
+         2,
+         10
+        ],
+        [
+         1,
+         0,
+         2
+        ],
+        [
+         6,
+         1,
+         0
+        ],
+        [
+         7,
+         9,
+         3
+        ],
+        [
+         8,
+         3,
+         7
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H1",
+         "length": 4,
+         "ways": 1,
+         "payPerWay": 65,
+         "win": 65,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           2
+          ],
+          [
+           3,
+           1
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          0,
+          2
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 65,
+       "multiplier": 3,
+       "totalWinCoins": 195,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 6,
+       "meterBefore": 3,
+       "meterAfter": 4,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 14,
+       "stops": [
+        43,
+        32,
+        2,
+        60,
+        27
+       ],
+       "grid": [
+        [
+         2,
+         2,
+         2
+        ],
+        [
+         2,
+         0,
+         6
+        ],
+        [
+         1,
+         7,
+         4
+        ],
+        [
+         1,
+         3,
+         5
+        ],
+        [
+         2,
+         6,
+         10
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          4,
+          2
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 4,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 5,
+       "meterBefore": 4,
+       "meterAfter": 4,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 15,
+       "stops": [
+        51,
+        6,
+        8,
+        45,
+        53
+       ],
+       "grid": [
+        [
+         2,
+         10,
+         0
+        ],
+        [
+         0,
+         2,
+         0
+        ],
+        [
+         4,
+         0,
+         3
+        ],
+        [
+         2,
+         0,
+         5
+        ],
+        [
+         0,
+         0,
+         5
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H1",
+         "length": 5,
+         "ways": 4,
+         "payPerWay": 160,
+         "win": 640,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           1
+          ],
+          [
+           3,
+           1
+          ],
+          [
+           4,
+           0
+          ],
+          [
+           4,
+           1
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          0,
+          1
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 640,
+       "multiplier": 4,
+       "totalWinCoins": 2560,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 4,
+       "meterBefore": 4,
+       "meterAfter": 4,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 16,
+       "stops": [
+        63,
+        53,
+        15,
+        59,
+        58
+       ],
+       "grid": [
+        [
+         1,
+         5,
+         2
+        ],
+        [
+         4,
+         9,
+         2
+        ],
+        [
+         3,
+         7,
+         1
+        ],
+        [
+         4,
+         1,
+         3
+        ],
+        [
+         9,
+         3,
+         0
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H2",
+         "length": 5,
+         "ways": 1,
+         "payPerWay": 120,
+         "win": 120,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           2
+          ],
+          [
+           3,
+           1
+          ],
+          [
+           4,
+           0
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 120,
+       "multiplier": 4,
+       "totalWinCoins": 480,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 3,
+       "meterBefore": 4,
+       "meterAfter": 4,
+       "winsTowardStep": 2,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 17,
+       "stops": [
+        65,
+        45,
+        26,
+        66,
+        10
+       ],
+       "grid": [
+        [
+         2,
+         1,
+         3
+        ],
+        [
+         4,
+         9,
+         6
+        ],
+        [
+         10,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         1
+        ],
+        [
+         9,
+         5,
+         4
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          2,
+          0
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 4,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 2,
+       "meterBefore": 4,
+       "meterAfter": 4,
+       "winsTowardStep": 2,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 18,
+       "stops": [
+        35,
+        30,
+        10,
+        56,
+        31
+       ],
+       "grid": [
+        [
+         4,
+         8,
+         4
+        ],
+        [
+         1,
+         0,
+         2
+        ],
+        [
+         3,
+         2,
+         8
+        ],
+        [
+         4,
+         3,
+         6
+        ],
+        [
+         3,
+         9,
+         9
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 4,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 1,
+       "meterBefore": 4,
+       "meterAfter": 4,
+       "winsTowardStep": 2,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 19,
+       "stops": [
+        15,
+        14,
+        86,
+        6,
+        66
+       ],
+       "grid": [
+        [
+         2,
+         2,
+         0
+        ],
+        [
+         1,
+         3,
+         9
+        ],
+        [
+         2,
+         6,
+         9
+        ],
+        [
+         2,
+         7,
+         9
+        ],
+        [
+         2,
+         0,
+         6
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H1",
+         "length": 5,
+         "ways": 1,
+         "payPerWay": 160,
+         "win": 160,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           2
+          ],
+          [
+           3,
+           2
+          ],
+          [
+           4,
+           1
+          ]
+         ]
+        },
+        {
+         "symbol": "H3",
+         "length": 5,
+         "ways": 8,
+         "payPerWay": 100,
+         "win": 800,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           0,
+           1
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           0
+          ],
+          [
+           2,
+           2
+          ],
+          [
+           3,
+           0
+          ],
+          [
+           3,
+           2
+          ],
+          [
+           4,
+           0
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 960,
+       "multiplier": 4,
+       "totalWinCoins": 3840,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 0,
+       "meterBefore": 4,
+       "meterAfter": 5,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      }
+     ],
+     "totalWinCoins": 7993,
+     "meterEnd": 5,
+     "endedByCap": false
+    },
+    "totalWinCoins": 8033,
+    "capped": false
+   }
+  },
+  {
+   "id": "buy-1",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-buy",
+    "nonce": 1,
+    "kind": "buyFree",
+    "base": {
+     "stops": [
+      30,
+      54,
+      63,
+      11,
+      42
+     ],
+     "grid": [
+      [
+       10,
+       6,
+       6
+      ],
+      [
+       10,
+       6,
+       6
+      ],
+      [
+       4,
+       9,
+       5
+      ],
+      [
+       8,
+       7,
+       5
+      ],
+      [
+       10,
+       2,
+       9
+      ]
+     ],
+     "wins": [
+      {
+       "symbol": "L2",
+       "length": 3,
+       "ways": 4,
+       "payPerWay": 5,
+       "win": 20,
+       "positions": [
+        [
+         0,
+         1
+        ],
+        [
+         0,
+         2
+        ],
+        [
+         1,
+         1
+        ],
+        [
+         1,
+         2
+        ],
+        [
+         2,
+         1
+        ]
+       ]
+      }
+     ],
+     "scatter": {
+      "count": 3,
+      "positions": [
+       [
+        0,
+        0
+       ],
+       [
+        1,
+        0
+       ],
+       [
+        4,
+        0
+       ]
+      ],
+      "pay": 40
+     },
+     "lineWinCoins": 60,
+     "multiplier": 1,
+     "totalWinCoins": 60,
+     "triggersSpins": 10
+    },
+    "feature": {
+     "tier": "free",
+     "spinsAwarded": 10,
+     "meter": {
+      "start": 1,
+      "winsPerStep": 3,
+      "step": 1,
+      "cap": 10
+     },
+     "spins": [
+      {
+       "index": 0,
+       "stops": [
+        16,
+        19,
+        54,
+        74,
+        51
+       ],
+       "grid": [
+        [
+         2,
+         0,
+         6
+        ],
+        [
+         3,
+         0,
+         2
+        ],
+        [
+         1,
+         1,
+         0
+        ],
+        [
+         6,
+         9,
+         1
+        ],
+        [
+         6,
+         4,
+         0
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H1",
+         "length": 5,
+         "ways": 1,
+         "payPerWay": 160,
+         "win": 160,
+         "positions": [
+          [
+           0,
+           1
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           2
+          ],
+          [
+           3,
+           1
+          ],
+          [
+           4,
+           2
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 160,
+       "multiplier": 1,
+       "totalWinCoins": 160,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 9,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 1,
+       "stops": [
+        30,
+        27,
+        57,
+        68,
+        83
+       ],
+       "grid": [
+        [
+         3,
+         7,
+         0
+        ],
+        [
+         0,
+         1,
+         6
+        ],
+        [
+         7,
+         9,
+         2
+        ],
+        [
+         1,
+         10,
+         8
+        ],
+        [
+         4,
+         1,
+         0
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H1",
+         "length": 3,
+         "ways": 1,
+         "payPerWay": 20,
+         "win": 20,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           2,
+           1
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          3,
+          1
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 20,
+       "multiplier": 1,
+       "totalWinCoins": 20,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 8,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 2,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 2,
+       "stops": [
+        31,
+        7,
+        15,
+        12,
+        35
+       ],
+       "grid": [
+        [
+         7,
+         0,
+         0
+        ],
+        [
+         2,
+         0,
+         1
+        ],
+        [
+         3,
+         7,
+         1
+        ],
+        [
+         2,
+         2,
+         4
+        ],
+        [
+         2,
+         3,
+         6
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 1,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 7,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 2,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 3,
+       "stops": [
+        2,
+        61,
+        30,
+        14,
+        81
+       ],
+       "grid": [
+        [
+         2,
+         1,
+         8
+        ],
+        [
+         4,
+         1,
+         1
+        ],
+        [
+         2,
+         10,
+         3
+        ],
+        [
+         4,
+         5,
+         9
+        ],
+        [
+         2,
+         0,
+         4
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          2,
+          1
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 1,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 6,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 2,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 4,
+       "stops": [
+        53,
+        50,
+        18,
+        7,
+        1
+       ],
+       "grid": [
+        [
+         0,
+         1,
+         0
+        ],
+        [
+         0,
+         9,
+         7
+        ],
+        [
+         0,
+         1,
+         6
+        ],
+        [
+         7,
+         9,
+         3
+        ],
+        [
+         3,
+         1,
+         9
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H1",
+         "length": 5,
+         "ways": 4,
+         "payPerWay": 160,
+         "win": 640,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           0
+          ],
+          [
+           3,
+           1
+          ],
+          [
+           4,
+           2
+          ]
+         ]
+        },
+        {
+         "symbol": "H2",
+         "length": 5,
+         "ways": 2,
+         "payPerWay": 120,
+         "win": 240,
+         "positions": [
+          [
+           0,
+           1
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           1
+          ],
+          [
+           3,
+           1
+          ],
+          [
+           4,
+           1
+          ],
+          [
+           4,
+           2
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 880,
+       "multiplier": 1,
+       "totalWinCoins": 880,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 5,
+       "meterBefore": 1,
+       "meterAfter": 2,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 5,
+       "stops": [
+        69,
+        63,
+        46,
+        24,
+        47
+       ],
+       "grid": [
+        [
+         0,
+         7,
+         1
+        ],
+        [
+         1,
+         8,
+         2
+        ],
+        [
+         0,
+         6,
+         1
+        ],
+        [
+         1,
+         7,
+         0
+        ],
+        [
+         2,
+         1,
+         2
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H2",
+         "length": 5,
+         "ways": 1,
+         "payPerWay": 120,
+         "win": 120,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           2,
+           2
+          ],
+          [
+           3,
+           0
+          ],
+          [
+           4,
+           1
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 120,
+       "multiplier": 2,
+       "totalWinCoins": 240,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 4,
+       "meterBefore": 2,
+       "meterAfter": 2,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 6,
+       "stops": [
+        7,
+        13,
+        52,
+        79,
+        38
+       ],
+       "grid": [
+        [
+         4,
+         0,
+         5
+        ],
+        [
+         8,
+         1,
+         3
+        ],
+        [
+         1,
+         2,
+         1
+        ],
+        [
+         5,
+         2,
+         2
+        ],
+        [
+         0,
+         2,
+         4
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 2,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 3,
+       "meterBefore": 2,
+       "meterAfter": 2,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 7,
+       "stops": [
+        31,
+        66,
+        88,
+        24,
+        74
+       ],
+       "grid": [
+        [
+         7,
+         0,
+         0
+        ],
+        [
+         2,
+         4,
+         2
+        ],
+        [
+         9,
+         7,
+         0
+        ],
+        [
+         1,
+         7,
+         0
+        ],
+        [
+         8,
+         3,
+         7
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 2,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 2,
+       "meterBefore": 2,
+       "meterAfter": 2,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 8,
+       "stops": [
+        59,
+        82,
+        51,
+        11,
+        7
+       ],
+       "grid": [
+        [
+         2,
+         3,
+         0
+        ],
+        [
+         8,
+         9,
+         5
+        ],
+        [
+         3,
+         1,
+         2
+        ],
+        [
+         2,
+         2,
+         2
+        ],
+        [
+         6,
+         1,
+         1
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H3",
+         "length": 4,
+         "ways": 3,
+         "payPerWay": 40,
+         "win": 120,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           2
+          ],
+          [
+           3,
+           0
+          ],
+          [
+           3,
+           1
+          ],
+          [
+           3,
+           2
+          ]
+         ]
+        },
+        {
+         "symbol": "M1",
+         "length": 3,
+         "ways": 1,
+         "payPerWay": 10,
+         "win": 10,
+         "positions": [
+          [
+           0,
+           1
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           0
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 130,
+       "multiplier": 2,
+       "totalWinCoins": 260,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 1,
+       "meterBefore": 2,
+       "meterAfter": 2,
+       "winsTowardStep": 2,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 9,
+       "stops": [
+        42,
+        28,
+        80,
+        39,
+        19
+       ],
+       "grid": [
+        [
+         3,
+         2,
+         2
+        ],
+        [
+         1,
+         6,
+         1
+        ],
+        [
+         3,
+         2,
+         9
+        ],
+        [
+         2,
+         1,
+         9
+        ],
+        [
+         8,
+         2,
+         0
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 2,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 0,
+       "meterBefore": 2,
+       "meterAfter": 2,
+       "winsTowardStep": 2,
+       "retriggerSpins": 0
+      }
+     ],
+     "totalWinCoins": 1560,
+     "meterEnd": 2,
+     "endedByCap": false
+    },
+    "totalWinCoins": 1620,
+    "capped": false
+   }
+  },
+  {
+   "id": "buy-2",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-buy",
+    "nonce": 2,
+    "kind": "buyFree",
+    "base": {
+     "stops": [
+      29,
+      70,
+      69,
+      9,
+      41
+     ],
+     "grid": [
+      [
+       1,
+       10,
+       6
+      ],
+      [
+       3,
+       8,
+       8
+      ],
+      [
+       10,
+       3,
+       5
+      ],
+      [
+       8,
+       8,
+       8
+      ],
+      [
+       3,
+       10,
+       2
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 3,
+      "positions": [
+       [
+        0,
+        1
+       ],
+       [
+        2,
+        0
+       ],
+       [
+        4,
+        1
+       ]
+      ],
+      "pay": 40
+     },
+     "lineWinCoins": 40,
+     "multiplier": 1,
+     "totalWinCoins": 40,
+     "triggersSpins": 10
+    },
+    "feature": {
+     "tier": "free",
+     "spinsAwarded": 10,
+     "meter": {
+      "start": 1,
+      "winsPerStep": 3,
+      "step": 1,
+      "cap": 10
+     },
+     "spins": [
+      {
+       "index": 0,
+       "stops": [
+        70,
+        79,
+        37,
+        77,
+        15
+       ],
+       "grid": [
+        [
+         7,
+         1,
+         2
+        ],
+        [
+         5,
+         9,
+         4
+        ],
+        [
+         2,
+         2,
+         6
+        ],
+        [
+         1,
+         7,
+         5
+        ],
+        [
+         9,
+         8,
+         3
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H3",
+         "length": 3,
+         "ways": 2,
+         "payPerWay": 12,
+         "win": 24,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           0
+          ],
+          [
+           2,
+           1
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 24,
+       "multiplier": 1,
+       "totalWinCoins": 24,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 9,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 1,
+       "stops": [
+        32,
+        12,
+        55,
+        37,
+        25
+       ],
+       "grid": [
+        [
+         0,
+         0,
+         8
+        ],
+        [
+         4,
+         8,
+         1
+        ],
+        [
+         1,
+         0,
+         7
+        ],
+        [
+         1,
+         4,
+         2
+        ],
+        [
+         0,
+         1,
+         2
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 1,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 8,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 2,
+       "stops": [
+        16,
+        36,
+        31,
+        27,
+        80
+       ],
+       "grid": [
+        [
+         2,
+         0,
+         6
+        ],
+        [
+         5,
+         1,
+         2
+        ],
+        [
+         10,
+         3,
+         0
+        ],
+        [
+         8,
+         0,
+         0
+        ],
+        [
+         2,
+         2,
+         0
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          2,
+          0
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 1,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 7,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 3,
+       "stops": [
+        9,
+        48,
+        56,
+        19,
+        53
+       ],
+       "grid": [
+        [
+         5,
+         3,
+         4
+        ],
+        [
+         2,
+         0,
+         0
+        ],
+        [
+         0,
+         7,
+         9
+        ],
+        [
+         4,
+         3,
+         7
+        ],
+        [
+         0,
+         0,
+         5
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 1,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 6,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 4,
+       "stops": [
+        0,
+        15,
+        79,
+        9,
+        7
+       ],
+       "grid": [
+        [
+         3,
+         0,
+         2
+        ],
+        [
+         3,
+         9,
+         0
+        ],
+        [
+         10,
+         3,
+         2
+        ],
+        [
+         3,
+         1,
+         2
+        ],
+        [
+         6,
+         1,
+         1
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H3",
+         "length": 4,
+         "ways": 1,
+         "payPerWay": 40,
+         "win": 40,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           2
+          ],
+          [
+           3,
+           2
+          ]
+         ]
+        },
+        {
+         "symbol": "M1",
+         "length": 4,
+         "ways": 2,
+         "payPerWay": 25,
+         "win": 50,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           1
+          ],
+          [
+           3,
+           0
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          2,
+          0
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 90,
+       "multiplier": 1,
+       "totalWinCoins": 90,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 5,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 2,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 5,
+       "stops": [
+        62,
+        11,
+        61,
+        2,
+        35
+       ],
+       "grid": [
+        [
+         1,
+         1,
+         5
+        ],
+        [
+         3,
+         4,
+         8
+        ],
+        [
+         2,
+         5,
+         7
+        ],
+        [
+         10,
+         4,
+         3
+        ],
+        [
+         2,
+         3,
+         6
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          3,
+          0
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 1,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 4,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 2,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 6,
+       "stops": [
+        49,
+        54,
+        53,
+        52,
+        53
+       ],
+       "grid": [
+        [
+         1,
+         6,
+         2
+        ],
+        [
+         9,
+         2,
+         1
+        ],
+        [
+         2,
+         1,
+         1
+        ],
+        [
+         6,
+         0,
+         7
+        ],
+        [
+         0,
+         0,
+         5
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H2",
+         "length": 3,
+         "ways": 4,
+         "payPerWay": 16,
+         "win": 64,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           1
+          ],
+          [
+           2,
+           2
+          ]
+         ]
+        },
+        {
+         "symbol": "H3",
+         "length": 3,
+         "ways": 2,
+         "payPerWay": 12,
+         "win": 24,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           0
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 88,
+       "multiplier": 1,
+       "totalWinCoins": 88,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 3,
+       "meterBefore": 1,
+       "meterAfter": 2,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 7,
+       "stops": [
+        4,
+        30,
+        11,
+        32,
+        63
+       ],
+       "grid": [
+        [
+         8,
+         6,
+         4
+        ],
+        [
+         1,
+         0,
+         2
+        ],
+        [
+         2,
+         8,
+         4
+        ],
+        [
+         0,
+         9,
+         0
+        ],
+        [
+         5,
+         5,
+         1
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 2,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 2,
+       "meterBefore": 2,
+       "meterAfter": 2,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 8,
+       "stops": [
+        77,
+        76,
+        31,
+        10,
+        31
+       ],
+       "grid": [
+        [
+         7,
+         3,
+         0
+        ],
+        [
+         2,
+         5,
+         0
+        ],
+        [
+         10,
+         3,
+         0
+        ],
+        [
+         1,
+         2,
+         2
+        ],
+        [
+         3,
+         9,
+         9
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H1",
+         "length": 3,
+         "ways": 1,
+         "payPerWay": 20,
+         "win": 20,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           2
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          2,
+          0
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 20,
+       "multiplier": 2,
+       "totalWinCoins": 40,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 1,
+       "meterBefore": 2,
+       "meterAfter": 2,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 9,
+       "stops": [
+        59,
+        72,
+        59,
+        2,
+        17
+       ],
+       "grid": [
+        [
+         2,
+         3,
+         0
+        ],
+        [
+         10,
+         6,
+         0
+        ],
+        [
+         2,
+         4,
+         2
+        ],
+        [
+         10,
+         4,
+         3
+        ],
+        [
+         3,
+         0,
+         8
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 2,
+        "positions": [
+         [
+          1,
+          0
+         ],
+         [
+          3,
+          0
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 2,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 0,
+       "meterBefore": 2,
+       "meterAfter": 2,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      }
+     ],
+     "totalWinCoins": 242,
+     "meterEnd": 2,
+     "endedByCap": false
+    },
+    "totalWinCoins": 282,
+    "capped": false
+   }
+  },
+  {
+   "id": "buy-3",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-buy",
+    "nonce": 3,
+    "kind": "buyFree",
+    "base": {
+     "stops": [
+      28,
+      71,
+      47,
+      81,
+      45
+     ],
+     "grid": [
+      [
+       4,
+       1,
+       10
+      ],
+      [
+       8,
+       8,
+       7
+      ],
+      [
+       10,
+       2,
+       2
+      ],
+      [
+       3,
+       5,
+       4
+      ],
+      [
+       7,
+       0,
+       10
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 3,
+      "positions": [
+       [
+        0,
+        2
+       ],
+       [
+        2,
+        0
+       ],
+       [
+        4,
+        2
+       ]
+      ],
+      "pay": 40
+     },
+     "lineWinCoins": 40,
+     "multiplier": 1,
+     "totalWinCoins": 40,
+     "triggersSpins": 10
+    },
+    "feature": {
+     "tier": "free",
+     "spinsAwarded": 10,
+     "meter": {
+      "start": 1,
+      "winsPerStep": 3,
+      "step": 1,
+      "cap": 10
+     },
+     "spins": [
+      {
+       "index": 0,
+       "stops": [
+        48,
+        34,
+        63,
+        33,
+        41
+       ],
+       "grid": [
+        [
+         4,
+         1,
+         6
+        ],
+        [
+         6,
+         4,
+         5
+        ],
+        [
+         7,
+         5,
+         2
+        ],
+        [
+         9,
+         0,
+         6
+        ],
+        [
+         1,
+         9,
+         1
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 1,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 9,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 1,
+       "stops": [
+        23,
+        44,
+        86,
+        17,
+        32
+       ],
+       "grid": [
+        [
+         6,
+         0,
+         7
+        ],
+        [
+         3,
+         4,
+         9
+        ],
+        [
+         2,
+         6,
+         9
+        ],
+        [
+         9,
+         8,
+         4
+        ],
+        [
+         9,
+         9,
+         8
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H1",
+         "length": 5,
+         "ways": 2,
+         "payPerWay": 160,
+         "win": 320,
+         "positions": [
+          [
+           0,
+           1
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           2
+          ],
+          [
+           3,
+           0
+          ],
+          [
+           4,
+           0
+          ],
+          [
+           4,
+           1
+          ]
+         ]
+        },
+        {
+         "symbol": "L2",
+         "length": 5,
+         "ways": 4,
+         "payPerWay": 25,
+         "win": 100,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           1
+          ],
+          [
+           2,
+           2
+          ],
+          [
+           3,
+           0
+          ],
+          [
+           4,
+           0
+          ],
+          [
+           4,
+           1
+          ]
+         ]
+        },
+        {
+         "symbol": "L3",
+         "length": 5,
+         "ways": 2,
+         "payPerWay": 22,
+         "win": 44,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           2
+          ],
+          [
+           3,
+           0
+          ],
+          [
+           4,
+           0
+          ],
+          [
+           4,
+           1
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 464,
+       "multiplier": 1,
+       "totalWinCoins": 464,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 8,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 2,
+       "stops": [
+        53,
+        47,
+        52,
+        4,
+        49
+       ],
+       "grid": [
+        [
+         0,
+         1,
+         0
+        ],
+        [
+         6,
+         2,
+         0
+        ],
+        [
+         1,
+         2,
+         1
+        ],
+        [
+         3,
+         4,
+         2
+        ],
+        [
+         2,
+         2,
+         6
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 1,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 7,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 3,
+       "stops": [
+        42,
+        69,
+        71,
+        61,
+        63
+       ],
+       "grid": [
+        [
+         3,
+         2,
+         2
+        ],
+        [
+         1,
+         6,
+         7
+        ],
+        [
+         4,
+         6,
+         9
+        ],
+        [
+         3,
+         5,
+         3
+        ],
+        [
+         5,
+         5,
+         1
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 1,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 6,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 4,
+       "stops": [
+        46,
+        4,
+        0,
+        37,
+        41
+       ],
+       "grid": [
+        [
+         1,
+         2,
+         4
+        ],
+        [
+         2,
+         7,
+         0
+        ],
+        [
+         7,
+         0,
+         1
+        ],
+        [
+         1,
+         4,
+         2
+        ],
+        [
+         1,
+         9,
+         1
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 1,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 5,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 5,
+       "stops": [
+        22,
+        19,
+        70,
+        38,
+        7
+       ],
+       "grid": [
+        [
+         6,
+         6,
+         0
+        ],
+        [
+         3,
+         0,
+         2
+        ],
+        [
+         2,
+         4,
+         6
+        ],
+        [
+         4,
+         2,
+         1
+        ],
+        [
+         6,
+         1,
+         1
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 1,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 4,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 6,
+       "stops": [
+        20,
+        17,
+        41,
+        47,
+        42
+       ],
+       "grid": [
+        [
+         0,
+         8,
+         6
+        ],
+        [
+         0,
+         2,
+         3
+        ],
+        [
+         9,
+         9,
+         1
+        ],
+        [
+         5,
+         2,
+         3
+        ],
+        [
+         9,
+         1,
+         0
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H1",
+         "length": 3,
+         "ways": 2,
+         "payPerWay": 20,
+         "win": 40,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           2,
+           0
+          ],
+          [
+           2,
+           1
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 40,
+       "multiplier": 1,
+       "totalWinCoins": 40,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 3,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 2,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 7,
+       "stops": [
+        35,
+        47,
+        67,
+        82,
+        15
+       ],
+       "grid": [
+        [
+         4,
+         8,
+         4
+        ],
+        [
+         6,
+         2,
+         0
+        ],
+        [
+         1,
+         4,
+         2
+        ],
+        [
+         9,
+         6,
+         9
+        ],
+        [
+         9,
+         8,
+         3
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 1,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 2,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 2,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 8,
+       "stops": [
+        29,
+        23,
+        59,
+        84,
+        25
+       ],
+       "grid": [
+        [
+         10,
+         3,
+         7
+        ],
+        [
+         9,
+         8,
+         3
+        ],
+        [
+         2,
+         4,
+         2
+        ],
+        [
+         9,
+         8,
+         3
+        ],
+        [
+         0,
+         1,
+         2
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          0,
+          0
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 1,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 1,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 2,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 9,
+       "stops": [
+        33,
+        53,
+        34,
+        66,
+        73
+       ],
+       "grid": [
+        [
+         0,
+         8,
+         4
+        ],
+        [
+         4,
+         9,
+         2
+        ],
+        [
+         9,
+         3,
+         4
+        ],
+        [
+         0,
+         0,
+         1
+        ],
+        [
+         2,
+         8,
+         3
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H1",
+         "length": 4,
+         "ways": 2,
+         "payPerWay": 65,
+         "win": 130,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           0
+          ],
+          [
+           3,
+           0
+          ],
+          [
+           3,
+           1
+          ]
+         ]
+        },
+        {
+         "symbol": "M2",
+         "length": 3,
+         "ways": 4,
+         "payPerWay": 8,
+         "win": 32,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           0
+          ],
+          [
+           2,
+           2
+          ]
+         ]
+        },
+        {
+         "symbol": "L4",
+         "length": 3,
+         "ways": 1,
+         "payPerWay": 3,
+         "win": 3,
+         "positions": [
+          [
+           0,
+           1
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           0
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 165,
+       "multiplier": 1,
+       "totalWinCoins": 165,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 0,
+       "meterBefore": 1,
+       "meterAfter": 2,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      }
+     ],
+     "totalWinCoins": 669,
+     "meterEnd": 2,
+     "endedByCap": false
+    },
+    "totalWinCoins": 709,
+    "capped": false
+   }
+  },
+  {
+   "id": "buy-4",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-buy",
+    "nonce": 4,
+    "kind": "buyFree",
+    "base": {
+     "stops": [
+      28,
+      53,
+      11,
+      5,
+      39
+     ],
+     "grid": [
+      [
+       4,
+       1,
+       10
+      ],
+      [
+       7,
+       10,
+       6
+      ],
+      [
+       6,
+       10,
+       3
+      ],
+      [
+       6,
+       8,
+       4
+      ],
+      [
+       8,
+       6,
+       3
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 3,
+      "positions": [
+       [
+        0,
+        2
+       ],
+       [
+        1,
+        1
+       ],
+       [
+        2,
+        1
+       ]
+      ],
+      "pay": 40
+     },
+     "lineWinCoins": 40,
+     "multiplier": 1,
+     "totalWinCoins": 40,
+     "triggersSpins": 10
+    },
+    "feature": {
+     "tier": "free",
+     "spinsAwarded": 10,
+     "meter": {
+      "start": 1,
+      "winsPerStep": 3,
+      "step": 1,
+      "cap": 10
+     },
+     "spins": [
+      {
+       "index": 0,
+       "stops": [
+        60,
+        30,
+        75,
+        59,
+        36
+       ],
+       "grid": [
+        [
+         3,
+         0,
+         1
+        ],
+        [
+         1,
+         0,
+         2
+        ],
+        [
+         5,
+         2,
+         0
+        ],
+        [
+         4,
+         1,
+         3
+        ],
+        [
+         3,
+         6,
+         0
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H1",
+         "length": 3,
+         "ways": 1,
+         "payPerWay": 20,
+         "win": 20,
+         "positions": [
+          [
+           0,
+           1
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           2
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 20,
+       "multiplier": 1,
+       "totalWinCoins": 20,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 9,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 1,
+       "stops": [
+        25,
+        39,
+        46,
+        18,
+        44
+       ],
+       "grid": [
+        [
+         7,
+         5,
+         0
+        ],
+        [
+         3,
+         10,
+         3
+        ],
+        [
+         0,
+         6,
+         1
+        ],
+        [
+         8,
+         4,
+         3
+        ],
+        [
+         0,
+         7,
+         3
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          1,
+          1
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 1,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 8,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 2,
+       "stops": [
+        47,
+        70,
+        33,
+        24,
+        4
+       ],
+       "grid": [
+        [
+         2,
+         4,
+         1
+        ],
+        [
+         6,
+         7,
+         10
+        ],
+        [
+         0,
+         9,
+         3
+        ],
+        [
+         1,
+         7,
+         0
+        ],
+        [
+         8,
+         1,
+         0
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          1,
+          2
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 1,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 7,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 3,
+       "stops": [
+        75,
+        47,
+        84,
+        83,
+        36
+       ],
+       "grid": [
+        [
+         1,
+         1,
+         7
+        ],
+        [
+         6,
+         2,
+         0
+        ],
+        [
+         5,
+         9,
+         2
+        ],
+        [
+         6,
+         9,
+         8
+        ],
+        [
+         3,
+         6,
+         0
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 1,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 6,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 4,
+       "stops": [
+        31,
+        16,
+        45,
+        71,
+        1
+       ],
+       "grid": [
+        [
+         7,
+         0,
+         0
+        ],
+        [
+         9,
+         0,
+         2
+        ],
+        [
+         9,
+         0,
+         6
+        ],
+        [
+         9,
+         2,
+         5
+        ],
+        [
+         3,
+         1,
+         9
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H1",
+         "length": 5,
+         "ways": 8,
+         "payPerWay": 160,
+         "win": 1280,
+         "positions": [
+          [
+           0,
+           1
+          ],
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           0
+          ],
+          [
+           2,
+           1
+          ],
+          [
+           3,
+           0
+          ],
+          [
+           4,
+           2
+          ]
+         ]
+        },
+        {
+         "symbol": "L3",
+         "length": 5,
+         "ways": 1,
+         "payPerWay": 22,
+         "win": 22,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           2,
+           0
+          ],
+          [
+           3,
+           0
+          ],
+          [
+           4,
+           2
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 1302,
+       "multiplier": 1,
+       "totalWinCoins": 1302,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 5,
+       "meterBefore": 1,
+       "meterAfter": 1,
+       "winsTowardStep": 2,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 5,
+       "stops": [
+        44,
+        53,
+        67,
+        29,
+        47
+       ],
+       "grid": [
+        [
+         2,
+         2,
+         1
+        ],
+        [
+         4,
+         9,
+         2
+        ],
+        [
+         1,
+         4,
+         2
+        ],
+        [
+         0,
+         0,
+         10
+        ],
+        [
+         2,
+         1,
+         2
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H2",
+         "length": 3,
+         "ways": 1,
+         "payPerWay": 16,
+         "win": 16,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           0
+          ]
+         ]
+        },
+        {
+         "symbol": "H3",
+         "length": 3,
+         "ways": 4,
+         "payPerWay": 12,
+         "win": 48,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           0,
+           1
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           2
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          3,
+          2
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 64,
+       "multiplier": 1,
+       "totalWinCoins": 64,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 4,
+       "meterBefore": 1,
+       "meterAfter": 2,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 6,
+       "stops": [
+        27,
+        82,
+        20,
+        57,
+        79
+       ],
+       "grid": [
+        [
+         0,
+         2,
+         10
+        ],
+        [
+         8,
+         9,
+         5
+        ],
+        [
+         6,
+         0,
+         9
+        ],
+        [
+         3,
+         6,
+         4
+        ],
+        [
+         1,
+         2,
+         2
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H1",
+         "length": 3,
+         "ways": 2,
+         "payPerWay": 20,
+         "win": 40,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           1
+          ],
+          [
+           2,
+           2
+          ]
+         ]
+        },
+        {
+         "symbol": "H3",
+         "length": 3,
+         "ways": 1,
+         "payPerWay": 12,
+         "win": 12,
+         "positions": [
+          [
+           0,
+           1
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           2
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          0,
+          2
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 52,
+       "multiplier": 2,
+       "totalWinCoins": 104,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 3,
+       "meterBefore": 2,
+       "meterAfter": 2,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 7,
+       "stops": [
+        11,
+        32,
+        30,
+        32,
+        32
+       ],
+       "grid": [
+        [
+         4,
+         5,
+         1
+        ],
+        [
+         2,
+         0,
+         6
+        ],
+        [
+         2,
+         10,
+         3
+        ],
+        [
+         0,
+         9,
+         0
+        ],
+        [
+         9,
+         9,
+         8
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          2,
+          1
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 2,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 2,
+       "meterBefore": 2,
+       "meterAfter": 2,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 8,
+       "stops": [
+        53,
+        13,
+        60,
+        17,
+        67
+       ],
+       "grid": [
+        [
+         0,
+         1,
+         0
+        ],
+        [
+         8,
+         1,
+         3
+        ],
+        [
+         4,
+         2,
+         5
+        ],
+        [
+         9,
+         8,
+         4
+        ],
+        [
+         0,
+         6,
+         4
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 2,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 1,
+       "meterBefore": 2,
+       "meterAfter": 2,
+       "winsTowardStep": 1,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 9,
+       "stops": [
+        63,
+        47,
+        21,
+        86,
+        32
+       ],
+       "grid": [
+        [
+         1,
+         5,
+         2
+        ],
+        [
+         6,
+         2,
+         0
+        ],
+        [
+         0,
+         9,
+         0
+        ],
+        [
+         3,
+         1,
+         1
+        ],
+        [
+         9,
+         9,
+         8
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H3",
+         "length": 3,
+         "ways": 1,
+         "payPerWay": 12,
+         "win": 12,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           1
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 12,
+       "multiplier": 2,
+       "totalWinCoins": 24,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 0,
+       "meterBefore": 2,
+       "meterAfter": 2,
+       "winsTowardStep": 2,
+       "retriggerSpins": 0
+      }
+     ],
+     "totalWinCoins": 1514,
+     "meterEnd": 2,
+     "endedByCap": false
+    },
+    "totalWinCoins": 1554,
+    "capped": false
+   }
+  },
+  {
+   "id": "super-0",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-super",
+    "nonce": 0,
+    "kind": "buySuper",
+    "base": {
+     "stops": [
+      66,
+      52,
+      15,
+      24,
+      45
+     ],
+     "grid": [
+      [
+       5,
+       6,
+       6
+      ],
+      [
+       7,
+       7,
+       10
+      ],
+      [
+       5,
+       2,
+       8
+      ],
+      [
+       5,
+       5,
+       10
+      ],
+      [
+       7,
+       0,
+       10
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 3,
+      "positions": [
+       [
+        1,
+        2
+       ],
+       [
+        3,
+        2
+       ],
+       [
+        4,
+        2
+       ]
+      ],
+      "pay": 40
+     },
+     "lineWinCoins": 40,
+     "multiplier": 1,
+     "totalWinCoins": 40,
+     "triggersSpins": 10
+    },
+    "feature": {
+     "tier": "super",
+     "spinsAwarded": 8,
+     "meter": {
+      "start": 3,
+      "winsPerStep": 1,
+      "step": 2,
+      "cap": 10
+     },
+     "spins": [
+      {
+       "index": 0,
+       "stops": [
+        63,
+        32,
+        76,
+        23,
+        8
+       ],
+       "grid": [
+        [
+         1,
+         5,
+         2
+        ],
+        [
+         2,
+         0,
+         6
+        ],
+        [
+         2,
+         0,
+         1
+        ],
+        [
+         2,
+         1,
+         7
+        ],
+        [
+         1,
+         1,
+         9
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H3",
+         "length": 5,
+         "ways": 1,
+         "payPerWay": 100,
+         "win": 100,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           2,
+           0
+          ],
+          [
+           3,
+           0
+          ],
+          [
+           4,
+           2
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 100,
+       "multiplier": 3,
+       "totalWinCoins": 300,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 7,
+       "meterBefore": 3,
+       "meterAfter": 5,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 1,
+       "stops": [
+        56,
+        13,
+        10,
+        2,
+        61
+       ],
+       "grid": [
+        [
+         4,
+         1,
+         1
+        ],
+        [
+         8,
+         1,
+         3
+        ],
+        [
+         3,
+         2,
+         8
+        ],
+        [
+         10,
+         4,
+         3
+        ],
+        [
+         4,
+         4,
+         5
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          3,
+          0
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 5,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 6,
+       "meterBefore": 5,
+       "meterAfter": 5,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 2,
+       "stops": [
+        46,
+        73,
+        31,
+        67,
+        43
+       ],
+       "grid": [
+        [
+         1,
+         2,
+         4
+        ],
+        [
+         6,
+         0,
+         2
+        ],
+        [
+         10,
+         3,
+         0
+        ],
+        [
+         0,
+         1,
+         10
+        ],
+        [
+         1,
+         0,
+         7
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 2,
+        "positions": [
+         [
+          2,
+          0
+         ],
+         [
+          3,
+          2
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 5,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 5,
+       "meterBefore": 5,
+       "meterAfter": 5,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 3,
+       "stops": [
+        9,
+        75,
+        29,
+        80,
+        47
+       ],
+       "grid": [
+        [
+         5,
+         3,
+         4
+        ],
+        [
+         2,
+         2,
+         5
+        ],
+        [
+         9,
+         2,
+         10
+        ],
+        [
+         2,
+         2,
+         9
+        ],
+        [
+         2,
+         1,
+         2
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "L1",
+         "length": 4,
+         "ways": 1,
+         "payPerWay": 12,
+         "win": 12,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           0
+          ],
+          [
+           3,
+           2
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          2,
+          2
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 12,
+       "multiplier": 5,
+       "totalWinCoins": 60,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 4,
+       "meterBefore": 5,
+       "meterAfter": 7,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 4,
+       "stops": [
+        19,
+        80,
+        72,
+        20,
+        37
+       ],
+       "grid": [
+        [
+         2,
+         0,
+         8
+        ],
+        [
+         9,
+         4,
+         8
+        ],
+        [
+         6,
+         9,
+         4
+        ],
+        [
+         3,
+         7,
+         1
+        ],
+        [
+         6,
+         0,
+         2
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H1",
+         "length": 3,
+         "ways": 1,
+         "payPerWay": 20,
+         "win": 20,
+         "positions": [
+          [
+           0,
+           1
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           2,
+           1
+          ]
+         ]
+        },
+        {
+         "symbol": "H3",
+         "length": 3,
+         "ways": 1,
+         "payPerWay": 12,
+         "win": 12,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           2,
+           1
+          ]
+         ]
+        },
+        {
+         "symbol": "L4",
+         "length": 3,
+         "ways": 2,
+         "payPerWay": 3,
+         "win": 6,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           1
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 38,
+       "multiplier": 7,
+       "totalWinCoins": 266,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 3,
+       "meterBefore": 7,
+       "meterAfter": 9,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 5,
+       "stops": [
+        24,
+        8,
+        20,
+        65,
+        79
+       ],
+       "grid": [
+        [
+         0,
+         7,
+         5
+        ],
+        [
+         0,
+         1,
+         8
+        ],
+        [
+         6,
+         0,
+         9
+        ],
+        [
+         2,
+         0,
+         0
+        ],
+        [
+         1,
+         2,
+         2
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H1",
+         "length": 4,
+         "ways": 4,
+         "payPerWay": 65,
+         "win": 260,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           2,
+           1
+          ],
+          [
+           2,
+           2
+          ],
+          [
+           3,
+           1
+          ],
+          [
+           3,
+           2
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 260,
+       "multiplier": 9,
+       "totalWinCoins": 2340,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 2,
+       "meterBefore": 9,
+       "meterAfter": 10,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 6,
+       "stops": [
+        20,
+        30,
+        73,
+        20,
+        48
+       ],
+       "grid": [
+        [
+         0,
+         8,
+         6
+        ],
+        [
+         1,
+         0,
+         2
+        ],
+        [
+         9,
+         4,
+         5
+        ],
+        [
+         3,
+         7,
+         1
+        ],
+        [
+         1,
+         2,
+         2
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H1",
+         "length": 3,
+         "ways": 1,
+         "payPerWay": 20,
+         "win": 20,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           0
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 20,
+       "multiplier": 10,
+       "totalWinCoins": 200,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 1,
+       "meterBefore": 10,
+       "meterAfter": 10,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 7,
+       "stops": [
+        17,
+        51,
+        88,
+        28,
+        11
+       ],
+       "grid": [
+        [
+         0,
+         6,
+         2
+        ],
+        [
+         9,
+         7,
+         4
+        ],
+        [
+         9,
+         7,
+         0
+        ],
+        [
+         0,
+         0,
+         0
+        ],
+        [
+         5,
+         4,
+         1
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H1",
+         "length": 4,
+         "ways": 6,
+         "payPerWay": 65,
+         "win": 390,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           2,
+           0
+          ],
+          [
+           2,
+           2
+          ],
+          [
+           3,
+           0
+          ],
+          [
+           3,
+           1
+          ],
+          [
+           3,
+           2
+          ]
+         ]
+        },
+        {
+         "symbol": "H3",
+         "length": 3,
+         "ways": 1,
+         "payPerWay": 12,
+         "win": 12,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           2,
+           0
+          ]
+         ]
+        },
+        {
+         "symbol": "L2",
+         "length": 3,
+         "ways": 1,
+         "payPerWay": 5,
+         "win": 5,
+         "positions": [
+          [
+           0,
+           1
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           2,
+           0
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 407,
+       "multiplier": 10,
+       "totalWinCoins": 4070,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 0,
+       "meterBefore": 10,
+       "meterAfter": 10,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      }
+     ],
+     "totalWinCoins": 7236,
+     "meterEnd": 10,
+     "endedByCap": false
+    },
+    "totalWinCoins": 7276,
+    "capped": false
+   }
+  },
+  {
+   "id": "super-1",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-super",
+    "nonce": 1,
+    "kind": "buySuper",
+    "base": {
+     "stops": [
+      54,
+      7,
+      30,
+      63,
+      45
+     ],
+     "grid": [
+      [
+       10,
+       4,
+       1
+      ],
+      [
+       10,
+       5,
+       5
+      ],
+      [
+       5,
+       5,
+       7
+      ],
+      [
+       9,
+       4,
+       6
+      ],
+      [
+       7,
+       0,
+       10
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 3,
+      "positions": [
+       [
+        0,
+        0
+       ],
+       [
+        1,
+        0
+       ],
+       [
+        4,
+        2
+       ]
+      ],
+      "pay": 40
+     },
+     "lineWinCoins": 40,
+     "multiplier": 1,
+     "totalWinCoins": 40,
+     "triggersSpins": 10
+    },
+    "feature": {
+     "tier": "super",
+     "spinsAwarded": 8,
+     "meter": {
+      "start": 3,
+      "winsPerStep": 1,
+      "step": 2,
+      "cap": 10
+     },
+     "spins": [
+      {
+       "index": 0,
+       "stops": [
+        43,
+        2,
+        45,
+        69,
+        83
+       ],
+       "grid": [
+        [
+         2,
+         2,
+         2
+        ],
+        [
+         7,
+         10,
+         2
+        ],
+        [
+         9,
+         0,
+         6
+        ],
+        [
+         10,
+         8,
+         9
+        ],
+        [
+         4,
+         1,
+         0
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H3",
+         "length": 4,
+         "ways": 3,
+         "payPerWay": 40,
+         "win": 120,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           0,
+           1
+          ],
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           0
+          ],
+          [
+           3,
+           2
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 2,
+        "positions": [
+         [
+          1,
+          1
+         ],
+         [
+          3,
+          0
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 120,
+       "multiplier": 3,
+       "totalWinCoins": 360,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 7,
+       "meterBefore": 3,
+       "meterAfter": 5,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 1,
+       "stops": [
+        20,
+        75,
+        2,
+        30,
+        12
+       ],
+       "grid": [
+        [
+         0,
+         8,
+         6
+        ],
+        [
+         2,
+         2,
+         5
+        ],
+        [
+         1,
+         7,
+         4
+        ],
+        [
+         0,
+         10,
+         0
+        ],
+        [
+         4,
+         1,
+         2
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          3,
+          1
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 5,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 6,
+       "meterBefore": 5,
+       "meterAfter": 5,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 2,
+       "stops": [
+        19,
+        19,
+        62,
+        63,
+        28
+       ],
+       "grid": [
+        [
+         2,
+         0,
+         8
+        ],
+        [
+         3,
+         0,
+         2
+        ],
+        [
+         5,
+         7,
+         5
+        ],
+        [
+         3,
+         1,
+         2
+        ],
+        [
+         6,
+         10,
+         1
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          4,
+          1
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 5,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 5,
+       "meterBefore": 5,
+       "meterAfter": 5,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 3,
+       "stops": [
+        26,
+        20,
+        18,
+        44,
+        43
+       ],
+       "grid": [
+        [
+         5,
+         0,
+         2
+        ],
+        [
+         0,
+         2,
+         9
+        ],
+        [
+         0,
+         1,
+         6
+        ],
+        [
+         1,
+         2,
+         0
+        ],
+        [
+         1,
+         0,
+         7
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H1",
+         "length": 5,
+         "ways": 2,
+         "payPerWay": 160,
+         "win": 320,
+         "positions": [
+          [
+           0,
+           1
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           0
+          ],
+          [
+           3,
+           2
+          ],
+          [
+           4,
+           1
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 320,
+       "multiplier": 5,
+       "totalWinCoins": 1600,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 4,
+       "meterBefore": 5,
+       "meterAfter": 7,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 4,
+       "stops": [
+        68,
+        70,
+        84,
+        44,
+        49
+       ],
+       "grid": [
+        [
+         0,
+         0,
+         7
+        ],
+        [
+         6,
+         7,
+         10
+        ],
+        [
+         5,
+         9,
+         2
+        ],
+        [
+         1,
+         2,
+         0
+        ],
+        [
+         2,
+         2,
+         6
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "L3",
+         "length": 3,
+         "ways": 1,
+         "payPerWay": 3,
+         "win": 3,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           1
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          1,
+          2
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 3,
+       "multiplier": 7,
+       "totalWinCoins": 21,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 3,
+       "meterBefore": 7,
+       "meterAfter": 9,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 5,
+       "stops": [
+        52,
+        63,
+        82,
+        7,
+        73
+       ],
+       "grid": [
+        [
+         10,
+         0,
+         1
+        ],
+        [
+         1,
+         8,
+         2
+        ],
+        [
+         9,
+         8,
+         5
+        ],
+        [
+         7,
+         9,
+         3
+        ],
+        [
+         2,
+         8,
+         3
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H2",
+         "length": 4,
+         "ways": 1,
+         "payPerWay": 50,
+         "win": 50,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           2,
+           0
+          ],
+          [
+           3,
+           1
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          0,
+          0
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 50,
+       "multiplier": 9,
+       "totalWinCoins": 450,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 2,
+       "meterBefore": 9,
+       "meterAfter": 10,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 6,
+       "stops": [
+        54,
+        46,
+        26,
+        82,
+        52
+       ],
+       "grid": [
+        [
+         1,
+         0,
+         4
+        ],
+        [
+         9,
+         6,
+         2
+        ],
+        [
+         10,
+         0,
+         0
+        ],
+        [
+         9,
+         6,
+         9
+        ],
+        [
+         4,
+         0,
+         0
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H1",
+         "length": 5,
+         "ways": 8,
+         "payPerWay": 160,
+         "win": 1280,
+         "positions": [
+          [
+           0,
+           1
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           2,
+           1
+          ],
+          [
+           2,
+           2
+          ],
+          [
+           3,
+           0
+          ],
+          [
+           3,
+           2
+          ],
+          [
+           4,
+           1
+          ],
+          [
+           4,
+           2
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          2,
+          0
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 1280,
+       "multiplier": 10,
+       "totalWinCoins": 12800,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 1,
+       "meterBefore": 10,
+       "meterAfter": 10,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 7,
+       "stops": [
+        42,
+        4,
+        46,
+        52,
+        52
+       ],
+       "grid": [
+        [
+         3,
+         2,
+         2
+        ],
+        [
+         2,
+         7,
+         0
+        ],
+        [
+         0,
+         6,
+         1
+        ],
+        [
+         6,
+         0,
+         7
+        ],
+        [
+         4,
+         0,
+         0
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 10,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 0,
+       "meterBefore": 10,
+       "meterAfter": 10,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      }
+     ],
+     "totalWinCoins": 15231,
+     "meterEnd": 10,
+     "endedByCap": false
+    },
+    "totalWinCoins": 15271,
+    "capped": false
+   }
+  },
+  {
+   "id": "super-2",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-super",
+    "nonce": 2,
+    "kind": "buySuper",
+    "base": {
+     "stops": [
+      29,
+      54,
+      47,
+      64,
+      14
+     ],
+     "grid": [
+      [
+       1,
+       10,
+       6
+      ],
+      [
+       10,
+       6,
+       6
+      ],
+      [
+       10,
+       2,
+       2
+      ],
+      [
+       4,
+       6,
+       7
+      ],
+      [
+       8,
+       5,
+       6
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 3,
+      "positions": [
+       [
+        0,
+        1
+       ],
+       [
+        1,
+        0
+       ],
+       [
+        2,
+        0
+       ]
+      ],
+      "pay": 40
+     },
+     "lineWinCoins": 40,
+     "multiplier": 1,
+     "totalWinCoins": 40,
+     "triggersSpins": 10
+    },
+    "feature": {
+     "tier": "super",
+     "spinsAwarded": 8,
+     "meter": {
+      "start": 3,
+      "winsPerStep": 1,
+      "step": 2,
+      "cap": 10
+     },
+     "spins": [
+      {
+       "index": 0,
+       "stops": [
+        36,
+        49,
+        49,
+        86,
+        76
+       ],
+       "grid": [
+        [
+         8,
+         4,
+         8
+        ],
+        [
+         0,
+         0,
+         9
+        ],
+        [
+         0,
+         5,
+         3
+        ],
+        [
+         3,
+         1,
+         1
+        ],
+        [
+         7,
+         0,
+         3
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 3,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 7,
+       "meterBefore": 3,
+       "meterAfter": 3,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 1,
+       "stops": [
+        7,
+        78,
+        85,
+        1,
+        61
+       ],
+       "grid": [
+        [
+         4,
+         0,
+         5
+        ],
+        [
+         0,
+         5,
+         9
+        ],
+        [
+         9,
+         2,
+         6
+        ],
+        [
+         8,
+         10,
+         4
+        ],
+        [
+         4,
+         4,
+         5
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H1",
+         "length": 3,
+         "ways": 2,
+         "payPerWay": 20,
+         "win": 40,
+         "positions": [
+          [
+           0,
+           1
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           0
+          ]
+         ]
+        },
+        {
+         "symbol": "M2",
+         "length": 5,
+         "ways": 2,
+         "payPerWay": 55,
+         "win": 110,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           0
+          ],
+          [
+           3,
+           2
+          ],
+          [
+           4,
+           0
+          ],
+          [
+           4,
+           1
+          ]
+         ]
+        },
+        {
+         "symbol": "L1",
+         "length": 3,
+         "ways": 2,
+         "payPerWay": 5,
+         "win": 10,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           0
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          3,
+          1
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 160,
+       "multiplier": 3,
+       "totalWinCoins": 480,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 6,
+       "meterBefore": 3,
+       "meterAfter": 5,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 2,
+       "stops": [
+        4,
+        49,
+        82,
+        56,
+        57
+       ],
+       "grid": [
+        [
+         8,
+         6,
+         4
+        ],
+        [
+         0,
+         0,
+         9
+        ],
+        [
+         9,
+         8,
+         5
+        ],
+        [
+         4,
+         3,
+         6
+        ],
+        [
+         4,
+         9,
+         3
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "M2",
+         "length": 5,
+         "ways": 2,
+         "payPerWay": 55,
+         "win": 110,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           0
+          ],
+          [
+           3,
+           0
+          ],
+          [
+           4,
+           0
+          ],
+          [
+           4,
+           1
+          ]
+         ]
+        },
+        {
+         "symbol": "L2",
+         "length": 5,
+         "ways": 1,
+         "payPerWay": 25,
+         "win": 25,
+         "positions": [
+          [
+           0,
+           1
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           0
+          ],
+          [
+           3,
+           2
+          ],
+          [
+           4,
+           1
+          ]
+         ]
+        },
+        {
+         "symbol": "L4",
+         "length": 3,
+         "ways": 2,
+         "payPerWay": 3,
+         "win": 6,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           0
+          ],
+          [
+           2,
+           1
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 141,
+       "multiplier": 5,
+       "totalWinCoins": 705,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 5,
+       "meterBefore": 5,
+       "meterAfter": 7,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 3,
+       "stops": [
+        5,
+        11,
+        34,
+        11,
+        9
+       ],
+       "grid": [
+        [
+         6,
+         4,
+         4
+        ],
+        [
+         3,
+         4,
+         8
+        ],
+        [
+         9,
+         3,
+         4
+        ],
+        [
+         2,
+         2,
+         2
+        ],
+        [
+         1,
+         9,
+         5
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "M2",
+         "length": 3,
+         "ways": 4,
+         "payPerWay": 8,
+         "win": 32,
+         "positions": [
+          [
+           0,
+           1
+          ],
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           0
+          ],
+          [
+           2,
+           2
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 32,
+       "multiplier": 7,
+       "totalWinCoins": 224,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 4,
+       "meterBefore": 7,
+       "meterAfter": 9,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 4,
+       "stops": [
+        27,
+        34,
+        30,
+        50,
+        56
+       ],
+       "grid": [
+        [
+         0,
+         2,
+         10
+        ],
+        [
+         6,
+         4,
+         5
+        ],
+        [
+         2,
+         10,
+         3
+        ],
+        [
+         0,
+         9,
+         6
+        ],
+        [
+         7,
+         4,
+         9
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 2,
+        "positions": [
+         [
+          0,
+          2
+         ],
+         [
+          2,
+          1
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 9,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 3,
+       "meterBefore": 9,
+       "meterAfter": 9,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 5,
+       "stops": [
+        28,
+        12,
+        22,
+        50,
+        83
+       ],
+       "grid": [
+        [
+         2,
+         10,
+         3
+        ],
+        [
+         4,
+         8,
+         1
+        ],
+        [
+         9,
+         0,
+         3
+        ],
+        [
+         0,
+         9,
+         6
+        ],
+        [
+         4,
+         1,
+         0
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          0,
+          1
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 9,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 2,
+       "meterBefore": 9,
+       "meterAfter": 9,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 6,
+       "stops": [
+        34,
+        57,
+        38,
+        61,
+        62
+       ],
+       "grid": [
+        [
+         8,
+         4,
+         8
+        ],
+        [
+         1,
+         1,
+         5
+        ],
+        [
+         2,
+         6,
+         8
+        ],
+        [
+         3,
+         5,
+         3
+        ],
+        [
+         4,
+         5,
+         5
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 9,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 1,
+       "meterBefore": 9,
+       "meterAfter": 9,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 7,
+       "stops": [
+        12,
+        72,
+        43,
+        65,
+        80
+       ],
+       "grid": [
+        [
+         5,
+         1,
+         10
+        ],
+        [
+         10,
+         6,
+         0
+        ],
+        [
+         1,
+         0,
+         9
+        ],
+        [
+         2,
+         0,
+         0
+        ],
+        [
+         2,
+         2,
+         0
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 2,
+        "positions": [
+         [
+          0,
+          2
+         ],
+         [
+          1,
+          0
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 9,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 0,
+       "meterBefore": 9,
+       "meterAfter": 9,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      }
+     ],
+     "totalWinCoins": 1409,
+     "meterEnd": 9,
+     "endedByCap": false
+    },
+    "totalWinCoins": 1449,
+    "capped": false
+   }
+  },
+  {
+   "id": "super-3",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-super",
+    "nonce": 3,
+    "kind": "buySuper",
+    "base": {
+     "stops": [
+      54,
+      36,
+      1,
+      74,
+      47
+     ],
+     "grid": [
+      [
+       10,
+       4,
+       1
+      ],
+      [
+       5,
+       5,
+       1
+      ],
+      [
+       6,
+       6,
+       4
+      ],
+      [
+       10,
+       3,
+       9
+      ],
+      [
+       10,
+       7,
+       4
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 3,
+      "positions": [
+       [
+        0,
+        0
+       ],
+       [
+        3,
+        0
+       ],
+       [
+        4,
+        0
+       ]
+      ],
+      "pay": 40
+     },
+     "lineWinCoins": 40,
+     "multiplier": 1,
+     "totalWinCoins": 40,
+     "triggersSpins": 10
+    },
+    "feature": {
+     "tier": "super",
+     "spinsAwarded": 8,
+     "meter": {
+      "start": 3,
+      "winsPerStep": 1,
+      "step": 2,
+      "cap": 10
+     },
+     "spins": [
+      {
+       "index": 0,
+       "stops": [
+        21,
+        18,
+        46,
+        14,
+        36
+       ],
+       "grid": [
+        [
+         8,
+         6,
+         6
+        ],
+        [
+         2,
+         3,
+         0
+        ],
+        [
+         0,
+         6,
+         1
+        ],
+        [
+         4,
+         5,
+         9
+        ],
+        [
+         3,
+         6,
+         0
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 3,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 7,
+       "meterBefore": 3,
+       "meterAfter": 3,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 1,
+       "stops": [
+        47,
+        79,
+        47,
+        0,
+        27
+       ],
+       "grid": [
+        [
+         2,
+         4,
+         1
+        ],
+        [
+         5,
+         9,
+         4
+        ],
+        [
+         6,
+         1,
+         0
+        ],
+        [
+         1,
+         8,
+         10
+        ],
+        [
+         2,
+         6,
+         10
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H2",
+         "length": 4,
+         "ways": 1,
+         "payPerWay": 50,
+         "win": 50,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           1
+          ],
+          [
+           3,
+           0
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 2,
+        "positions": [
+         [
+          3,
+          2
+         ],
+         [
+          4,
+          2
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 50,
+       "multiplier": 3,
+       "totalWinCoins": 150,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 6,
+       "meterBefore": 3,
+       "meterAfter": 5,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 2,
+       "stops": [
+        1,
+        31,
+        14,
+        55,
+        44
+       ],
+       "grid": [
+        [
+         0,
+         2,
+         1
+        ],
+        [
+         0,
+         2,
+         0
+        ],
+        [
+         8,
+         3,
+         7
+        ],
+        [
+         2,
+         4,
+         3
+        ],
+        [
+         0,
+         7,
+         3
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 5,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 5,
+       "meterBefore": 5,
+       "meterAfter": 5,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 3,
+       "stops": [
+        19,
+        3,
+        17,
+        24,
+        13
+       ],
+       "grid": [
+        [
+         2,
+         0,
+         8
+        ],
+        [
+         10,
+         2,
+         7
+        ],
+        [
+         1,
+         0,
+         1
+        ],
+        [
+         1,
+         7,
+         0
+        ],
+        [
+         1,
+         2,
+         9
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          1,
+          0
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 5,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 4,
+       "meterBefore": 5,
+       "meterAfter": 5,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 4,
+       "stops": [
+        37,
+        50,
+        53,
+        67,
+        35
+       ],
+       "grid": [
+        [
+         4,
+         8,
+         4
+        ],
+        [
+         0,
+         9,
+         7
+        ],
+        [
+         2,
+         1,
+         1
+        ],
+        [
+         0,
+         1,
+         10
+        ],
+        [
+         2,
+         3,
+         6
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          3,
+          2
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 5,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 3,
+       "meterBefore": 5,
+       "meterAfter": 5,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 5,
+       "stops": [
+        4,
+        7,
+        21,
+        33,
+        68
+       ],
+       "grid": [
+        [
+         8,
+         6,
+         4
+        ],
+        [
+         2,
+         0,
+         1
+        ],
+        [
+         0,
+         9,
+         0
+        ],
+        [
+         9,
+         0,
+         6
+        ],
+        [
+         6,
+         4,
+         10
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          4,
+          2
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 5,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 2,
+       "meterBefore": 5,
+       "meterAfter": 5,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 6,
+       "stops": [
+        48,
+        43,
+        29,
+        60,
+        47
+       ],
+       "grid": [
+        [
+         4,
+         1,
+         6
+        ],
+        [
+         1,
+         3,
+         4
+        ],
+        [
+         9,
+         2,
+         10
+        ],
+        [
+         1,
+         3,
+         5
+        ],
+        [
+         2,
+         1,
+         2
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H2",
+         "length": 5,
+         "ways": 1,
+         "payPerWay": 120,
+         "win": 120,
+         "positions": [
+          [
+           0,
+           1
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           2,
+           0
+          ],
+          [
+           3,
+           0
+          ],
+          [
+           4,
+           1
+          ]
+         ]
+        },
+        {
+         "symbol": "M2",
+         "length": 3,
+         "ways": 1,
+         "payPerWay": 8,
+         "win": 8,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           0
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          2,
+          2
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 128,
+       "multiplier": 5,
+       "totalWinCoins": 640,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 1,
+       "meterBefore": 5,
+       "meterAfter": 7,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 7,
+       "stops": [
+        62,
+        32,
+        81,
+        85,
+        44
+       ],
+       "grid": [
+        [
+         1,
+         1,
+         5
+        ],
+        [
+         2,
+         0,
+         6
+        ],
+        [
+         2,
+         9,
+         8
+        ],
+        [
+         8,
+         3,
+         1
+        ],
+        [
+         0,
+         7,
+         3
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 7,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 0,
+       "meterBefore": 7,
+       "meterAfter": 7,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      }
+     ],
+     "totalWinCoins": 790,
+     "meterEnd": 7,
+     "endedByCap": false
+    },
+    "totalWinCoins": 830,
+    "capped": false
+   }
+  },
+  {
+   "id": "super-4",
+   "outcome": {
+    "configVersion": "1.0.0",
+    "seed": "golden-super",
+    "nonce": 4,
+    "kind": "buySuper",
+    "base": {
+     "stops": [
+      50,
+      52,
+      69,
+      39,
+      41
+     ],
+     "grid": [
+      [
+       1,
+       7,
+       7
+      ],
+      [
+       7,
+       7,
+       10
+      ],
+      [
+       10,
+       3,
+       5
+      ],
+      [
+       3,
+       6,
+       0
+      ],
+      [
+       3,
+       10,
+       2
+      ]
+     ],
+     "wins": [],
+     "scatter": {
+      "count": 3,
+      "positions": [
+       [
+        1,
+        2
+       ],
+       [
+        2,
+        0
+       ],
+       [
+        4,
+        1
+       ]
+      ],
+      "pay": 40
+     },
+     "lineWinCoins": 40,
+     "multiplier": 1,
+     "totalWinCoins": 40,
+     "triggersSpins": 10
+    },
+    "feature": {
+     "tier": "super",
+     "spinsAwarded": 8,
+     "meter": {
+      "start": 3,
+      "winsPerStep": 1,
+      "step": 2,
+      "cap": 10
+     },
+     "spins": [
+      {
+       "index": 0,
+       "stops": [
+        44,
+        20,
+        44,
+        21,
+        68
+       ],
+       "grid": [
+        [
+         2,
+         2,
+         1
+        ],
+        [
+         0,
+         2,
+         9
+        ],
+        [
+         0,
+         9,
+         0
+        ],
+        [
+         7,
+         1,
+         2
+        ],
+        [
+         6,
+         4,
+         10
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H2",
+         "length": 4,
+         "ways": 1,
+         "payPerWay": 50,
+         "win": 50,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           1
+          ],
+          [
+           3,
+           1
+          ]
+         ]
+        },
+        {
+         "symbol": "H3",
+         "length": 4,
+         "ways": 4,
+         "payPerWay": 40,
+         "win": 160,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           0,
+           1
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           1
+          ],
+          [
+           3,
+           2
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          4,
+          2
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 210,
+       "multiplier": 3,
+       "totalWinCoins": 630,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 7,
+       "meterBefore": 3,
+       "meterAfter": 5,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 1,
+       "stops": [
+        56,
+        50,
+        27,
+        49,
+        23
+       ],
+       "grid": [
+        [
+         4,
+         1,
+         1
+        ],
+        [
+         0,
+         9,
+         7
+        ],
+        [
+         0,
+         0,
+         9
+        ],
+        [
+         3,
+         0,
+         9
+        ],
+        [
+         2,
+         10,
+         0
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H2",
+         "length": 4,
+         "ways": 2,
+         "payPerWay": 50,
+         "win": 100,
+         "positions": [
+          [
+           0,
+           1
+          ],
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           2
+          ],
+          [
+           3,
+           2
+          ]
+         ]
+        },
+        {
+         "symbol": "M2",
+         "length": 4,
+         "ways": 1,
+         "payPerWay": 22,
+         "win": 22,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           2
+          ],
+          [
+           3,
+           2
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          4,
+          1
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 122,
+       "multiplier": 5,
+       "totalWinCoins": 610,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 6,
+       "meterBefore": 5,
+       "meterAfter": 7,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 2,
+       "stops": [
+        3,
+        76,
+        26,
+        66,
+        30
+       ],
+       "grid": [
+        [
+         1,
+         8,
+         6
+        ],
+        [
+         2,
+         5,
+         0
+        ],
+        [
+         10,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         1
+        ],
+        [
+         1,
+         3,
+         9
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          2,
+          0
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 7,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 5,
+       "meterBefore": 7,
+       "meterAfter": 7,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 3,
+       "stops": [
+        74,
+        4,
+        58,
+        86,
+        0
+       ],
+       "grid": [
+        [
+         3,
+         1,
+         1
+        ],
+        [
+         2,
+         7,
+         0
+        ],
+        [
+         9,
+         2,
+         4
+        ],
+        [
+         3,
+         1,
+         1
+        ],
+        [
+         7,
+         3,
+         1
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 7,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 4,
+       "meterBefore": 7,
+       "meterAfter": 7,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 4,
+       "stops": [
+        64,
+        7,
+        25,
+        27,
+        37
+       ],
+       "grid": [
+        [
+         5,
+         2,
+         1
+        ],
+        [
+         2,
+         0,
+         1
+        ],
+        [
+         1,
+         10,
+         0
+        ],
+        [
+         8,
+         0,
+         0
+        ],
+        [
+         6,
+         0,
+         2
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H2",
+         "length": 3,
+         "ways": 1,
+         "payPerWay": 16,
+         "win": 16,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           2
+          ],
+          [
+           2,
+           0
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          2,
+          1
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 16,
+       "multiplier": 7,
+       "totalWinCoins": 112,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 3,
+       "meterBefore": 7,
+       "meterAfter": 9,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 5,
+       "stops": [
+        42,
+        68,
+        51,
+        84,
+        34
+       ],
+       "grid": [
+        [
+         3,
+         2,
+         2
+        ],
+        [
+         2,
+         1,
+         6
+        ],
+        [
+         3,
+         1,
+         2
+        ],
+        [
+         9,
+         8,
+         3
+        ],
+        [
+         8,
+         2,
+         3
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H3",
+         "length": 5,
+         "ways": 2,
+         "payPerWay": 100,
+         "win": 200,
+         "positions": [
+          [
+           0,
+           1
+          ],
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           2,
+           2
+          ],
+          [
+           3,
+           0
+          ],
+          [
+           4,
+           1
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 0,
+        "positions": [],
+        "pay": 0
+       },
+       "lineWinCoins": 200,
+       "multiplier": 9,
+       "totalWinCoins": 1800,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 2,
+       "meterBefore": 9,
+       "meterAfter": 10,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 6,
+       "stops": [
+        36,
+        29,
+        78,
+        79,
+        22
+       ],
+       "grid": [
+        [
+         8,
+         4,
+         8
+        ],
+        [
+         6,
+         1,
+         0
+        ],
+        [
+         1,
+         10,
+         3
+        ],
+        [
+         5,
+         2,
+         2
+        ],
+        [
+         9,
+         2,
+         10
+        ]
+       ],
+       "wins": [],
+       "scatter": {
+        "count": 2,
+        "positions": [
+         [
+          2,
+          1
+         ],
+         [
+          4,
+          2
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 0,
+       "multiplier": 10,
+       "totalWinCoins": 0,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 1,
+       "meterBefore": 10,
+       "meterAfter": 10,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      },
+      {
+       "index": 7,
+       "stops": [
+        30,
+        16,
+        40,
+        58,
+        22
+       ],
+       "grid": [
+        [
+         3,
+         7,
+         0
+        ],
+        [
+         9,
+         0,
+         2
+        ],
+        [
+         8,
+         9,
+         9
+        ],
+        [
+         6,
+         4,
+         1
+        ],
+        [
+         9,
+         2,
+         10
+        ]
+       ],
+       "wins": [
+        {
+         "symbol": "H1",
+         "length": 3,
+         "ways": 4,
+         "payPerWay": 20,
+         "win": 80,
+         "positions": [
+          [
+           0,
+           2
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           1,
+           1
+          ],
+          [
+           2,
+           1
+          ],
+          [
+           2,
+           2
+          ]
+         ]
+        },
+        {
+         "symbol": "M1",
+         "length": 3,
+         "ways": 2,
+         "payPerWay": 10,
+         "win": 20,
+         "positions": [
+          [
+           0,
+           0
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           2,
+           1
+          ],
+          [
+           2,
+           2
+          ]
+         ]
+        },
+        {
+         "symbol": "L3",
+         "length": 3,
+         "ways": 2,
+         "payPerWay": 3,
+         "win": 6,
+         "positions": [
+          [
+           0,
+           1
+          ],
+          [
+           1,
+           0
+          ],
+          [
+           2,
+           1
+          ],
+          [
+           2,
+           2
+          ]
+         ]
+        }
+       ],
+       "scatter": {
+        "count": 1,
+        "positions": [
+         [
+          4,
+          2
+         ]
+        ],
+        "pay": 0
+       },
+       "lineWinCoins": 106,
+       "multiplier": 10,
+       "totalWinCoins": 1060,
+       "triggersSpins": 0,
+       "spinsRemainingAfter": 0,
+       "meterBefore": 10,
+       "meterAfter": 10,
+       "winsTowardStep": 0,
+       "retriggerSpins": 0
+      }
+     ],
+     "totalWinCoins": 4212,
+     "meterEnd": 10,
+     "endedByCap": false
+    },
+    "totalWinCoins": 4252,
+    "capped": false
+   }
+  }
+ ],
+ "digest": {
+  "seed": "golden-digest",
+  "spins": 20000,
+  "value": "5fa74999"
+ }
+}
