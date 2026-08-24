@@ -314,6 +314,18 @@ Commits: `stage-1: maths`, `stage-2: static reels`, … on `main` of a fresh rep
 
 ## 12. Amendments made during the build (approved plan → what shipped)
 
+**Stage 3**
+
+0. The presenter was put behind a Pixi-free `PresenterDeps` interface so the real sequencing/skip
+   logic runs in tests against fake visuals — a structural addition, not a behaviour change.
+
+**Stage 5**
+
+0. Audio cues piggyback on the visual callbacks (via `audioBus`) instead of a parallel cue
+   channel in the presenter — audio cannot desynchronise from what is on screen, and skipped
+   beats fire their cue exactly once for free. Pixi v8's `ParticleContainer` turned out to need
+   a shared texture source **and** a per-frame `update()` — both handled inside `ParticleSystem`.
+
 **Stage 1**
 
 1. **Super tier meter rules.** At 300× the super feature must be worth ≈ 3× the regular one; "×3 start, fewer spins" on the same reels is worth ≈ 1.1× and cannot reach 96.5 %. Shipped: super = 8 spins, meter **starts ×3 and steps +2 on every win** (cap ×10). `buy.super.meter` is a full `MeterRules` object, so this is data, not code. Same free strips are used. Documented in README.

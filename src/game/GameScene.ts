@@ -103,6 +103,12 @@ export class GameScene {
     return this.backgroundFor(this.bgVariant, this.currentLayout.orientation);
   }
 
+  /** Cover scale applied to the active backdrop (for effects living in backdrop space). */
+  get backdropScale(): number {
+    const bg = this.background;
+    return Math.max(this.currentLayout.viewW / bg.width, this.currentLayout.viewH / bg.height);
+  }
+
   setBackground(variant: BackgroundVariant): void {
     this.bgVariant = variant;
     this.applyBackground();

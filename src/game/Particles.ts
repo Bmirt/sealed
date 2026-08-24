@@ -1,5 +1,5 @@
-import { Graphics, Particle, ParticleContainer, Rectangle } from 'pixi.js';
-import type { Renderer, Texture, Ticker } from 'pixi.js';
+import { Graphics, Particle, ParticleContainer, Rectangle, Texture } from 'pixi.js';
+import type { Renderer, Ticker } from 'pixi.js';
 import { PALETTE } from '@config/palette';
 
 interface Slot {
@@ -54,8 +54,8 @@ export class ParticleSystem {
     this.view = new ParticleContainer({
       dynamicProperties: { position: true, scale: true, rotation: true, color: true },
     });
-    const sparkTex = bakeSpark(renderer);
-    const emberTex = bakeEmber(renderer);
+    // ParticleContainer requires every particle to share ONE texture source — bake a tiny sheet.
+    const { sparkTex, emberTex } = bakeSheet(renderer);
     for (let i = 0; i < capacity; i++) {
       const particle = new Particle({ texture: i % 2 === 0 ? emberTex : sparkTex, x: 0, y: 0, anchorX: 0.5, anchorY: 0.5 });
       particle.alpha = 0;
@@ -103,22 +103,24 @@ export class ParticleSystem {
       if (slot.active) continue;
       slot.active = true;
       slot.particle.x = x + this.rng() * w;
-      slot.particle.y = y;
-      slot.vx = (this.rng() - 0.5) * 30;
-      slot.vy = -upSpeed * (0.5 + this.rng());
-      slot.ax = (this.rng() - 0.5) * 20;
-      slot.ay = -10;
-      slot.maxLife = 3 + this.rng() * 4;
+      slot.particle.y = y - this.rng() * y * 0.35; // some start higher for depth
+      slot.vx = (this.rng() - 0.5) * 34;
+      slot.vy = -upSpeed * (0.8 + this.rng() * 1.4);
+      slot.ax = (this.rng() - 0.5) * 24;
+      slot.ay = -14;
+      slot.maxLife = 5 + this.rng() * 5;
       slot.life = slot.maxLife;
       slot.spin = (this.rng() - 0.5) * 1.5;
-      slot.baseScale = 0.25 + this.rng() * 0.5;
-      slot.fadeIn = 0.6;
+      slot.baseScale = 0.25 + this.rng() * 0.55;
+      slot.fadeIn = 0.8;
       spawned++;
     }
   }
 
   /** Advance the simulation. Hook onto the app ticker. */
   update = (ticker: Ticker): void => {
+    // ParticleContainer only re-uploads its buffers when flagged — flag every frame.
+    this.view.update();
     const dt = Math.min(0.05, ticker.deltaMS / 1000);
     for (const slot of this.slots) {
       if (!slot.active) continue;
@@ -152,23 +154,18 @@ export class ParticleSystem {
   }
 }
 
-function bakeSpark(renderer: Renderer): Texture {
+function bakeSheet(renderer: Renderer): { sparkTex: Texture; emberTex: Texture } {
   const g = new Graphics();
-  g.poly([0, -7, 2, -2, 7, 0, 2, 2, 0, 7, -2, 2, -7, 0, -2, -2]).fill({ color: PALETTE.goldHi });
-  g.circle(0, 0, 2).fill({ color: 0xffffff });
-  g.position.set(8, 8);
-  const tex = renderer.generateTexture({ target: g, frame: new Rectangle(0, 0, 16, 16), resolution: 2 });
+  // Spark at (8,8) in a 16×16 cell.
+  g.poly([8, 1, 10, 6, 15, 8, 10, 10, 8, 15, 6, 10, 1, 8, 6, 6]).fill({ color: PALETTE.goldHi });
+  g.circle(8, 8, 2).fill({ color: 0xffffff });
+  // Ember at (24,8) in the next cell.
+  g.circle(24, 8, 5).fill({ color: PALETTE.ember, alpha: 0.35 });
+  g.circle(24, 8, 3).fill({ color: PALETTE.ember });
+  g.circle(23.2, 7.2, 1.4).fill({ color: PALETTE.goldHi });
+  const sheet = renderer.generateTexture({ target: g, frame: new Rectangle(0, 0, 32, 16), resolution: 2 });
   g.destroy();
-  return tex;
-}
-
-function bakeEmber(renderer: Renderer): Texture {
-  const g = new Graphics();
-  g.circle(0, 0, 5).fill({ color: PALETTE.ember, alpha: 0.35 });
-  g.circle(0, 0, 3).fill({ color: PALETTE.ember });
-  g.circle(-0.8, -0.8, 1.4).fill({ color: PALETTE.goldHi });
-  g.position.set(6, 6);
-  const tex = renderer.generateTexture({ target: g, frame: new Rectangle(0, 0, 12, 12), resolution: 2 });
-  g.destroy();
-  return tex;
+  const sparkTex = new Texture({ source: sheet.source, frame: new Rectangle(0, 0, 16, 16) });
+  const emberTex = new Texture({ source: sheet.source, frame: new Rectangle(17, 1, 14, 14) });
+  return { sparkTex, emberTex };
 }

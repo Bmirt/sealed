@@ -1,6 +1,8 @@
 import { gsap } from 'gsap';
 import { Container, FillGradient, Graphics } from 'pixi.js';
 import { PALETTE, rgba } from '@config/palette';
+import { audioBus } from '@/audio/bus';
+import { fxBus } from './Ambient';
 import { SYMBOL_H, SYMBOL_W } from '@/assets/procedural/metrics';
 import type { GameScene } from './GameScene';
 import { REELS, REELS_H, ROWS } from './layout';
@@ -51,10 +53,13 @@ export class AnticipationView {
     this.columnTweens[reel]?.kill();
     g.alpha = 0.35;
     this.columnTweens[reel] = gsap.to(g, { alpha: 1, duration: 0.42, yoyo: true, repeat: -1, ease: 'sine.inOut' });
-    // Frame pulse (shared).
+    // Frame pulse (shared) + the tension drone (music ducks under it).
     if (!this.frameTween) {
       const frame = this.scene.reels.frame;
       this.frameTween = gsap.to(frame.scale, { x: 1.006, y: 1.006, duration: 0.34, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+      audioBus.engine?.duck(true);
+      audioBus.engine?.loopStart('anticipationLoop', 0.3);
+      fxBus.ambient?.setIntensity(2.6);
     }
   }
 
@@ -76,6 +81,11 @@ export class AnticipationView {
   }
 
   private stopFramePulse(): void {
+    if (this.frameTween) {
+      audioBus.engine?.loopStop('anticipationLoop', 0.2);
+      audioBus.engine?.duck(false);
+      fxBus.ambient?.setIntensity(1.2);
+    }
     this.frameTween?.kill();
     this.frameTween = null;
     this.scene.reels.frame.scale.set(1);

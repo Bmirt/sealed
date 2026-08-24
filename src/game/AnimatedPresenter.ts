@@ -52,7 +52,8 @@ export interface PresenterDeps {
   readonly cycle: { show(win: WayWin, betCents: number, coinsPerBet: number): void; clear(): void };
   readonly feature: FeatureDeps;
   readonly cinematic: CinematicDeps;
-  landPuff(reel: number): void;
+  /** A reel landed: dust/thud, plus scatter chime and wild fire-trail dressing. */
+  landPuff(reel: number, fx: { readonly scatter: boolean; readonly wildRows: readonly number[] }): void;
   resetOverlay(): void;
 }
 
@@ -118,13 +119,14 @@ export class AnimatedPresenter implements OutcomePresenter {
     const profile = SPEED_PROFILES[this.store.get().turboMode];
     const ctx = contextFor(this.config);
     const scatterByReel = outcome.base.grid.map((col) => col.filter((c) => c === ctx.scatterCode).length);
+    const wildRowsByReel = outcome.base.grid.map((col) => col.flatMap((c, row) => (c === ctx.wildCode ? [row] : [])));
     const plan = { stops: outcome.base.stops, anticipation: anticipationReels(scatterByReel) };
 
     this.stageName = 'reels';
     this.seq.enqueue(
       new TimelinePresentation('reels', (tl) => {
         buildReelSpin(tl, this.deps.reels(), plan, profile, {
-          onReelLand: (r) => this.deps.landPuff(r),
+          onReelLand: (r) => this.deps.landPuff(r, { scatter: (scatterByReel[r] ?? 0) > 0, wildRows: wildRowsByReel[r] ?? [] }),
           onAnticipationStart: (r) => this.deps.anticipation.start(r),
           onAnticipationEnd: (r) => this.deps.anticipation.end(r),
         });
@@ -207,12 +209,13 @@ export class AnimatedPresenter implements OutcomePresenter {
     for (const fs of f.spins) {
       const profileNow = (): (typeof SPEED_PROFILES)['normal'] => SPEED_PROFILES[this.store.get().turboMode];
       const scatterByReel = fs.grid.map((col) => col.filter((c) => c === ctx.scatterCode).length);
+      const wildRowsByReel = fs.grid.map((col) => col.flatMap((c, row) => (c === ctx.wildCode ? [row] : [])));
       const plan = { stops: fs.stops, anticipation: anticipationReels(scatterByReel) };
 
       this.seq.enqueue(
         new TimelinePresentation(`feature:spin:${fs.index}`, (tl) => {
           buildReelSpin(tl, this.deps.reels(), plan, profileNow(), {
-            onReelLand: (r) => this.deps.landPuff(r),
+            onReelLand: (r) => this.deps.landPuff(r, { scatter: (scatterByReel[r] ?? 0) > 0, wildRows: wildRowsByReel[r] ?? [] }),
             onAnticipationStart: (r) => this.deps.anticipation.start(r),
             onAnticipationEnd: (r) => this.deps.anticipation.end(r),
           });

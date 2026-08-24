@@ -1,5 +1,6 @@
 import { gsap } from 'gsap';
 import { BitmapFont, BitmapText, Container, FillGradient, Graphics } from 'pixi.js';
+import { audioBus } from '@/audio/bus';
 import { PALETTE, rgba } from '@config/palette';
 import { DISPLAY_FONT } from '@config/typography';
 import type { Cell, WayWin } from '@math/types';
@@ -47,10 +48,12 @@ function ensureFont(): void {
 class TextCounter implements CounterLike {
   readonly view: BitmapText;
   private readonly prefix: string;
+  private readonly onSet: (() => void) | null;
 
-  constructor(size: number, prefix = '') {
+  constructor(size: number, prefix = '', onSet: (() => void) | null = null) {
     ensureFont();
     this.prefix = prefix;
+    this.onSet = onSet;
     this.view = new BitmapText({ text: '', style: { fontFamily: FONT_NAME, fontSize: size } });
     this.view.anchor.set(0.5);
     this.view.visible = false;
@@ -58,6 +61,7 @@ class TextCounter implements CounterLike {
 
   set(cents: number): void {
     this.view.text = `${this.prefix}${formatCents(cents)}`;
+    this.onSet?.();
   }
 
   show(): void {
@@ -108,7 +112,7 @@ export class WinOverlayView implements WinShowSurface {
       this.flareLayer.addChild(f);
     }
 
-    this.counter = new TextCounter(46, 'WIN ');
+    this.counter = new TextCounter(46, 'WIN ', () => audioBus.engine?.rollupTick());
     this.counter.view.position.set(REELS_W / 2, REELS_H + 78);
     scene.reels.addChild(this.counter.view);
 
@@ -168,7 +172,11 @@ export class WinOverlayView implements WinShowSurface {
 
   setFlares(on: boolean): void {
     this.flares.forEach((f) => (f.visible = false));
-    if (!on) return;
+    if (!on) {
+      audioBus.engine?.rollupStop(true);
+      return;
+    }
+    audioBus.engine?.rollupStart();
     this.cells.forEach(([r, row], i) => {
       const f = this.flares[i];
       if (!f) return;
@@ -248,6 +256,9 @@ export class WinOverlayView implements WinShowSurface {
   }
 
   private showTier(label: string): void {
+    audioBus.engine?.duck(true);
+    audioBus.engine?.play('fanfare', { rate: label.startsWith('BIG') ? 0.94 : 1 });
+    if (label.startsWith('EPIC') || label.startsWith('LEGENDARY')) audioBus.engine?.play('roar', { volume: 0.6 });
     const d = DESIGN[this.scene.layout.orientation];
     this.tierLabel.text = label;
     this.tierLabel.position.set(d.w / 2, d.h * 0.36);
@@ -258,6 +269,7 @@ export class WinOverlayView implements WinShowSurface {
 
   private hideTier(): void {
     this.tierRoot.visible = false;
+    audioBus.engine?.duck(false);
   }
 
   private shake(intensity: number): void {

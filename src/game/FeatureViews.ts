@@ -3,6 +3,7 @@ import { BitmapText, Container, FillGradient, Graphics, Rectangle, Sprite } from
 import type { Renderer, Texture } from 'pixi.js';
 import { PALETTE, rgba } from '@config/palette';
 import { drawFlybyDragon } from '@/assets/procedural/dragons';
+import { audioBus } from '@/audio/bus';
 import { formatCents } from '@/state/money';
 import type { FeatureDeps, CinematicDeps } from './AnimatedPresenter';
 import type { GameScene } from './GameScene';
@@ -127,13 +128,20 @@ export class FeatureHudView implements FeatureDeps {
     this.perStep = winsPerStep;
     this.meterText.text = `×${multiplier}`;
     this.meterText.scale.set(1);
+    this.stepCuePlayed = false;
     this.drawPips();
   }
 
   pulseMeter(progress: number): void {
+    if (!this.stepCuePlayed && progress > 0) {
+      this.stepCuePlayed = true;
+      audioBus.engine?.play('meterStep', { rate: 1 + this.meter * 0.045 });
+    }
     const s = 1 + Math.sin(Math.min(1, progress) * Math.PI) * 0.35;
     this.meterText.scale.set(s);
   }
+
+  private stepCuePlayed = false;
 
   setSpinsLeft(n: number): void {
     this.spinsText.text = `SPINS LEFT ${n}`;
@@ -144,6 +152,9 @@ export class FeatureHudView implements FeatureDeps {
   }
 
   showBanner(title: string, sub: string): void {
+    if (title.startsWith('+')) audioBus.engine?.play('retriggerArp');
+    else if (title.includes('COMPLETE') || title.includes('MAX WIN')) audioBus.engine?.play('outroStinger');
+    else audioBus.engine?.play('stingerIntro');
     this.bannerTitle.text = title;
     this.bannerSub.text = sub;
     this.banner.visible = true;
@@ -222,8 +233,13 @@ export class CinematicView implements CinematicDeps {
     this.dragon.tint = tier === 'super' ? 0xb9b2c4 : 0xffffff;
     this.dragon.visible = false;
     this.lastEmber = -1;
+    this.igniteCued = false;
+    audioBus.engine?.duck(true);
+    audioBus.engine?.play('roar', { rate: tier === 'super' ? 0.85 : 1 });
     this.update(0);
   }
+
+  private igniteCued = false;
 
   update(p: number): void {
     const d = DESIGN[this.scene.layout.orientation];
@@ -250,6 +266,10 @@ export class CinematicView implements CinematicDeps {
     }
     // Ignite flash 0.8..1.
     const ip = (p - 0.8) / 0.2;
+    if (ip >= 0 && !this.igniteCued) {
+      this.igniteCued = true;
+      audioBus.engine?.play('igniteHit');
+    }
     this.flash.alpha = ip >= 0 && ip <= 1 ? Math.sin(Math.min(1, ip) * Math.PI) * 0.55 : 0;
   }
 
@@ -258,6 +278,7 @@ export class CinematicView implements CinematicDeps {
     this.flash.alpha = 0;
     this.veil.alpha = 0;
     this.dragon.visible = false;
+    audioBus.engine?.duck(false);
   }
 }
 

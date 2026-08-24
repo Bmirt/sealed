@@ -4,9 +4,9 @@ A 5-reel × 3-row, 243-ways video slot. Dark medieval dragon-dynasty theme: obsi
 
 Browser-based, single app: **Vite + TypeScript (strict) + PixiJS v8 + GSAP + Howler**. No external art or audio — every symbol and effect is drawn procedurally and every sound is synthesised with the Web Audio API. Mock balance only; no wallet, no real money.
 
-> Build status: **Stage 4 of 5 — free spins, buy bonus, autoplay, paytable & settings.** Stage 5 (audio, ambient juice, perf polish) follows. See [PLAN.md](PLAN.md).
+> Build status: **complete — all five stages shipped** (maths → static reels → motion → features → audio & ambience). See [PLAN.md](PLAN.md) for the build contract and its amendments.
 >
-> `pnpm dev` then open the URL; add `?dev` for the dev overlay (FPS, seed/nonce entry, "find me a scatter / wild / big win" buttons — all of which still go through the maths).
+> `pnpm dev` then open the URL; add `?dev` for the dev overlay (FPS, seed/nonce entry, "find me a scatter / wild / big win" buttons — all of which still go through the maths). Sound starts on the first click/keypress (browser autoplay policy).
 
 ---
 
@@ -145,6 +145,33 @@ confirmation modal (exact cost at the current stake, feature RTP, insufficient-b
 flag-gated tiers); confirming plays the entry cinematic — veil, dragon pass with ember trail, reel
 ignite — then the triggering spin lands its scatters for real. **Autoplay** (10/25/50/100) stops on
 feature (optional), on insufficient balance, or by button.
+
+## Audio
+
+No audio files exist in this repository. Every sound — reel thuds, scatter bells, the anticipation
+drone, pitch-ramped roll-up shimmer, tiered fanfares, the dragon roar, both music loops and the
+fire-crackle ambience — is a Web Audio recipe in
+[`src/assets/sfx/recipes.ts`](src/assets/sfx/recipes.ts), rendered through an `OfflineAudioContext`
+into a WAV blob at the first user gesture and played through **Howler** (pooling, fades, rate
+ramps, mobile unlock). Swap any recipe for `{ kind: 'file', url }` to use a real recording.
+
+Cues fire from inside the visual code paths (`src/audio/bus.ts`): the reel-land thud plays in the
+same callback that spawns the landing dust, the fanfare in the same call that shows the tier
+overlay — audio and visuals cannot drift apart, and a skipped beat fires its cue exactly once.
+Music crossfades between the base and feature loops and **ducks** under the anticipation drone and
+Big-Win sequences.
+
+## Ambience & performance
+
+The slot never sits still: embers drift up the screen at all times (surging during anticipation
+and features), the lava glow flickers with layered sines, and a distant dragon crosses the sky
+every half minute. Everything ambient runs on one fixed particle pool (420 slots, zero allocation
+per frame) and a rolling-FPS **governor** ([`src/game/perf.ts`](src/game/perf.ts)) that sheds
+ambience first — half the ember budget below ~48 fps, quarter budget and no flicker below ~38 —
+and recovers with hysteresis so it never flaps. Wilds burn a fire trail down their reel as they
+land. Symbols are pre-baked textures, the reel blur is a pre-smeared texture (no filters in the
+spin loop), and counters are bitmap text. Verify the 60 fps target on a physical mid-range phone
+with `?dev` (the overlay shows live FPS; headless/software-GL numbers are not representative).
 
 ## Scripts
 

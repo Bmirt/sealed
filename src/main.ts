@@ -2,6 +2,9 @@ import './styles/app.css';
 import { GAME_CONFIG } from '@config/game.config';
 import { paletteCssVars } from '@config/palette';
 import { assertValidConfig } from '@math/validate';
+import { AudioEngine } from './audio/AudioEngine';
+import { audioBus } from './audio/bus';
+import { AmbientLife, fxBus } from './game/Ambient';
 import { AnimatedPresenter } from './game/AnimatedPresenter';
 import { GameScene } from './game/GameScene';
 import { PixiPresenterDeps } from './game/PixiPresenterDeps';
@@ -39,9 +42,46 @@ async function boot(): Promise<void> {
     },
   });
 
-  const particles = new ParticleSystem(scene.app.renderer, 320);
+  const particles = new ParticleSystem(scene.app.renderer, 420);
   scene.overlay.addChild(particles.view);
   scene.app.ticker.add(particles.update);
+
+  // Ambient life: embers, firelight flicker, the distant dragon.
+  const ambient = new AmbientLife(scene, particles, scene.app.renderer);
+  fxBus.ambient = ambient;
+
+  // Audio: synthesised at the first user gesture (autoplay policy), then cued from the views.
+  const initAudio = (): void => {
+    window.removeEventListener('pointerdown', initAudio);
+    window.removeEventListener('keydown', initAudio);
+    void AudioEngine.create().then((engine) => {
+      audioBus.engine = engine;
+      engine.setMuted(!store.get().soundOn);
+      engine.music(store.get().phase === 'feature' ? 'feature' : 'base');
+      engine.loopStart('ambientFire', 1.5);
+    });
+  };
+  window.addEventListener('pointerdown', initAudio);
+  window.addEventListener('keydown', initAudio);
+
+  // Music follows the game phase; mute follows the sound toggle; ambience heats up in features.
+  store.subscribe((s, prev) => {
+    if (s.soundOn !== prev.soundOn) audioBus.engine?.setMuted(!s.soundOn);
+    if (s.phase !== prev.phase) {
+      if (s.phase === 'feature') {
+        audioBus.engine?.music('feature');
+        ambient.setIntensity(1.8);
+      } else if (prev.phase === 'feature') {
+        audioBus.engine?.music('base');
+        ambient.setIntensity(1);
+      }
+    }
+  });
+
+  // UI click sound (event delegation over the DOM chrome).
+  uiHost.addEventListener('pointerdown', (e) => {
+    if (e.target instanceof Element && e.target.closest('.btn')) audioBus.engine?.play('ui');
+  });
 
   const presenter = new AnimatedPresenter(new PixiPresenterDeps(scene, particles), store, GAME_CONFIG);
 
@@ -95,7 +135,7 @@ async function boot(): Promise<void> {
 
   if (new URLSearchParams(location.search).has('dev')) {
     new DevPanel(uiHost, GAME_CONFIG, store, controller, scene);
-    (window as unknown as { __ashfall: unknown }).__ashfall = { scene, store, controller, presenter, config: GAME_CONFIG };
+    (window as unknown as { __ashfall: unknown }).__ashfall = { scene, store, controller, presenter, particles, ambient, config: GAME_CONFIG };
   }
 }
 
