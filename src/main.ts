@@ -7,11 +7,17 @@ import { GameScene } from './game/GameScene';
 import { PixiPresenterDeps } from './game/PixiPresenterDeps';
 import { ParticleSystem } from './game/Particles';
 import { SpinFlow } from './game/SpinFlow';
+import { Autoplay } from './state/Autoplay';
 import { GameController } from './state/GameController';
 import { GameStore, LocalStoragePersistence } from './state/GameStore';
 import { formatCents } from './state/money';
+import { openAutoplayModal } from './ui/AutoplayModal';
+import { openBuyModal } from './ui/BuyBonusModal';
 import { DevPanel } from './ui/DevPanel';
 import { Hud } from './ui/Hud';
+import { Modal } from './ui/Modal';
+import { openPaytableModal } from './ui/PaytableModal';
+import { openSettingsModal } from './ui/SettingsModal';
 
 async function boot(): Promise<void> {
   assertValidConfig(GAME_CONFIG);
@@ -42,17 +48,10 @@ async function boot(): Promise<void> {
   let hud: Hud | null = null;
   const controller = new GameController(GAME_CONFIG, store, presenter, {
     onInsufficientBalance: (needed) => hud?.showMessage(`Insufficient balance — need ${formatCents(needed)}`),
-    onRoundEnd: (outcome) => {
-      if (outcome.feature) {
-        hud?.showMessage(
-          `Dragonfire Free Spins: ${outcome.feature.spins.length} spins · ${outcome.feature.totalWinCoins / GAME_CONFIG.coinsPerBet}× bet (full feature presentation arrives in stage 4)`,
-          4000,
-        );
-      }
-    },
   });
 
   const flow = new SpinFlow(store, controller, presenter);
+  const autoplay = new Autoplay(store, controller);
 
   hud = new Hud(uiHost, GAME_CONFIG, store, {
     spin: () => flow.spinPressed(),
@@ -62,16 +61,20 @@ async function boot(): Promise<void> {
     betDown: () => store.betDown(),
     cycleTurbo: () => store.cycleTurbo(),
     toggleSound: () => store.toggleSound(),
-    openBuy: () => hud?.showMessage('Buy Feature — modal arrives in stage 4'),
-    openAutoplay: () => hud?.showMessage('Autoplay — arrives in stage 4'),
-    stopAutoplay: () => store.set({ autoplayRemaining: 0 }),
-    openInfo: () => hud?.showMessage('Paytable — arrives in stage 4'),
-    openSettings: () => hud?.showMessage('Settings — arrives in stage 4'),
+    openBuy: () => {
+      if (controller.canSpin) openBuyModal(uiHost, GAME_CONFIG, store, (tier) => void controller.buy(tier));
+    },
+    openAutoplay: () => {
+      if (controller.canSpin) openAutoplayModal(uiHost, GAME_CONFIG, (count, stopOnFeature) => autoplay.start(count, stopOnFeature));
+    },
+    stopAutoplay: () => autoplay.stop(),
+    openInfo: () => openPaytableModal(uiHost, GAME_CONFIG, store, scene.textures),
+    openSettings: () => openSettingsModal(uiHost, GAME_CONFIG, store),
   });
 
-  // Keyboard: Space = the spin button; Escape releases a held spin.
+  // Keyboard: Space = the spin button (ignored while a dialog is open).
   window.addEventListener('keydown', (e) => {
-    if (e.target instanceof HTMLInputElement) return;
+    if (e.target instanceof HTMLInputElement || Modal.anyOpen) return;
     if (e.code === 'Space') {
       e.preventDefault();
       if (!e.repeat) {

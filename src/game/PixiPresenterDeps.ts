@@ -3,10 +3,11 @@ import { SYMBOL_W } from '@/assets/procedural/metrics';
 import type { SpinnableReel } from './anim/reelSpin';
 import type { TierSurface, WinShowSurface } from './anim/winShow';
 import { AnticipationView } from './AnticipationView';
+import { CinematicView, FeatureHudView } from './FeatureViews';
 import type { GameScene } from './GameScene';
 import { REELS_H } from './layout';
 import type { ParticleSystem } from './Particles';
-import type { PresenterDeps } from './AnimatedPresenter';
+import type { CinematicDeps, FeatureDeps, PresenterDeps } from './AnimatedPresenter';
 import { WinOverlayView } from './WinOverlayView';
 
 /** Wires the presenter's Pixi-free deps interface to the real scene. */
@@ -15,12 +16,16 @@ export class PixiPresenterDeps implements PresenterDeps {
   private readonly particles: ParticleSystem;
   readonly overlay: WinOverlayView;
   private readonly anticipationView: AnticipationView;
+  readonly feature: FeatureDeps;
+  readonly cinematic: CinematicDeps;
 
   constructor(scene: GameScene, particles: ParticleSystem) {
     this.scene = scene;
     this.particles = particles;
     this.overlay = new WinOverlayView(scene, particles);
     this.anticipationView = new AnticipationView(scene);
+    this.feature = new FeatureHudView(scene);
+    this.cinematic = new CinematicView(scene, particles, scene.app.renderer);
   }
 
   reels(): SpinnableReel[] {

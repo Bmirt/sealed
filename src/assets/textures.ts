@@ -86,6 +86,18 @@ export class TextureBank {
     return tex;
   }
 
+  /** PNG data URL of a symbol (for the DOM paytable). Cached. */
+  symbolDataUrl(id: SymbolId): string {
+    const hit = this.dataUrls.get(id);
+    if (hit) return hit;
+    const canvas = this.renderer.extract.canvas(this.symbol(id));
+    const url = canvas.toDataURL?.('image/png') ?? '';
+    this.dataUrls.set(id, url);
+    return url;
+  }
+
+  private readonly dataUrls = new Map<SymbolId, string>();
+
   destroy(): void {
     for (const t of this.symbols.values()) t.destroy(true);
     for (const t of this.blurred.values()) t.destroy(true);

@@ -1,17 +1,14 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { GAME_CONFIG } from '@config/game.config';
 import { spin } from '@math/spin';
-import type { WayWin } from '@math/types';
 import { AnimatedPresenter } from '@/game/AnimatedPresenter';
-import type { PresenterDeps } from '@/game/AnimatedPresenter';
-import type { SpinnableReel } from '@/game/anim/reelSpin';
-import type { TierSurface, WinShowSurface } from '@/game/anim/winShow';
 import { SpinFlow } from '@/game/SpinFlow';
 import { GameController } from '@/state/GameController';
 import { GameStore, MemoryPersistence } from '@/state/GameStore';
 import { betCents, coinsToCents } from '@/state/money';
 import { flushMicrotasks, installManualClock } from '../helpers/gsapClock';
 import type { ManualClock } from '../helpers/gsapClock';
+import { FakeDeps } from './fakeDeps';
 
 let clock: ManualClock;
 beforeEach(() => {
@@ -20,107 +17,6 @@ beforeEach(() => {
 afterEach(() => {
   clock.uninstall();
 });
-
-class FakeDepsReel implements SpinnableReel {
-  readonly stripLength: number;
-  pos = 0;
-  blur = false;
-  constructor(len: number) {
-    this.stripLength = len;
-  }
-  getPos(): number {
-    return this.pos;
-  }
-  setPos(pos: number, blur: boolean): void {
-    this.pos = pos;
-    this.blur = blur;
-  }
-}
-
-class FakeDeps implements PresenterDeps {
-  readonly reelViews = GAME_CONFIG.strips.base.map((s) => new FakeDepsReel(s.length));
-  counterValue = -1;
-  counterVisible = false;
-  dim = false;
-  flares = false;
-  tierVisible = false;
-  tierCounterValue = -1;
-  log: string[] = [];
-  cycleShown: WayWin[] = [];
-
-  reels(): SpinnableReel[] {
-    return this.reelViews;
-  }
-  setStripSet(set: 'base' | 'free'): void {
-    this.log.push(`strips:${set}`);
-  }
-  setBackground(v: 'base' | 'free'): void {
-    this.log.push(`bg:${v}`);
-  }
-  showStops(): void {
-    this.log.push('showStops');
-  }
-  readonly winSurface: WinShowSurface & { prepare(wins: readonly WayWin[]): void } = {
-    prepare: () => this.log.push('prepare'),
-    setDim: (on) => {
-      this.dim = on;
-    },
-    setFlares: (on) => {
-      this.flares = on;
-    },
-    winningCells: [{ setPulse: () => undefined }],
-    counter: {
-      set: (c) => {
-        this.counterValue = c;
-      },
-      show: () => {
-        this.counterVisible = true;
-      },
-      hide: () => {
-        this.counterVisible = false;
-      },
-    },
-  };
-  readonly tierSurface: TierSurface = {
-    show: () => {
-      this.tierVisible = true;
-    },
-    hide: () => {
-      this.tierVisible = false;
-    },
-    counter: {
-      set: (c) => {
-        this.tierCounterValue = c;
-      },
-      show: () => undefined,
-      hide: () => undefined,
-    },
-    shake: () => undefined,
-    burst: () => undefined,
-    setRollProgress: () => undefined,
-  };
-  readonly anticipation = {
-    start: (): void => {
-      this.log.push('ant:start');
-    },
-    end: (): void => {
-      this.log.push('ant:end');
-    },
-    reset: (): void => undefined,
-  };
-  readonly cycle = {
-    show: (w: WayWin): void => {
-      this.cycleShown.push(w);
-    },
-    clear: (): void => undefined,
-  };
-  landPuff(): void {
-    /* noop */
-  }
-  resetOverlay(): void {
-    this.log.push('resetOverlay');
-  }
-}
 
 interface Rig {
   store: GameStore;

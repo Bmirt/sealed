@@ -19,6 +19,7 @@ export class ReelsView extends Container {
   private readonly stripsById: Record<StripSet, readonly (readonly SymbolId[])[]>;
   private currentSet: StripSet = 'base';
   readonly frame: Container;
+  readonly plaque: Container;
   readonly window: Container;
 
   constructor(bank: TextureBank, config: GameConfig) {
@@ -56,7 +57,9 @@ export class ReelsView extends Container {
       this.window.addChild(reel);
     }
 
-    this.frame = buildFrame(REELS_W, REELS_H);
+    const frame = buildFrame(REELS_W, REELS_H);
+    this.frame = frame.root;
+    this.plaque = frame.plaque;
     this.addChild(this.frame);
   }
 

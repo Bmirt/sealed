@@ -207,6 +207,121 @@ html, body {
   .btn-buy { width: 92px; padding: 8px 4px; }
 }
 
+/* ---------- modals ---------- */
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5, 4, 7, 0.78);
+  opacity: 0;
+  transition: opacity 160ms ease;
+  z-index: 20;
+  padding: 16px;
+}
+.modal-backdrop.open { opacity: 1; }
+.modal-panel {
+  width: min(680px, 94vw);
+  max-height: min(86vh, 900px);
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #241f2a 0%, #17131b 55%, #100c12 100%);
+  border: 2px solid var(--c-goldDeep);
+  border-radius: 14px;
+  box-shadow: 0 0 0 1px #000, 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(242, 177, 52, 0.12);
+  transform: translateY(8px);
+  transition: transform 160ms ease;
+}
+.modal-backdrop.open .modal-panel { transform: translateY(0); }
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px 10px;
+  border-bottom: 1px solid rgba(242, 177, 52, 0.3);
+}
+.modal-title {
+  margin: 0;
+  font-size: 20px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--c-goldHi);
+}
+.modal-body { padding: 16px 18px; overflow-y: auto; }
+.modal-note { font-size: 12.5px; color: var(--c-ash); line-height: 1.5; }
+
+/* buy modal */
+.buy-cards { display: flex; gap: 14px; flex-wrap: wrap; }
+.buy-card {
+  flex: 1 1 240px;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid var(--c-goldDeep);
+  background: rgba(11, 10, 13, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.buy-card-super { border-color: var(--c-garnet); box-shadow: 0 0 18px rgba(143, 29, 44, 0.35) inset; }
+.buy-card-title { margin: 0; font-size: 17px; color: #fff4e6; letter-spacing: 1.5px; text-transform: uppercase; }
+.buy-card-cost { font-size: 15px; color: var(--c-goldHi); }
+.buy-card-lines { margin: 0; padding-left: 18px; font-size: 13px; color: var(--c-ash); line-height: 1.6; }
+.buy-card-rtp { font-size: 12px; color: var(--c-ash); }
+.buy-card-warn { font-size: 13px; color: var(--c-garnet); font-weight: 700; }
+.btn-confirm {
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: var(--gold-grad);
+  color: var(--c-obsidian);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 1px;
+  box-shadow: inset 0 1px 0 #fff1c2, inset 0 -2px 0 #7a5210, var(--shadow-hard);
+}
+
+/* autoplay */
+.autoplay-counts { display: flex; gap: 10px; margin: 12px 0; }
+.btn-count {
+  flex: 1;
+  padding: 14px 0;
+  font-size: 20px;
+  border-radius: 8px;
+  background: var(--stone-grad);
+  box-shadow: inset 0 1px 0 #4a4654, inset 0 -2px 0 #000, 0 0 0 1px var(--c-goldDeep);
+}
+.btn-count:hover { filter: brightness(1.2); }
+.autoplay-flag { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #d8d4de; margin: 10px 0; cursor: pointer; }
+.autoplay-flag input { width: 18px; height: 18px; accent-color: var(--c-gold); }
+
+/* paytable */
+.pt-rows { display: flex; flex-direction: column; gap: 4px; }
+.pt-row { display: flex; gap: 12px; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(138, 134, 144, 0.12); }
+.pt-img { flex: 0 0 auto; border-radius: 8px; }
+.pt-name { font-size: 15px; color: var(--c-goldHi); letter-spacing: 1px; text-transform: uppercase; }
+.pt-blurb { font-size: 12px; color: var(--c-ash); margin: 2px 0 4px; }
+.pt-pays { display: flex; gap: 12px; flex-wrap: wrap; }
+.pt-pay { font-size: 13px; color: #fff4e6; }
+.pt-rules { margin-top: 14px; }
+.pt-rule h3 { margin: 12px 0 4px; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; color: var(--c-goldHi); }
+.pt-rule p { margin: 0; font-size: 13px; color: #c9c4cf; line-height: 1.6; }
+
+/* settings */
+.settings-h { margin: 10px 0 8px; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; color: var(--c-goldHi); }
+.settings-speeds { display: flex; gap: 10px; }
+.btn-speed {
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 6px;
+  border-radius: 8px;
+  background: var(--stone-grad);
+  box-shadow: inset 0 1px 0 #4a4654, inset 0 -2px 0 #000, 0 0 0 1px var(--c-stoneEdge);
+}
+.btn-speed small { font-size: 10.5px; color: var(--c-ash); letter-spacing: 0.4px; }
+.btn-speed.is-selected { box-shadow: inset 0 1px 0 #4a4654, inset 0 -2px 0 #000, 0 0 0 2px var(--c-gold), 0 0 14px rgba(242, 177, 52, 0.35); }
+.btn-reset { align-self: flex-start; }
+
 /* ---------- dev panel ---------- */
 .dev-panel {
   position: absolute;

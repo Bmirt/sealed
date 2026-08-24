@@ -89,6 +89,15 @@ export const FIXED_TIMING = {
     /** Roll-up time per tier (Big, Mega, Epic, Legendary). */
     rollupTimes: [2.2, 3.2, 4.2, 5.5] as readonly number[],
   },
+  /** Dragonfire feature beats (each individually skippable, never auto-shortened). */
+  feature: {
+    introTime: 2.2,
+    meterStepTime: 0.8,
+    retriggerTime: 1.5,
+    outroTime: 2.8,
+    /** Bought-feature entry cinematic (dragon pass + reel ignite). */
+    cinematicTime: 4.2,
+  },
 } as const;
 
 export interface WinTierDef {

@@ -146,6 +146,40 @@ export function drawAshDragon(g: Graphics): void {
   g.moveTo(80, -28).quadraticCurveTo(90, -38, 84, -50).stroke({ width: 1.5, color: PALETTE.ash, alpha: 0.5 });
 }
 
+/**
+ * Flyby dragon — side view, mid-flap, streaming right. Used by the buy-bonus cinematic,
+ * baked large and tinted per tier. Box ≈ 220×140 centred on (0,0).
+ */
+export function drawFlybyDragon(g: Graphics): void {
+  const polys: Poly[] = [];
+  // Far wing (down-stroke, behind the body).
+  polys.push(batWing(pt(-10, 2), pt(-2, 52), [pt(40, 66), pt(56, 44), pt(52, 22)], pt(24, 6), 10));
+  // Body: long horizontal taper, head right, tail streaming left.
+  polys.push(ribbon({ p0: pt(-96, 26), c0: pt(-40, 2), c1: pt(20, 14), p1: pt(66, -2) }, 5, 26, 24, (t) => t * t * 0.2 + t * 0.8));
+  // Tail spade.
+  polys.push(flat([pt(-94, 32), pt(-108, 20), pt(-104, 40)]));
+  // Head (facing right), open jaw.
+  polys.push(
+    flat([
+      pt(58, -14), pt(72, -20), pt(86, -16), pt(98, -9), pt(102, -2), pt(92, 1), pt(80, 0),
+      pt(94, 9), pt(80, 12), pt(68, 10), pt(58, 4),
+    ]),
+  );
+  polys.push(ribbon({ p0: pt(64, -18), c0: pt(56, -30), p1: pt(44, -38) }, 6, 2));
+  // Near wing (up-stroke, big).
+  polys.push(batWing(pt(4, -6), pt(28, -66), [pt(84, -76), pt(96, -46), pt(84, -18)], pt(46, -2), 12));
+  // Legs tucked.
+  polys.push(flat([pt(6, 18), pt(22, 24), pt(14, 34), pt(0, 30)]));
+  polys.push(flat([pt(-14, 20), pt(0, 26), pt(-8, 34), pt(-22, 30)]));
+
+  silhouette(g, polys, PALETTE.goldHi, PALETTE.goldDeep, 0xfff1c2, -78, 66);
+  for (const tip of [pt(84, -76), pt(96, -46), pt(84, -18)]) {
+    g.moveTo(28, -66).lineTo(tip.x, tip.y).stroke({ width: 1.6, color: PALETTE.goldDeep, alpha: 0.55 });
+  }
+  g.circle(78, -12, 2.6).fill({ color: PALETTE.ember });
+  g.circle(78, -12, 1.1).fill({ color: PALETTE.white });
+}
+
 /** Emerald Dragon — House Myrrowen. In profile, stalking left, wing folded back, tail curled. */
 export function drawEmeraldDragon(g: Graphics): void {
   const polys: Poly[] = [];

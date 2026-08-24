@@ -5,11 +5,17 @@ import { flat, pt } from './shapes';
 
 export const FRAME_THICKNESS = 26;
 
+export interface FrameParts {
+  readonly root: Container;
+  /** Title plaque + text — hidden while the feature HUD takes its place. */
+  readonly plaque: Container;
+}
+
 /**
  * The stone reel frame: bevelled basalt with a molten-gold inlay, claw ornaments on the corners
  * and a title plaque on top. Drawn around a reel window of `w × h` whose top-left is (0,0).
  */
-export function buildFrame(w: number, h: number): Container {
+export function buildFrame(w: number, h: number): FrameParts {
   const root = new Container();
   const t = FRAME_THICKNESS;
   const g = new Graphics();
@@ -76,6 +82,7 @@ export function buildFrame(w: number, h: number): Container {
   root.addChild(g);
 
   // Title plaque.
+  const plaqueRoot = new Container();
   const plaqueW = 520;
   const plaqueH = 64;
   const px = w / 2 - plaqueW / 2;
@@ -84,7 +91,7 @@ export function buildFrame(w: number, h: number): Container {
   plaque.roundRect(px + 4, py + 6, plaqueW, plaqueH, 10).fill({ color: PALETTE.black, alpha: 0.5 });
   plaque.poly([px, py + 10, px + 14, py, px + plaqueW - 14, py, px + plaqueW, py + 10, px + plaqueW, py + plaqueH - 10, px + plaqueW - 14, py + plaqueH, px + 14, py + plaqueH, px, py + plaqueH - 10]).fill({ color: PALETTE.stone });
   plaque.poly([px, py + 10, px + 14, py, px + plaqueW - 14, py, px + plaqueW, py + 10, px + plaqueW, py + plaqueH - 10, px + plaqueW - 14, py + plaqueH, px + 14, py + plaqueH, px, py + plaqueH - 10]).stroke({ width: 2, color: PALETTE.gold, alpha: 0.9 });
-  root.addChild(plaque);
+  plaqueRoot.addChild(plaque);
 
   const title = new Text({
     text: 'ASHFALL DYNASTY',
@@ -100,7 +107,8 @@ export function buildFrame(w: number, h: number): Container {
   });
   title.anchor.set(0.5);
   title.position.set(w / 2 + 4, py + plaqueH / 2 + 2);
-  root.addChild(title);
+  plaqueRoot.addChild(title);
+  root.addChild(plaqueRoot);
 
-  return root;
+  return { root, plaque: plaqueRoot };
 }

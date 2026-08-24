@@ -4,7 +4,7 @@ A 5-reel × 3-row, 243-ways video slot. Dark medieval dragon-dynasty theme: obsi
 
 Browser-based, single app: **Vite + TypeScript (strict) + PixiJS v8 + GSAP + Howler**. No external art or audio — every symbol and effect is drawn procedurally and every sound is synthesised with the Web Audio API. Mock balance only; no wallet, no real money.
 
-> Build status: **Stage 3 of 5 — spin/stop animation and win presentation.** Stages 4–5 (features, polish) follow. See [PLAN.md](PLAN.md).
+> Build status: **Stage 4 of 5 — free spins, buy bonus, autoplay, paytable & settings.** Stage 5 (audio, ambient juice, perf polish) follows. See [PLAN.md](PLAN.md).
 >
 > `pnpm dev` then open the URL; add `?dev` for the dev overlay (FPS, seed/nonce entry, "find me a scatter / wild / big win" buttons — all of which still go through the maths).
 
@@ -129,12 +129,22 @@ the whole queue synchronously. Input semantics ([`src/game/SpinFlow.ts`](src/gam
 | hold Spin / Space | — | auto-repeats when idle |
 
 Three speed modes (Normal / Turbo / Quick) scale reel and roll-up times — but the scatter
-**anticipation** slow-roll and the **Big/Mega/Epic/Legendary** sequences are fixed-length in every
-mode; only a deliberate click/Space cuts them. Anticipation arms on any reel from the third onward
-that is still spinning once two scatters sit to its left. All of the above is under test
-([`tests/game/spinFlow.test.ts`](tests/game/spinFlow.test.ts) runs the real presenter + controller
-against a manually-driven GSAP clock; `tests/game/reelSpin.test.ts` proves landing exactness,
-left-to-right order, slam-stop equivalence and the fixed anticipation time per speed mode).
+**anticipation** slow-roll, the **Big/Mega/Epic/Legendary** sequences and the feature banners are
+fixed-length in every mode; only a deliberate click/Space cuts them. Anticipation arms on any reel
+from the third onward that is still spinning once two scatters sit to its left. All of the above is
+under test ([`tests/game/spinFlow.test.ts`](tests/game/spinFlow.test.ts) runs the real presenter +
+controller against a manually-driven GSAP clock; `tests/game/reelSpin.test.ts` proves landing
+exactness, left-to-right order, slam-stop equivalence and the fixed anticipation time per speed mode).
+
+The **Dragonfire feature** is presented entirely from the pre-resolved outcome: intro banner, every
+free spin (with anticipation on retrigger teases), the meter (+pips) stepping after its third paid
+win, retrigger banners, and a whole-round win tier before the total. A skip-spam run through a
+feature is proven to land on the identical end state as a played-out one
+([`tests/game/featureFlow.test.ts`](tests/game/featureFlow.test.ts)). **Buying** opens a
+confirmation modal (exact cost at the current stake, feature RTP, insufficient-balance state,
+flag-gated tiers); confirming plays the entry cinematic — veil, dragon pass with ember trail, reel
+ignite — then the triggering spin lands its scatters for real. **Autoplay** (10/25/50/100) stops on
+feature (optional), on insufficient balance, or by button.
 
 ## Scripts
 
