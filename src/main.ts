@@ -2,8 +2,11 @@ import './styles/app.css';
 import { GAME_CONFIG } from '@config/game.config';
 import { paletteCssVars } from '@config/palette';
 import { assertValidConfig } from '@math/validate';
+import { AnimatedPresenter } from './game/AnimatedPresenter';
 import { GameScene } from './game/GameScene';
-import { StaticPresenter } from './game/StaticPresenter';
+import { PixiPresenterDeps } from './game/PixiPresenterDeps';
+import { ParticleSystem } from './game/Particles';
+import { SpinFlow } from './game/SpinFlow';
 import { GameController } from './state/GameController';
 import { GameStore, LocalStoragePersistence } from './state/GameStore';
 import { formatCents } from './state/money';
@@ -30,18 +33,31 @@ async function boot(): Promise<void> {
     },
   });
 
+  const particles = new ParticleSystem(scene.app.renderer, 320);
+  scene.overlay.addChild(particles.view);
+  scene.app.ticker.add(particles.update);
+
+  const presenter = new AnimatedPresenter(new PixiPresenterDeps(scene, particles), store, GAME_CONFIG);
+
   let hud: Hud | null = null;
-  const controller = new GameController(GAME_CONFIG, store, new StaticPresenter(scene), {
+  const controller = new GameController(GAME_CONFIG, store, presenter, {
     onInsufficientBalance: (needed) => hud?.showMessage(`Insufficient balance — need ${formatCents(needed)}`),
     onRoundEnd: (outcome) => {
       if (outcome.feature) {
-        hud?.showMessage(`Dragonfire Free Spins: ${outcome.feature.spins.length} spins · ${outcome.feature.totalWinCoins / GAME_CONFIG.coinsPerBet}× bet (full feature presentation arrives in stage 4)`, 5000);
+        hud?.showMessage(
+          `Dragonfire Free Spins: ${outcome.feature.spins.length} spins · ${outcome.feature.totalWinCoins / GAME_CONFIG.coinsPerBet}× bet (full feature presentation arrives in stage 4)`,
+          4000,
+        );
       }
     },
   });
 
+  const flow = new SpinFlow(store, controller, presenter);
+
   hud = new Hud(uiHost, GAME_CONFIG, store, {
-    spin: () => void controller.spin(),
+    spin: () => flow.spinPressed(),
+    spinPressStart: () => flow.holdStart(),
+    spinPressEnd: () => flow.holdEnd(),
     betUp: () => store.betUp(),
     betDown: () => store.betDown(),
     cycleTurbo: () => store.cycleTurbo(),
@@ -53,21 +69,30 @@ async function boot(): Promise<void> {
     openSettings: () => hud?.showMessage('Settings — arrives in stage 4'),
   });
 
-  // Keyboard: Space = spin.
+  // Keyboard: Space = the spin button; Escape releases a held spin.
   window.addEventListener('keydown', (e) => {
-    if (e.code === 'Space' && !e.repeat && !(e.target instanceof HTMLInputElement)) {
+    if (e.target instanceof HTMLInputElement) return;
+    if (e.code === 'Space') {
       e.preventDefault();
-      void controller.spin();
+      if (!e.repeat) {
+        flow.holdStart();
+        flow.spinPressed();
+      }
     }
   });
+  window.addEventListener('keyup', (e) => {
+    if (e.code === 'Space') flow.holdEnd();
+  });
+  // Canvas click / tap = skip the current beat (never starts a spin).
+  scene.app.canvas.addEventListener('pointerdown', () => flow.skipPressed());
 
-  // Opening screen: show a deterministic, win-free stop so the first frame is calm.
+  // Opening screen: a deterministic, win-free stop so the first frame is calm.
   scene.reels.showStops([0, 0, 0, 0, 0], 'base');
   store.set({ phase: 'idle' });
 
   if (new URLSearchParams(location.search).has('dev')) {
     new DevPanel(uiHost, GAME_CONFIG, store, controller, scene);
-    (window as unknown as { __ashfall: unknown }).__ashfall = { scene, store, controller, config: GAME_CONFIG };
+    (window as unknown as { __ashfall: unknown }).__ashfall = { scene, store, controller, presenter, config: GAME_CONFIG };
   }
 }
 

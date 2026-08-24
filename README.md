@@ -4,7 +4,7 @@ A 5-reel × 3-row, 243-ways video slot. Dark medieval dragon-dynasty theme: obsi
 
 Browser-based, single app: **Vite + TypeScript (strict) + PixiJS v8 + GSAP + Howler**. No external art or audio — every symbol and effect is drawn procedurally and every sound is synthesised with the Web Audio API. Mock balance only; no wallet, no real money.
 
-> Build status: **Stage 2 of 5 — static reels rendering real outcomes.** Stages 3–5 (animation, features, polish) follow. See [PLAN.md](PLAN.md).
+> Build status: **Stage 3 of 5 — spin/stop animation and win presentation.** Stages 4–5 (features, polish) follow. See [PLAN.md](PLAN.md).
 >
 > `pnpm dev` then open the URL; add `?dev` for the dev overlay (FPS, seed/nonce entry, "find me a scatter / wild / big win" buttons — all of which still go through the maths).
 
@@ -111,6 +111,30 @@ Big 15–50×  1 in 193 · Mega 50–100×  1 in 746 · Epic 100–500×  1 in 7
 - Symbols are painted once with Pixi Graphics and **baked to textures** at boot (plus a pre-smeared motion-blur variant), so the reels render plain sprites — no live vector drawing and no filters in the spin loop.
 - The stage is a letterboxed design box (1600×900 landscape / 900×1600 portrait) with a full-cover backdrop composed per orientation; the DOM HUD reflows with CSS.
 - The reel view is a window onto the actual reel strip: at rest its visible rows are `strip[stop..stop+2]` — exactly the cells the maths evaluated (tested).
+
+## Motion & the skip system
+
+Every timed beat on screen is a `Presentation` wrapping one GSAP timeline; `skip()` jumps the
+timeline to its end (`progress(1)`), firing every callback on the way — so a skipped beat lands on
+**exactly** the same end state as a played-out one. A `Sequencer` runs beats in order and can abort
+the whole queue synchronously. Input semantics ([`src/game/SpinFlow.ts`](src/game/SpinFlow.ts)):
+
+| Input | During | Result |
+|---|---|---|
+| Spin / Space | idle | spin |
+| Spin / Space | reel spin | slam-stop (same outcome) |
+| Spin / Space | win presentation / Big Win+ | everything to its end state, next spin starts |
+| Spin / Space | free spins | skip current beat only |
+| canvas click | anything | skip current beat only — never spins |
+| hold Spin / Space | — | auto-repeats when idle |
+
+Three speed modes (Normal / Turbo / Quick) scale reel and roll-up times — but the scatter
+**anticipation** slow-roll and the **Big/Mega/Epic/Legendary** sequences are fixed-length in every
+mode; only a deliberate click/Space cuts them. Anticipation arms on any reel from the third onward
+that is still spinning once two scatters sit to its left. All of the above is under test
+([`tests/game/spinFlow.test.ts`](tests/game/spinFlow.test.ts) runs the real presenter + controller
+against a manually-driven GSAP clock; `tests/game/reelSpin.test.ts` proves landing exactness,
+left-to-right order, slam-stop equivalence and the fixed anticipation time per speed mode).
 
 ## Scripts
 

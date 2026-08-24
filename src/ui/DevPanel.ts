@@ -66,7 +66,7 @@ export class DevPanel {
       el('div', { class: 'dev-row' }, [
         spinSeed,
         find('Find scatter×3+', (o) => o.base.scatter.count >= 3),
-        find('Find scatter×2 (tease)', (o) => o.base.scatter.count === 2 && (o.base.scatter.positions[0]?.[0] ?? 9) <= 1),
+        find('Find scatter×2 (tease)', (o) => o.base.scatter.count === 2 && (o.base.scatter.positions[0]?.[0] ?? 9) <= 1 && (o.base.scatter.positions[1]?.[0] ?? 9) <= 1),
         find('Find wild', (o) => o.base.grid.some((col) => col.includes(config.symbols.W.code))),
         find('Find win ≥15×', (o) => o.base.totalWinCoins >= 15 * config.coinsPerBet),
         find('Find win ≥50×', (o) => o.totalWinCoins >= 50 * config.coinsPerBet),

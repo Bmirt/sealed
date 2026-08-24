@@ -32,6 +32,7 @@ export class GameController {
   private presenter: OutcomePresenter;
   private events: ControllerEvents;
   private lastOutcome: SpinOutcome | null = null;
+  private inFlight: Promise<void> | null = null;
 
   constructor(config: GameConfig, store: GameStore, presenter: OutcomePresenter, events: ControllerEvents = {}) {
     this.config = config;
@@ -50,6 +51,11 @@ export class GameController {
 
   get canSpin(): boolean {
     return this.store.get().phase === 'idle';
+  }
+
+  /** The round currently being presented (null when idle). Awaited by the input flow on interrupt. */
+  get roundInFlight(): Promise<void> | null {
+    return this.inFlight;
   }
 
   /** A normal spin at the current bet. Returns false if nothing happened. */
@@ -90,7 +96,15 @@ export class GameController {
     await this.runRound(outcome, this.store.bet);
   }
 
-  private async runRound(outcome: SpinOutcome, bet: number): Promise<void> {
+  private runRound(outcome: SpinOutcome, bet: number): Promise<void> {
+    const round = this.runRoundInner(outcome, bet).finally(() => {
+      this.inFlight = null;
+    });
+    this.inFlight = round;
+    return round;
+  }
+
+  private async runRoundInner(outcome: SpinOutcome, bet: number): Promise<void> {
     this.lastOutcome = outcome;
     const cpb = this.config.coinsPerBet;
     this.store.set({ phase: 'spinning', lastWinCents: 0, message: null });
