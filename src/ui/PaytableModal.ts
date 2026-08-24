@@ -25,7 +25,7 @@ export function openPaytableModal(host: HTMLElement, config: GameConfig, store: 
     ]);
 
   const rows: HTMLElement[] = [];
-  rows.push(symbolRow('W', ['Substitutes for all symbols except the Dragon Egg']));
+  rows.push(symbolRow('W', ['Appears on reels 2–5', 'No pay of its own']));
   rows.push(
     symbolRow('S', [
       `3× — ${pay(config.scatterPays[0])} + ${config.freeSpins.awards[3]} free spins`,

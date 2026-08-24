@@ -93,14 +93,16 @@ Same `(config, seed, nonce)` → byte-identical outcome, on every platform (sfc3
 4. The feature's EV is pinned with a 200k bought-feature sim (±0.3× bet) and combined with the exact base RTP; the result is written to `config.rtp.declared*` and locked by [`tests/math/rtp.test.ts`](tests/math/rtp.test.ts).
 5. Lesson worth keeping: high-symbol pays drive ~90 % of feature value, so base RTP is tuned with the low/mid pays and feature RTP with the free-strip wild/high density.
 
-**Measured (config v1.0.0, 1,000,000 spins, seed `sim-2026`)**
+**Measured (config v1.0.0)**
 
 ```
-RTP            96.46%   (base 55.86% + feature 40.61%; scatter pays 1.25%)
-Hit frequency  21.97%  (1 in 4.55)
-Feature        1 in 226.7   avg 92.0× bet over 11.3 spins
-Max win        1837× bet in 1M base spins; 5,000× cap reached in the super-tier sim (≈ 1 in 100k)
-Big 15–50×  1 in 193 · Mega 50–100×  1 in 746 · Epic 100–500×  1 in 773 · Legendary 500×+  1 in 19,231
+10,000,000 spins (seed "sim-2026"):
+RTP            96.30%  (Monte-Carlo ±0.3%; the exact-base + feature-EV estimate is 96.56%)
+               base 55.77% + feature 40.53%; scatter pays 1.22%
+Hit frequency  21.95%  (1 in 4.56)
+Feature        1 in 233.6   avg 94.7× bet over 11.3 spins
+Max win        4,395× bet seen naturally in 10M spins; the 5,000× cap is hit in the super-tier sim (≈ 1 in 100k)
+Big 15–50×  1 in 197 · Mega 50–100×  1 in 752 · Epic 100–500×  1 in 788 · Legendary 500×+  1 in 17,361
 ```
 
 ---
