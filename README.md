@@ -16,7 +16,7 @@ A volcanic keep at night, lit from below by lava and from above by nothing. Ever
 
 - **Palette** (one source file, shared by Pixi and CSS): obsidian `#0B0A0D` · charcoal stone `#1D1B22` · ash `#8A8690` · molten gold `#F2B134` → highlight `#FFD66B` · ember `#FF6A1F` · garnet `#8F1D2C` · emerald `#2EC27E` (Emerald Dragon only). Free spins add night-sky indigo `#141A33` and starlight `#C9D4FF`.
 - **Light model:** warm key-light from *below* (lava) in the base game; in free spins the keep is backlit by a cold night sky while the reel frame still glows warm from underneath.
-- **Symbols:** heavy stone tiles with carved inner relief. Highs are heraldic dragon silhouettes, rim-lit in gold — imposing, never cute. Mids are gold objects on stone. Lows are monochrome carved sigils readable by *silhouette alone* (flame / wolf / kraken / rose), never by colour.
+- **Symbols:** floating emblems with a bold warm-black outline, layered gradient shading, rim light and a baked drop shadow — the reel well provides subtle recessed cell slots. Highs are dragon-head emblems in profile (great horns / broken horn and smoke / crest fins). Mids are gold regalia. Lows are sigils carved into four different stone plates (shard / shield / medallion / diamond) — distinct by silhouette twice over, with only a faint colour wash.
 - **Motion:** heavy. Reels have mass (overshoot + settle), wins burn rather than sparkle, big wins shake the camera. Nothing bounces cheerfully.
 - **Type:** heavy serif display from a system stack; no external font files (swappable via the asset manifest).
 

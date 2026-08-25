@@ -326,6 +326,15 @@ Commits: `stage-1: maths`, `stage-2: static reels`, … on `main` of a fresh rep
    beats fire their cue exactly once for free. Pixi v8's `ParticleContainer` turned out to need
    a shared texture source **and** a per-frame `update()` — both handled inside `ParticleSystem`.
 
+**Post-ship art & animation pass (user feedback, 2026-08-25)**
+
+0. Symbol art relaunched: stone tiles dropped in favour of floating emblems (bold outline,
+   layered gradients, rim light, baked drop shadow) over recessed cell slots; the full-body
+   dragons became dragon-HEAD emblems (far stronger silhouettes); lows moved onto four distinct
+   plate shapes. Animation move-set extended to the premium set (win pop with flash + wiggle,
+   landing squash-and-stretch, spin-up pull-back, win plume, cell sprays, tier ember fountain) —
+   modelled on the Stake Engine reference bar (idle breathe / win pop / anticipation shake).
+
 **Stage 1**
 
 1. **Super tier meter rules.** At 300× the super feature must be worth ≈ 3× the regular one; "×3 start, fewer spins" on the same reels is worth ≈ 1.1× and cannot reach 96.5 %. Shipped: super = 8 spins, meter **starts ×3 and steps +2 on every win** (cap ×10). `buy.super.meter` is a full `MeterRules` object, so this is data, not code. Same free strips are used. Documented in README.

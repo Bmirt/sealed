@@ -122,6 +122,11 @@ export class WinOverlayView implements WinShowSurface {
     this.cycleLabel.position.set(REELS_W / 2, REELS_H + 38);
     scene.reels.addChild(this.cycleLabel);
 
+    this.plume = new BitmapText({ text: '', style: { fontFamily: FONT_NAME, fontSize: 40 } });
+    this.plume.anchor.set(0.5);
+    this.plume.visible = false;
+    scene.reels.addChild(this.plume);
+
     // Tier overlay lives in the screen-space overlay container.
     this.tierRoot = new Container();
     this.tierRoot.visible = false;
@@ -156,6 +161,47 @@ export class WinOverlayView implements WinShowSurface {
   get winningCells(): readonly PulseTarget[] {
     return this.cells.map(([r, row]) => this.scene.reels.reels[r]?.viewAtRow(row) ?? NULL_PULSE);
   }
+
+  /** One-shot at win-show start: spark spray from every winning cell + the rising win plume. */
+  celebrate(totalCents: number): void {
+    const layout = this.scene.layout;
+    for (const [r, row] of this.cells) {
+      this.particles.burst({
+        x: layout.reelsX + (r + 0.5) * SYMBOL_W * layout.reelsScale,
+        y: layout.reelsY + (row + 0.5) * SYMBOL_H * layout.reelsScale,
+        count: 7,
+        speed: 190,
+        spread: Math.PI * 2,
+        gravity: 320,
+        life: [0.35, 0.8],
+        scale: [0.35, 0.75],
+      });
+    }
+    // Rising plume with the amount.
+    this.plumeTween?.kill();
+    this.plume.text = `+${formatCents(totalCents)}`;
+    this.plume.position.set(REELS_W / 2, REELS_H * 0.42);
+    this.plume.alpha = 0;
+    this.plume.scale.set(0.8);
+    this.plume.visible = true;
+    const state = { t: 0 };
+    this.plumeTween = gsap.to(state, {
+      t: 1,
+      duration: 1.15,
+      ease: 'power1.out',
+      onUpdate: () => {
+        this.plume.y = REELS_H * 0.42 - state.t * 86;
+        this.plume.alpha = state.t < 0.2 ? state.t / 0.2 : 1 - Math.max(0, (state.t - 0.55) / 0.45);
+        this.plume.scale.set(0.8 + state.t * 0.35);
+      },
+      onComplete: () => {
+        this.plume.visible = false;
+      },
+    });
+  }
+
+  private plumeTween: gsap.core.Tween | null = null;
+  private readonly plume: BitmapText;
 
   setDim(on: boolean): void {
     for (let r = 0; r < REELS; r++) {
@@ -240,6 +286,9 @@ export class WinOverlayView implements WinShowSurface {
     this.counter.hide();
     this.tierRoot.visible = false;
     this.tierCounter.hide();
+    this.plumeTween?.kill();
+    this.plumeTween = null;
+    this.plume.visible = false;
   }
 
   // ---- TierSurface (adapter — the tier builder gets the tier counter, not the line counter) ----
@@ -302,4 +351,4 @@ export class WinOverlayView implements WinShowSurface {
   }
 }
 
-const NULL_PULSE: PulseTarget = { setPulse: () => undefined };
+const NULL_PULSE: PulseTarget = { setPulse: () => undefined, setPop: () => undefined };

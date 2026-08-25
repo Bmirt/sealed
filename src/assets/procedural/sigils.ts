@@ -1,116 +1,131 @@
 import type { Graphics } from 'pixi.js';
-import { PALETTE } from '@config/palette';
+import { PALETTE, rgba } from '@config/palette';
 import { flat, pt, ribbon, xform } from './shapes';
 import type { Poly } from './shapes';
+import { OUTLINE, dropShadow, part, vGrad } from './style';
 
 /**
- * Low-pay symbols: monochrome sigils carved into a stone medallion.
- * Recessed look: shadow edge top-left, lit edge bottom-right, flat ash face.
- * Distinct by silhouette only — no colour coding.
+ * Low-pay symbols: sigils carved into stone plates. Distinct by SILHOUETTE twice over —
+ * the sigil itself and the plate it is cut into (shard / shield / medallion / diamond).
+ * A faint colour wash tints each stone, but shape stays the primary read.
  */
-function medallion(g: Graphics): void {
-  g.circle(0, 0, 56).fill({ color: PALETTE.obsidian, alpha: 0.9 });
-  g.circle(0, 0, 56).stroke({ width: 2, color: PALETTE.stoneEdge, alpha: 0.9 });
-  g.circle(0, 0, 52).stroke({ width: 1, color: PALETTE.black, alpha: 0.6 });
-  // Ring notches.
-  for (let i = 0; i < 16; i++) {
-    const a = (i / 16) * Math.PI * 2;
-    g.moveTo(Math.cos(a) * 53, Math.sin(a) * 53).lineTo(Math.cos(a) * 56, Math.sin(a) * 56).stroke({ width: 1.5, color: PALETTE.ashDark, alpha: 0.8 });
+
+function plate(g: Graphics, shape: Poly, wash: number): void {
+  dropShadow(g, 0, 58, 48, 9, 0.45);
+  part(g, shape, vGrad([[0, 0x4e4a58], [0.4, 0x35323e], [1, 0x1c1a22]], -60, 60));
+  // Bevel: lit top-left run, shaded bottom-right run.
+  g.poly([...xform(shape, 0, 0, 0.93)]).stroke({ width: 2.2, color: 0x6e6a7c, alpha: 0.65 });
+  // Recessed field.
+  g.poly([...xform(shape, 0, 1, 0.82)]).fill({ color: 0x16141b });
+  g.poly([...xform(shape, 0, 1, 0.82)]).fill({ color: rgba(wash, 0.1) });
+  g.poly([...xform(shape, 0, 1, 0.82)]).stroke({ width: 1.6, color: 0x000000, alpha: 0.7 });
+}
+
+/** Recessed carving: dark edge up-left, lit edge down-right, ash face with a wash. */
+function carve(g: Graphics, polys: readonly Poly[], wash: number): void {
+  for (const p of polys) g.poly([...xform(p, 1.8, 1.8)]).fill({ color: 0xc4c0cc, alpha: 0.5 });
+  for (const p of polys) g.poly([...xform(p, -1.8, -1.8)]).fill({ color: 0x000000, alpha: 0.85 });
+  for (const p of polys) {
+    g.poly([...p]).fill({ color: PALETTE.ash });
+    g.poly([...p]).fill({ color: rgba(wash, 0.28) });
   }
 }
 
-function carved(g: Graphics, polys: readonly Poly[], face = PALETTE.ash): void {
-  for (const p of polys) g.poly(xform(p, 1.8, 1.8)).fill({ color: 0xb8b4c0, alpha: 0.55 });
-  for (const p of polys) g.poly(xform(p, -1.8, -1.8)).fill({ color: PALETTE.black, alpha: 0.85 });
-  for (const p of polys) g.poly(p).fill({ color: face });
+const SHARD: Poly = flat([pt(0, -62), pt(38, -34), pt(30, 52), pt(0, 62), pt(-30, 52), pt(-38, -34)]);
+const SHIELD: Poly = flat([pt(-42, -52), pt(42, -52), pt(44, 6), pt(24, 44), pt(0, 60), pt(-24, 44), pt(-44, 6)]);
+const DIAMOND: Poly = flat([pt(0, -62), pt(44, -10), pt(34, 34), pt(0, 62), pt(-34, 34), pt(-44, -10)]);
+
+function medallion(g: Graphics, wash: number): void {
+  dropShadow(g, 0, 58, 48, 9, 0.45);
+  g.circle(0, 0, 56).fill(vGrad([[0, 0x4e4a58], [0.4, 0x35323e], [1, 0x1c1a22]], -56, 56));
+  g.circle(0, 0, 56).stroke({ width: 4.5, color: OUTLINE });
+  g.circle(0, 0, 51).stroke({ width: 2.2, color: 0x6e6a7c, alpha: 0.65 });
+  g.circle(0, 1, 45).fill({ color: 0x16141b });
+  g.circle(0, 1, 45).fill({ color: rgba(wash, 0.1) });
+  g.circle(0, 1, 45).stroke({ width: 1.6, color: 0x000000, alpha: 0.7 });
+  for (let i = 0; i < 12; i++) {
+    const a = (i / 12) * Math.PI * 2 + Math.PI / 12;
+    g.moveTo(Math.cos(a) * 47, Math.sin(a) * 47).lineTo(Math.cos(a) * 52, Math.sin(a) * 52).stroke({ width: 2, color: 0x6e6a7c, alpha: 0.5 });
+  }
 }
 
-/** Flame Sigil — tall, three tongues, tapering. */
+/** Flame Sigil — a fire tongue carved into a pointed shard. */
 export function drawFlameSigil(g: Graphics): void {
-  medallion(g);
+  plate(g, SHARD, PALETTE.ember);
   const outer = flat([
-    pt(0, -46), pt(10, -30), pt(8, -16), pt(20, -30), pt(30, -8), pt(26, 18), pt(14, 36), pt(0, 42), pt(-14, 36), pt(-26, 18), pt(-30, -8), pt(-20, -30),
-    pt(-8, -16), pt(-10, -30),
+    pt(0, -36), pt(8, -22), pt(5, -11), pt(15, -23), pt(22, -4), pt(19, 16), pt(10, 29), pt(0, 34), pt(-10, 29), pt(-19, 16), pt(-22, -4),
+    pt(-15, -23), pt(-5, -11), pt(-8, -22),
   ]);
-  carved(g, [outer]);
-  // Inner tongue (recessed deeper).
-  const inner = flat([pt(0, -14), pt(8, 0), pt(12, 16), pt(4, 30), pt(0, 34), pt(-4, 30), pt(-12, 16), pt(-8, 0)]);
-  g.poly(inner).fill({ color: PALETTE.obsidian2 });
-  g.poly(xform(inner, 1, 1)).stroke({ width: 1, color: 0xb8b4c0, alpha: 0.5 });
+  carve(g, [outer], PALETTE.ember);
+  const inner = flat([pt(0, -8), pt(6, 3), pt(9, 15), pt(3, 25), pt(0, 28), pt(-3, 25), pt(-9, 15), pt(-6, 3)]);
+  g.poly([...inner]).fill({ color: 0x16141b });
+  g.poly([...inner]).fill({ color: rgba(PALETTE.ember, 0.6) });
+  g.poly([...xform(inner, 0, 3, 0.5)]).fill({ color: rgba(0xffd9a8, 0.5) });
 }
 
-/** Wolf Sigil — head in profile, pointed ears, open snout. */
+/** Wolf Sigil — a howling head carved into a shield. */
 export function drawWolfSigil(g: Graphics): void {
-  medallion(g);
+  plate(g, SHIELD, 0x7a90c8);
   const head = flat([
-    pt(-4, -44), pt(10, -24), pt(24, -40), pt(28, -12), pt(20, 4), pt(8, 8), pt(-16, 14), pt(-40, 14), pt(-46, 10), pt(-30, 6), pt(-40, 0),
-    pt(-46, -4), pt(-28, -6), pt(-14, -14), pt(-12, -26),
+    pt(-2, -40), pt(10, -22), pt(22, -36), pt(25, -10), pt(18, 4), pt(7, 8), pt(-14, 13), pt(-36, 13), pt(-42, 9), pt(-27, 5), pt(-36, 0),
+    pt(-42, -4), pt(-25, -6), pt(-12, -13), pt(-10, -24),
   ]);
-  // Lower jaw.
-  const jaw = flat([pt(-6, 12), pt(8, 10), pt(16, 12), pt(10, 24), pt(-4, 30), pt(-22, 28), pt(-36, 22), pt(-30, 16), pt(-14, 16)]);
-  // Neck / chest.
-  const neck = flat([pt(10, 6), pt(26, 2), pt(34, 30), pt(30, 44), pt(4, 44), pt(-6, 30)]);
-  carved(g, [neck, head, jaw]);
-  // Eye (recessed).
-  g.poly(flat([pt(4, -18), pt(14, -16), pt(8, -11)])).fill({ color: PALETTE.obsidian });
+  const jaw = flat([pt(-5, 11), pt(7, 9), pt(14, 11), pt(9, 21), pt(-4, 27), pt(-20, 25), pt(-32, 20), pt(-27, 15), pt(-12, 15)]);
+  const neck = flat([pt(9, 5), pt(23, 1), pt(30, 27), pt(27, 39), pt(4, 39), pt(-5, 27)]);
+  carve(g, [neck, head, jaw], 0x7a90c8);
+  g.poly([4, -16, 13, -14, 8, -10]).fill({ color: 0x16141b });
 }
 
-/** Kraken Sigil — domed head, six curling tentacles. */
+/** Kraken Sigil — the deep one carved into a round medallion. */
 export function drawKrakenSigil(g: Graphics): void {
-  medallion(g);
+  medallion(g, 0x3fae9e);
   const polys: Poly[] = [];
-  // Tentacles.
-  polys.push(ribbon({ p0: pt(-18, 2), c0: pt(-40, 14), c1: pt(-46, 44), p1: pt(-26, 44) }, 12, 3));
-  polys.push(ribbon({ p0: pt(-8, 6), c0: pt(-22, 30), c1: pt(-14, 52), p1: pt(2, 46) }, 12, 3));
-  polys.push(ribbon({ p0: pt(6, 6), c0: pt(10, 34), c1: pt(26, 50), p1: pt(34, 40) }, 12, 3));
-  polys.push(ribbon({ p0: pt(18, 2), c0: pt(40, 10), c1: pt(50, 36), p1: pt(34, 44) }, 12, 3));
-  polys.push(ribbon({ p0: pt(-24, -4), c0: pt(-46, -2), c1: pt(-52, 24), p1: pt(-44, 28) }, 9, 2));
-  polys.push(ribbon({ p0: pt(24, -4), c0: pt(46, -2), c1: pt(52, 24), p1: pt(44, 28) }, 9, 2));
-  // Head dome.
-  polys.push(flat([pt(-26, 0), pt(-30, -20), pt(-18, -40), pt(0, -48), pt(18, -40), pt(30, -20), pt(26, 0), pt(10, 8), pt(-10, 8)]));
-  carved(g, polys);
-  // Eyes.
-  g.circle(-11, -16, 5).fill({ color: PALETTE.obsidian });
-  g.circle(11, -16, 5).fill({ color: PALETTE.obsidian });
-  g.circle(-10, -17, 1.6).fill({ color: 0xb8b4c0, alpha: 0.7 });
-  g.circle(12, -17, 1.6).fill({ color: 0xb8b4c0, alpha: 0.7 });
+  polys.push(ribbon({ p0: pt(-16, 2), c0: pt(-36, 12), c1: pt(-41, 39), p1: pt(-23, 39) }, 11, 3));
+  polys.push(ribbon({ p0: pt(-7, 5), c0: pt(-20, 27), c1: pt(-12, 46), p1: pt(2, 41) }, 11, 3));
+  polys.push(ribbon({ p0: pt(5, 5), c0: pt(9, 30), c1: pt(23, 44), p1: pt(30, 35) }, 11, 3));
+  polys.push(ribbon({ p0: pt(16, 2), c0: pt(36, 9), c1: pt(45, 32), p1: pt(30, 39) }, 11, 3));
+  polys.push(ribbon({ p0: pt(-21, -4), c0: pt(-41, -2), c1: pt(-46, 21), p1: pt(-39, 25) }, 8, 2));
+  polys.push(ribbon({ p0: pt(21, -4), c0: pt(41, -2), c1: pt(46, 21), p1: pt(39, 25) }, 8, 2));
+  polys.push(flat([pt(-23, 0), pt(-27, -18), pt(-16, -36), pt(0, -43), pt(16, -36), pt(27, -18), pt(23, 0), pt(9, 7), pt(-9, 7)]));
+  carve(g, polys, 0x3fae9e);
+  g.circle(-10, -15, 4.5).fill({ color: 0x16141b });
+  g.circle(10, -15, 4.5).fill({ color: 0x16141b });
+  g.circle(-9, -16, 1.4).fill({ color: 0xc4f0e8, alpha: 0.8 });
+  g.circle(11, -16, 1.4).fill({ color: 0xc4f0e8, alpha: 0.8 });
 }
 
-/** Rose Sigil — five petals, spiral heart, two leaves. */
+/** Rose Sigil — the ash rose carved into a diamond plate. */
 export function drawRoseSigil(g: Graphics): void {
-  medallion(g);
+  plate(g, DIAMOND, 0xc86a86);
   const polys: Poly[] = [];
-  // Leaves.
-  polys.push(flat([pt(-6, 20), pt(-30, 26), pt(-44, 44), pt(-20, 42), pt(-4, 30)]));
-  polys.push(flat([pt(6, 20), pt(30, 26), pt(44, 44), pt(20, 42), pt(4, 30)]));
-  // Stem.
-  polys.push(ribbon({ p0: pt(0, 16), c0: pt(2, 32), p1: pt(0, 48) }, 6, 4));
-  // Petals.
+  polys.push(flat([pt(-5, 18), pt(-26, 23), pt(-38, 39), pt(-17, 37), pt(-3, 27)]));
+  polys.push(flat([pt(5, 18), pt(26, 23), pt(38, 39), pt(17, 37), pt(3, 27)]));
+  polys.push(ribbon({ p0: pt(0, 14), c0: pt(2, 28), p1: pt(0, 42) }, 5, 3.5));
   for (let i = 0; i < 5; i++) {
     const a = -Math.PI / 2 + (i * Math.PI * 2) / 5;
-    const cx = Math.cos(a) * 18;
-    const cy = Math.sin(a) * 18 - 6;
+    const cx = Math.cos(a) * 16;
+    const cy = Math.sin(a) * 16 - 6;
     const px = Math.cos(a);
     const py = Math.sin(a);
     const nx = -py;
     const ny = px;
     polys.push(
       flat([
-        pt(cx - px * 10, cy - py * 10),
-        pt(cx + nx * 16 - px * 2, cy + ny * 16 - py * 2),
-        pt(cx + nx * 12 + px * 14, cy + ny * 12 + py * 14),
-        pt(cx + px * 20, cy + py * 20),
-        pt(cx - nx * 12 + px * 14, cy - ny * 12 + py * 14),
-        pt(cx - nx * 16 - px * 2, cy - ny * 16 - py * 2),
+        pt(cx - px * 9, cy - py * 9),
+        pt(cx + nx * 14 - px * 2, cy + ny * 14 - py * 2),
+        pt(cx + nx * 10 + px * 12, cy + ny * 10 + py * 12),
+        pt(cx + px * 17, cy + py * 17),
+        pt(cx - nx * 10 + px * 12, cy - ny * 10 + py * 12),
+        pt(cx - nx * 14 - px * 2, cy - ny * 14 - py * 2),
       ]),
     );
   }
-  carved(g, polys);
-  // Spiral heart (recessed lines).
-  g.circle(0, -6, 12).fill({ color: PALETTE.obsidian2 });
+  carve(g, polys, 0xc86a86);
+  g.circle(0, -6, 10).fill({ color: 0x16141b });
+  g.circle(0, -6, 10).fill({ color: rgba(0xc86a86, 0.25) });
   g.moveTo(0, -6);
-  for (let t = 0; t < Math.PI * 4; t += 0.2) {
-    const r = 1 + t * 0.85;
+  for (let t = 0; t < Math.PI * 3.6; t += 0.22) {
+    const r = 1 + t * 0.8;
     g.lineTo(Math.cos(t) * r, -6 + Math.sin(t) * r);
   }
   g.stroke({ width: 1.6, color: PALETTE.ash, alpha: 0.9 });

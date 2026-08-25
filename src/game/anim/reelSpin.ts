@@ -71,6 +71,13 @@ export function buildReelSpin(
     };
 
     const sub = gsap.timeline();
+    // Anticipation dip: a small pull UP before the reel launches down (classic wind-up).
+    sub.to(state, {
+      pos: from + 0.22,
+      duration: 0.1,
+      ease: 'power2.out',
+      onUpdate: apply(false),
+    });
     // Spin-up: accelerate into the travel (small share of the fast portion).
     const spinUpDist = Math.min(fastPortion * 0.15, profile.reelSpeed * profile.spinUpTime * 0.5);
     sub.to(state, {

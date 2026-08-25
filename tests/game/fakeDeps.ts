@@ -44,6 +44,7 @@ export class FakeDeps implements PresenterDeps {
   showStops(): void {
     this.log.push('showStops');
   }
+  celebrations: number[] = [];
   readonly winSurface: WinShowSurface & { prepare(wins: readonly WayWin[]): void } = {
     prepare: () => this.log.push('prepare'),
     setDim: (on) => {
@@ -52,7 +53,10 @@ export class FakeDeps implements PresenterDeps {
     setFlares: (on) => {
       this.flares = on;
     },
-    winningCells: [{ setPulse: () => undefined }],
+    celebrate: (cents) => {
+      this.celebrations.push(cents);
+    },
+    winningCells: [{ setPulse: () => undefined, setPop: () => undefined }],
     counter: {
       set: (c) => {
         this.counterValue = c;

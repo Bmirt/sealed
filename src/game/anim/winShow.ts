@@ -1,9 +1,12 @@
 import { FIXED_TIMING, rollupTime } from '@config/speeds';
 import type { SpeedProfile, WinTierDef } from '@config/speeds';
 
-/** A tweenable pulse target — SymbolView satisfies this; tests use fakes. */
+/** A tweenable win-animation target — SymbolView satisfies this; tests use fakes. */
 export interface PulseTarget {
+  /** Gentle scale pulse (idle win cycle). */
   setPulse(scale: number): void;
+  /** Win pop 0→1 (overshooting ease): swell + flash + wiggle; 0 and ≥1 are the rest state. */
+  setPop(v: number): void;
 }
 
 export interface CounterLike {
@@ -18,6 +21,8 @@ export interface WinShowSurface {
   setDim(on: boolean): void;
   /** Flare frames on the winning cells (true = visible). */
   setFlares(on: boolean): void;
+  /** One-shot celebration at win-show start: cell sprays + the rising win plume. */
+  celebrate(totalCents: number): void;
   readonly winningCells: readonly PulseTarget[];
   readonly counter: CounterLike;
 }
@@ -35,22 +40,21 @@ export function buildWinShow(
   profile: SpeedProfile,
   hooks: { onTick?: (cents: number) => void } = {},
 ): void {
-  const state = { cents: 0, pulse: 1 };
+  const state = { cents: 0, pop: 0 };
   tl.add(() => {
     surface.setDim(true);
     surface.setFlares(true);
+    surface.celebrate(totalCents);
     surface.counter.show();
     surface.counter.set(0);
   });
-  // Winner pulse: up and back, twice.
+  // Winner POP: swell with an overshooting settle, flash and wiggle riding along.
   tl.to(state, {
-    pulse: 1.14,
-    duration: profile.winShowTime / 2,
-    ease: 'sine.inOut',
-    yoyo: true,
-    repeat: 1,
+    pop: 1,
+    duration: profile.winShowTime,
+    ease: 'back.out(2.1)',
     onUpdate: () => {
-      for (const c of surface.winningCells) c.setPulse(state.pulse);
+      for (const c of surface.winningCells) c.setPop(state.pop);
     },
   });
   // Roll-up (starts with the pulse, may outlast it).
@@ -71,7 +75,10 @@ export function buildWinShow(
   tl.add(() => {
     state.cents = totalCents;
     surface.counter.set(totalCents);
-    for (const c of surface.winningCells) c.setPulse(1);
+    for (const c of surface.winningCells) {
+      c.setPulse(1);
+      c.setPop(1);
+    }
     surface.setDim(false);
     surface.setFlares(false);
   });
@@ -121,6 +128,11 @@ export function buildTierRoll(
       hooks.onTick?.(Math.round(state.cents), p);
     },
   }, `+=${t.introTime}`);
+  // Ember fountain riding the roll (skipping collapses these into one final burst).
+  const fountains = Math.max(2, Math.floor(roll / 0.45));
+  for (let i = 0; i < fountains; i++) {
+    tl.add(() => surface.burst(0.35 + tierIndex * 0.12), t.introTime + (i + 0.5) * (roll / fountains));
+  }
   tl.add(() => {
     state.cents = totalCents;
     surface.counter.set(totalCents);

@@ -1,3 +1,4 @@
+import { gsap } from 'gsap';
 import type { WayWin } from '@math/types';
 import { SYMBOL_H, SYMBOL_W } from '@/assets/procedural/metrics';
 import { audioBus } from '@/audio/bus';
@@ -76,6 +77,19 @@ export class PixiPresenterDeps implements PresenterDeps {
   landPuff(reel: number, fx: { readonly scatter: boolean; readonly wildRows: readonly number[] }): void {
     const layout = this.scene.layout;
     const reelX = layout.reelsX + (reel + 0.5) * SYMBOL_W * layout.reelsScale;
+    // Landing squash & stretch on the visible cells (decorative, self-terminating).
+    const reelView = this.scene.reels.reels[reel];
+    if (reelView) {
+      const state = { v: 0 };
+      gsap.to(state, {
+        v: 1,
+        duration: 0.22,
+        ease: 'power1.out',
+        onUpdate: () => {
+          for (let row = 0; row < 3; row++) reelView.viewAtRow(row).setSquash(state.v);
+        },
+      });
+    }
     this.particles.burst({
       x: reelX,
       y: layout.reelsY + (REELS_H - 6) * layout.reelsScale,

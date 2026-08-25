@@ -33,14 +33,19 @@ class FakeCounter implements CounterLike {
 
 class FakeCell {
   pulse = 1;
+  pop = 0;
   setPulse(v: number): void {
     this.pulse = v;
+  }
+  setPop(v: number): void {
+    this.pop = v;
   }
 }
 
 class FakeSurface implements WinShowSurface {
   dim = false;
   flares = false;
+  celebrations: number[] = [];
   readonly counter = new FakeCounter();
   readonly cells = [new FakeCell(), new FakeCell(), new FakeCell()];
   get winningCells(): FakeCell[] {
@@ -51,6 +56,9 @@ class FakeSurface implements WinShowSurface {
   }
   setFlares(on: boolean): void {
     this.flares = on;
+  }
+  celebrate(cents: number): void {
+    this.celebrations.push(cents);
   }
 }
 
@@ -89,7 +97,8 @@ describe('win show', () => {
     expect(s.flares).toBe(true);
     expect(s.counter.visible).toBe(true);
     clock.tick(0.3);
-    expect(s.cells[0]?.pulse).toBeGreaterThan(1);
+    expect(s.cells[0]?.pop).toBeGreaterThan(0);
+    expect(s.celebrations).toEqual([12_345]);
     clock.tick(5, 100);
     await flushMicrotasks();
     expect(s.counter.value).toBe(12_345);
@@ -98,7 +107,7 @@ describe('win show', () => {
     }
     expect(s.dim).toBe(false);
     expect(s.flares).toBe(false);
-    expect(s.cells.every((c) => c.pulse === 1)).toBe(true);
+    expect(s.cells.every((c) => c.pulse === 1 && c.pop >= 1)).toBe(true);
     expect(p.done).toBe(true);
   });
 
@@ -182,7 +191,7 @@ describe('tier sequence', () => {
     expect(s.counter.value).toBe(777_00);
     expect(s.progress).toBe(1);
     expect(s.visible).toBe(true); // still up — dismissing is the hold presentation's job
-    expect(s.bursts.length).toBe(2); // entry + completion
+    expect(s.bursts.length).toBeGreaterThanOrEqual(2); // entry + fountain(s) + completion
   });
 
   it('hold: waits, then dismisses; skipping the hold dismisses immediately', async () => {

@@ -12,8 +12,6 @@ import { drawBlade, drawCrown } from './procedural/items';
 import { SYMBOL_H, SYMBOL_W } from './procedural/metrics';
 import { drawFlameSigil, drawKrakenSigil, drawRoseSigil, drawWolfSigil } from './procedural/sigils';
 import { drawDragonEgg, drawMoltenThrone } from './procedural/special';
-import { drawTile } from './procedural/tile';
-import type { TileRim } from './procedural/tile';
 
 export interface ProceduralVisual {
   readonly kind: 'procedural';
@@ -32,30 +30,34 @@ export interface TextureVisual {
 
 export type VisualAsset = ProceduralVisual | TextureVisual;
 
-function symbol(rim: TileRim, seed: number, art: (g: Graphics) => void): ProceduralVisual {
+/**
+ * Symbols are floating emblems (bold outline, layered shading, baked drop shadow) — no tile
+ * backing; the reel well draws the cell slots. `scale` fits each emblem's art box to the cell.
+ */
+function symbol(art: (g: Graphics) => void, scale = 1): ProceduralVisual {
   return {
     kind: 'procedural',
     width: SYMBOL_W,
     height: SYMBOL_H,
     paint: (g) => {
-      drawTile(g, rim, seed);
       art(g);
+      if (scale !== 1) g.scale.set(scale);
     },
   };
 }
 
 export const SYMBOL_VISUALS: Readonly<Record<SymbolId, VisualAsset>> = {
-  H1: symbol('gold', 1, drawGoldDragon),
-  H2: symbol('gold', 2, drawAshDragon),
-  H3: symbol('emerald', 3, drawEmeraldDragon),
-  M1: symbol('dimgold', 4, drawCrown),
-  M2: symbol('dimgold', 5, drawBlade),
-  L1: symbol('ash', 6, drawFlameSigil),
-  L2: symbol('ash', 7, drawWolfSigil),
-  L3: symbol('ash', 8, drawKrakenSigil),
-  L4: symbol('ash', 9, drawRoseSigil),
-  W: symbol('lava', 10, drawMoltenThrone),
-  S: symbol('garnet', 11, drawDragonEgg),
+  H1: symbol(drawGoldDragon),
+  H2: symbol(drawAshDragon),
+  H3: symbol(drawEmeraldDragon),
+  M1: symbol(drawCrown),
+  M2: symbol(drawBlade),
+  L1: symbol(drawFlameSigil, 0.92),
+  L2: symbol(drawWolfSigil, 0.92),
+  L3: symbol(drawKrakenSigil, 0.92),
+  L4: symbol(drawRoseSigil, 0.92),
+  W: symbol(drawMoltenThrone),
+  S: symbol(drawDragonEgg),
 };
 
 /** Display copy for the paytable / info screens. */

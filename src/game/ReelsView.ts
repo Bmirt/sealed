@@ -39,10 +39,22 @@ export class ReelsView extends Container {
     // Dark well behind the symbols.
     const well = new Graphics().roundRect(-2, -2, REELS_W + 4, REELS_H + 4, 4).fill({ color: PALETTE.obsidian, alpha: 0.92 });
     this.addChild(well);
+    // Cell slots: each symbol floats in a subtle recessed pocket.
+    const slots = new Graphics();
+    for (let r = 0; r < REELS; r++) {
+      for (let row = 0; row < ROWS; row++) {
+        const x = r * SYMBOL_W + 5;
+        const y = row * SYMBOL_H + 5;
+        slots.roundRect(x, y, SYMBOL_W - 10, SYMBOL_H - 10, 14).fill({ color: PALETTE.obsidian2, alpha: 0.55 });
+        slots.roundRect(x, y, SYMBOL_W - 10, SYMBOL_H - 10, 14).stroke({ width: 1.4, color: PALETTE.stoneEdge, alpha: 0.28 });
+        slots.moveTo(x + 12, y + 2).lineTo(x + SYMBOL_W - 22, y + 2).stroke({ width: 2, color: PALETTE.black, alpha: 0.35 });
+      }
+    }
+    this.addChild(slots);
     // Subtle reel separators.
     const seps = new Graphics();
     for (let r = 1; r < REELS; r++) {
-      seps.moveTo(r * SYMBOL_W, 4).lineTo(r * SYMBOL_W, REELS_H - 4).stroke({ width: 1, color: PALETTE.stoneEdge, alpha: 0.35 });
+      seps.moveTo(r * SYMBOL_W, 4).lineTo(r * SYMBOL_W, REELS_H - 4).stroke({ width: 1, color: PALETTE.stoneEdge, alpha: 0.3 });
     }
     this.addChild(seps);
 
