@@ -82,7 +82,7 @@ export class Hud {
     );
 
     this.spinBtn = button(
-      icon(ICONS.spin, 44),
+      `<span class="spin-face">${icon(ICONS.spin, 34)}<span class="spin-word">SPIN</span></span>`,
       "btn btn-spin",
       () => actions.spin(),
       { "aria-label": "Spin", "data-action": "spin" },
@@ -107,7 +107,7 @@ export class Hud {
       "data-action": "sound",
     });
     this.autoBtn = button(
-      icon(ICONS.auto, 24),
+      icon(ICONS.auto, 26),
       "btn btn-round",
       () => {
         if (this.store.get().autoplayRemaining > 0) actions.stopAutoplay();
