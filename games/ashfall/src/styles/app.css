@@ -342,6 +342,56 @@ html, body {
 .dev-info { margin: 0; white-space: pre-wrap; color: #ffd66b; }
 .dev-fps { color: #7af0b9; min-width: 56px; display: inline-block; }
 
+/* ---------- admin corner (sealed mode) ---------- */
+.admin-corner {
+  position: absolute;
+  top: max(52px, calc(env(safe-area-inset-top) + 44px));
+  right: max(14px, env(safe-area-inset-right));
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+.btn-admin-toggle {
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(11, 10, 13, 0.82);
+  border: 1px solid rgba(242, 177, 52, 0.35);
+  color: var(--c-ash);
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+.btn-admin-toggle:hover { color: var(--c-goldHi); }
+.admin-panel {
+  width: min(360px, calc(100vw - 28px));
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(11, 10, 13, 0.94);
+  border: 1px solid var(--c-goldDeep);
+  box-shadow: var(--shadow-hard);
+  color: var(--c-ash);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.admin-title { font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--c-goldHi); margin-bottom: 8px; }
+.admin-buttons { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.btn-admin {
+  padding: 7px 11px;
+  border-radius: 8px;
+  background: var(--stone-grad);
+  color: #fff4e6;
+  font-size: 12px;
+  box-shadow: inset 0 1px 0 #4a4654, inset 0 -2px 0 #000, 0 0 0 1px var(--c-goldDeep);
+}
+.btn-admin-danger { color: #ffb4b4; box-shadow: inset 0 1px 0 #4a4654, inset 0 -2px 0 #000, 0 0 0 1px var(--c-garnet); }
+.admin-status a, .admin-panel a { color: var(--c-goldHi); }
+.admin-rejected { display: inline-block; padding: 1px 6px; border-radius: 5px; background: #b91c1c; color: #fff; font-weight: 800; font-size: 10px; letter-spacing: 1px; margin-right: 4px; }
+.admin-rtp { margin-top: 8px; color: var(--c-ashDark); }
+@media (orientation: portrait) {
+  .admin-corner { top: auto; bottom: calc(var(--hud-h) + 96px); left: max(10px, env(safe-area-inset-left)); right: auto; align-items: flex-start; }
+}
+
 /* ---------- provably-fair trust bar ---------- */
 .trust-bar {
   position: absolute;

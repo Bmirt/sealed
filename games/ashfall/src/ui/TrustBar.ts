@@ -18,6 +18,8 @@ export class TrustBar {
   private readonly seedInput: HTMLInputElement;
   private readonly cycleEl: HTMLElement;
   private readonly roundsEl: HTMLElement;
+  /** Re-read the sealed cycle from the server (the admin corner calls this after a rotation). */
+  readonly refresh: () => Promise<void>;
 
   constructor(host: HTMLElement, source: SealedOutcomeSource, clientSeedKey: string, store: GameStore) {
     const verifyUrl = (import.meta.env['VITE_SEALED_VERIFY_URL'] as string | undefined) ?? 'http://localhost:5173/verify';
@@ -55,12 +57,13 @@ export class TrustBar {
           const n = s.active_cycle.rounds;
           this.roundsEl.textContent = `${n} round${n === 1 ? '' : 's'} recorded · sealed at rotate`;
           const q = s.cluster === 'devnet' ? 'cluster=devnet' : 'cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899';
-          this.linkEl.href = `https://explorer.solana.com/address/${s.active_cycle.pda}?${q}`;
+          this.linkEl.href = `https://explorer.solana.com/address/${s.active_cycle.pda}/history?${q}`;
         }
       } catch {
         this.hashEl.textContent = 'server offline';
       }
     };
+    this.refresh = refresh;
     void refresh();
     window.setInterval(() => void refresh(), 10_000);
     store.subscribe((st, prev) => {

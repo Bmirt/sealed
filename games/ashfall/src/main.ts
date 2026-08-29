@@ -17,6 +17,7 @@ import { formatCents } from './state/money';
 import { openAutoplayModal } from './ui/AutoplayModal';
 import { openBuyModal } from './ui/BuyBonusModal';
 import { DevPanel } from './ui/DevPanel';
+import { AdminCorner } from './ui/AdminCorner';
 import { TrustBar } from './ui/TrustBar';
 import { SealedOutcomeSource } from './state/OutcomeSource';
 import { Hud } from './ui/Hud';
@@ -149,7 +150,10 @@ async function boot(): Promise<void> {
   scene.reels.showStops([0, 0, 0, 0, 0], 'base');
   store.set({ phase: 'idle' });
 
-  if (sealed) new TrustBar(uiHost, sealed, clientSeedKey, store);
+  if (sealed) {
+    const trust = new TrustBar(uiHost, sealed, clientSeedKey, store);
+    new AdminCorner(uiHost, sealed, store, () => void trust.refresh());
+  }
 
   if (new URLSearchParams(location.search).has('dev')) {
     new DevPanel(uiHost, GAME_CONFIG, store, controller, scene);
