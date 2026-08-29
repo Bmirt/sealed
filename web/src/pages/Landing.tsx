@@ -68,8 +68,8 @@ export function Landing(): JSX.Element {
 
       <section className="how">
         <div className="step"><b>1</b> Commit — <code>commit_seed(sha256(seed))</code> lands on-chain before the first bet.</div>
-        <div className="step"><b>2</b> Play — dice rolls and slot spins are HMAC(seed, your client seed : nonce).</div>
-        <div className="step"><b>3</b> Close — the Merkle root of every round and the money totals are written on-chain.</div>
+        <div className="step"><b>2</b> Play — dice rolls and slot spins are HMAC(seed, your client seed : nonce). Rounds are recorded off-chain; nothing is written per bet.</div>
+        <div className="step"><b>3</b> Close — the Merkle root of every round and the money totals are written on-chain, sealing the whole cycle at once.</div>
         <div className="step"><b>4</b> Reveal — the chain recomputes sha256 and refuses any other seed. Then <Link to="/verify">verify it yourself →</Link></div>
       </section>
     </main>

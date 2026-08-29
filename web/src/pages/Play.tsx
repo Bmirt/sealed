@@ -275,18 +275,35 @@ export function Play(): JSX.Element {
       <section className="panel trust">
         <h3>Trust ritual</h3>
         {active ? (
-          <p>
-            Current cycle <strong>#{active.cycle_id}</strong> sealed: <code title={active.seed_hash}>{active.seed_hash.slice(0, 10)}…{active.seed_hash.slice(-6)}</code> 🔒{" "}
-            <a href={explorerAddress(active.pda)} target="_blank" rel="noreferrer">view on chain</a>
-            {active.commit_tx && (
-              <>
-                {" · "}
-                <a href={explorerTx(active.commit_tx)} target="_blank" rel="noreferrer">commit tx</a>
-              </>
-            )}
-            <br />
-            <small>The server committed to this hash BEFORE any round was played. When the cycle closes, the seed is revealed and the chain checks it.</small>
-          </p>
+          <>
+            <p>
+              Current cycle <strong>#{active.cycle_id}</strong> sealed: <code title={active.seed_hash}>{active.seed_hash.slice(0, 10)}…{active.seed_hash.slice(-6)}</code> 🔒{" "}
+              <a href={explorerAddress(active.pda)} target="_blank" rel="noreferrer">cycle account on chain</a>
+              {active.commit_tx && (
+                <>
+                  {" · "}
+                  <a href={explorerTx(active.commit_tx)} target="_blank" rel="noreferrer">commit tx</a>
+                </>
+              )}
+            </p>
+            <ul className="chain-legend">
+              <li className="done">✓ commitment — <code>sha256(seed)</code> on-chain before the first bet</li>
+              <li className="pending">
+                ○ <strong>{active.rounds}</strong> round{active.rounds === 1 ? "" : "s"} recorded off-chain this cycle (yours included)
+              </li>
+              <li className="pending">○ close — Merkle root of every round + totals go on-chain when you rotate</li>
+              <li className="pending">○ reveal — the seed goes on-chain and the program checks its hash</li>
+            </ul>
+            <details className="why">
+              <summary>Why doesn't my bet show up on chain?</summary>
+              <p>
+                Bets never touch the chain — that would cost a transaction per roll for no extra trust. Fairness comes from the two things that <em>are</em> sealed:
+                the seed hash <strong>before</strong> you bet (the server can't steer results), and at close the Merkle root of every round (the server can't rewrite them).
+                Rotate the cycle and reload the explorer link: two new transactions appear and the account's <code>rounds</code>, <code>merkle_root</code> and{" "}
+                <code>revealed_seed</code> fill in.
+              </p>
+            </details>
+          </>
         ) : (
           <p>connecting to server…</p>
         )}

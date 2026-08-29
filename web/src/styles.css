@@ -37,6 +37,12 @@ button.tamper.on { background: #3a0d0d; border-color: var(--red); color: #fff; }
 .dice-num { display: block; font-size: 56px; font-weight: 800; font-variant-numeric: tabular-nums; }
 .dice-verdict { color: var(--muted); font-size: 13px; }
 .trust code { color: var(--gold); }
+.chain-legend { list-style: none; padding: 10px 12px; margin: 8px 0 10px; border: 1px solid var(--line); border-radius: 8px; background: #08080f; font-size: 13px; line-height: 1.7; }
+.chain-legend li.done { color: var(--green); }
+.chain-legend li.pending { color: var(--muted); }
+.chain-legend li strong { color: var(--text); }
+.why summary { cursor: pointer; color: var(--blue); font-size: 13px; }
+.why p { font-size: 13px; color: #c9c9dd; line-height: 1.6; margin: 8px 0 0; }
 .trust small { color: var(--muted); }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }

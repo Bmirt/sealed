@@ -7,7 +7,8 @@ export const CLUSTER = ((import.meta.env["VITE_SEALED_CLUSTER"] as string | unde
 export const RPC = (import.meta.env["VITE_SOLANA_RPC"] as string | undefined) ?? (CLUSTER === "devnet" ? "https://api.devnet.solana.com" : "http://localhost:8899");
 
 const clusterQuery = CLUSTER === "devnet" ? "cluster=devnet" : `cluster=custom&customUrl=${encodeURIComponent(RPC)}`;
-export const explorerAddress = (a: string): string => `https://explorer.solana.com/address/${a}?${clusterQuery}`;
+/** Cycle accounts deep-link to the transaction HISTORY tab: commit → close → reveal is the story, not the raw bytes. */
+export const explorerAddress = (a: string): string => `https://explorer.solana.com/address/${a}/history?${clusterQuery}`;
 export const explorerTx = (s: string): string => `https://explorer.solana.com/tx/${s}?${clusterQuery}`;
 
 async function json<T>(res: Response): Promise<T> {

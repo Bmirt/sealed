@@ -4,7 +4,7 @@ import { el } from './dom';
 
 interface SealedState {
   cluster?: string;
-  active_cycle: { cycle_id: number; seed_hash: string; pda: string } | null;
+  active_cycle: { cycle_id: number; seed_hash: string; pda: string; rounds: number } | null;
 }
 
 /**
@@ -17,6 +17,7 @@ export class TrustBar {
   private readonly linkEl: HTMLAnchorElement;
   private readonly seedInput: HTMLInputElement;
   private readonly cycleEl: HTMLElement;
+  private readonly roundsEl: HTMLElement;
 
   constructor(host: HTMLElement, source: SealedOutcomeSource, clientSeedKey: string, store: GameStore) {
     const verifyUrl = (import.meta.env['VITE_SEALED_VERIFY_URL'] as string | undefined) ?? 'http://localhost:5173/verify';
@@ -27,12 +28,15 @@ export class TrustBar {
     this.seedInput.addEventListener('change', () => {
       localStorage.setItem(clientSeedKey, this.seedInput.value.slice(0, 64) || 'seed');
     });
+    this.roundsEl = el('span', { class: 'trust-rounds', text: '', title: 'Spins are recorded off-chain and sealed by a Merkle root when the cycle closes — nothing is written per spin.' });
     this.root = el('div', { class: 'trust-bar' }, [
       el('span', { class: 'trust-lock', text: '🔒' }),
       this.cycleEl,
-      el('span', { class: 'trust-label', text: 'sealed:' }),
+      el('span', { class: 'trust-label', text: 'committed ✓' }),
       this.hashEl,
       this.linkEl,
+      el('span', { class: 'trust-sep', text: '·' }),
+      this.roundsEl,
       el('span', { class: 'trust-sep', text: '·' }),
       el('label', { class: 'trust-seed-label', text: 'client seed ' }, [this.seedInput]),
       el('span', { class: 'trust-sep', text: '·' }),
@@ -48,6 +52,8 @@ export class TrustBar {
           this.cycleEl.textContent = `cycle #${s.active_cycle.cycle_id}`;
           this.hashEl.textContent = `${h.slice(0, 10)}…${h.slice(-6)}`;
           this.hashEl.title = h;
+          const n = s.active_cycle.rounds;
+          this.roundsEl.textContent = `${n} round${n === 1 ? '' : 's'} recorded · sealed at rotate`;
           const q = s.cluster === 'devnet' ? 'cluster=devnet' : 'cluster=custom&customUrl=http%3A%2F%2Flocalhost%3A8899';
           this.linkEl.href = `https://explorer.solana.com/address/${s.active_cycle.pda}?${q}`;
         }

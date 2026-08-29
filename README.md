@@ -88,6 +88,18 @@ gentler watchdog poll (public RPC rate limits). The program id is the same on bo
  watchdog  ──► same, on a loop, with its own code → GET /status {rounds_verified, mismatches}
 ```
 
+### What is on-chain, and when
+
+| Moment | On-chain | Off-chain |
+|---|---|---|
+| Cycle starts (before any bet) | `commit_seed` — `sha256(seed)`, `committed_at` | — |
+| **Every bet / spin** | **nothing** | the round record (seed-derived roll or spin outcome, wager, payout) |
+| Rotate | `close_cycle` — Merkle root of *all* rounds, round count, wagered/paid → `reveal_seed`, hash-checked by the program | — |
+
+Per-bet transactions would cost a transaction per roll for no additional trust: fairness comes from
+the seed being sealed *before* the bet and the Merkle root sealing *every* round at close. So a
+cycle's account changes exactly three times; watch its transaction history on the explorer.
+
 ## Modules
 
 ### `programs/sealed_engine` (Anchor, Rust)
