@@ -132,6 +132,20 @@ Toolchain: Rust 1.98, Agave 4.2.1 (`solana-test-validator`), Anchor CLI 0.31.1, 
 Screenshots of each state were captured with headless Chrome (`verify-green`, `verify-tampered`,
 `verify-seed-tampered`, `play`).
 
+### Devnet run (2026-08-29) — public, inspectable
+
+| | |
+|---|---|
+| Program | [`86EtE7RmAxHX6P62evx5XB94TmbFa5cG7ST4aXpDMRvs`](https://explorer.solana.com/address/86EtE7RmAxHX6P62evx5XB94TmbFa5cG7ST4aXpDMRvs?cluster=devnet) (deploy tx `5NW7y9hRP3pUjjaaHPteWwN8P1UoWt8bwDiCRsy84UxW1pn36gNEhaPkRGbkEgV2BjxSqJU9SgY5oeECTbM4BRz`) |
+| Authority / fee payer | `u5LNTNL1NyyzDA3P8L4ouSGb6rGGeo9o9V5c3NGfEog` |
+| Cycle 0 commitment | [`2jqq6iX62xqG632CMt7uVHrHWc8NFp5DpU3yP6dE1dqefto5aNb93DPjoywRsUn1gBDe2zBPdSTtZstpdmrrtKkP`](https://explorer.solana.com/tx/2jqq6iX62xqG632CMt7uVHrHWc8NFp5DpU3yP6dE1dqefto5aNb93DPjoywRsUn1gBDe2zBPdSTtZstpdmrrtKkP?cluster=devnet) — seed hash sealed before play |
+| **Rejected fake reveal** (cycle 1) | [`2jc4r6BuXrUx2ecoVoEP5imfzTM6suKvUhmrdcm72AAnYNhCSgeMv54iQyC852hM7Qo57wFMnc8cpz5XhjE8jYca`](https://explorer.solana.com/tx/2jc4r6BuXrUx2ecoVoEP5imfzTM6suKvUhmrdcm72AAnYNhCSgeMv54iQyC852hM7Qo57wFMnc8cpz5XhjE8jYca?cluster=devnet) — slot 489840184, `err: {"InstructionError":[0,{"Custom":6000}]}`, log `Error Code: HashMismatch` |
+| Seeded data | 200 rounds, 3 players, cycles 0 (honest) and 1 (dishonest); cycle 2 active |
+| `/verify` | all six green on devnet data; tamper → checks 4+5 red; seed tamper → checks 2+4 red |
+| Watchdog | `rounds verified: 200, cycles: 2, mismatches: 0` |
+
+Devnet cost: ~1.76 SOL for program rent, then ≈ 0.00001 SOL per instruction.
+
 ### Toolchain notes that cost time (so you don't repeat them)
 - `avm install` switches the active Solana release to an old one (2.1.0 for Anchor 0.31); its
   platform-tools (rustc 1.79) cannot compile 2026 crates that need `edition2024`. `dev.sh` puts the
