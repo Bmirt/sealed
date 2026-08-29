@@ -117,6 +117,19 @@ derives `spinSeed = hex(HMAC(seed, client_seed:nonce))`, runs `spin(config, spin
 stops, total win and the outcome hash. One Merkle tree and one on-chain RTP counter cover both
 games; `/state.games` breaks RTP down per game (dice declared 99 %, slot 96.56 %).
 
+### Rotation, step by step (both admin corners)
+Pressing *Rotate cycle* or *Rotate with a fake reveal first* shows a live timeline fed by
+`GET /cycle/rotation`: **close** (Merkle root of N rounds + totals, tx link) → **fake reveal**
+(dishonest only — `✗ REJECTED … HashMismatch`, link to the failed transaction) → **reveal** (seed,
+hash matched) → **commit** (next cycle sealed), then a *Verify cycle #N →* link that opens the
+verifier on exactly that cycle.
+
+Guarantees around it: bets are refused with `409` while a cycle is closing; a rotation is
+resumable (every step reads chain state first); the reveal verdict comes from the signature
+*status* polled until confirmed — "not indexed yet" is never read as "succeeded"; and if rounds
+were ever accepted after an on-chain close (a crash mid-rotation), the rotation keeps exactly the
+sealed prefix, sets the rest aside as `orphaned_records` for inspection, and continues.
+
 ### `server/` (Fastify + Anchor client)
 - `crypto.ts` — sha256, seed generation, HMAC roll derivation, canonical JSON.
 - `merkle.ts` — pairwise sha256 tree (odd → duplicate last), `merkleRoot`, `merkleProof`, `verifyProof`.

@@ -66,6 +66,7 @@ async function main(): Promise<void> {
       program_id: chain.programId.toBase58(),
       cluster: CLUSTER,
       rpc: RPC,
+      rotating: Boolean(cycles.rotationStatus && !cycles.rotationStatus.finishedAt),
       config_pda: chain.configPda.toBase58(),
       rtp_pda: chain.rtpPda.toBase58(),
       active_cycle: active
@@ -101,6 +102,7 @@ async function main(): Promise<void> {
   app.post<{ Body: { playerId?: string; clientSeed?: string; bet?: number; buy?: string | null } }>("/slot/spin", async (req, reply) => {
     const cycle = store.activeCycle();
     if (!cycle) return reply.code(409).send({ error: "no active cycle" });
+    if (cycle.closing) return reply.code(409).send({ error: "cycle is closing (rotation in progress) — the next cycle opens in a few seconds" });
     const body = req.body ?? {};
     const playerId = String(body.playerId ?? "anon").slice(0, 64);
     let bet;
@@ -133,6 +135,7 @@ async function main(): Promise<void> {
   app.post<{ Body: { playerId?: string; clientSeed?: string; target?: number; wagerMicros?: number } }>("/bet", async (req, reply) => {
     const cycle = store.activeCycle();
     if (!cycle) return reply.code(409).send({ error: "no active cycle" });
+    if (cycle.closing) return reply.code(409).send({ error: "cycle is closing (rotation in progress) — the next cycle opens in a few seconds" });
     const body = req.body ?? {};
     const playerId = String(body.playerId ?? "anon").slice(0, 64);
     let bet;
@@ -170,6 +173,9 @@ async function main(): Promise<void> {
       seedHash: cycle.seed_hash,
     };
   });
+
+  /** Live rotation progress for the admin corners (poll while a rotate request is in flight). */
+  app.get("/cycle/rotation", async () => cycles.rotationStatus ?? { steps: [] });
 
   app.post("/cycle/rotate", async () => {
     const r = await cycles.rotate(false);

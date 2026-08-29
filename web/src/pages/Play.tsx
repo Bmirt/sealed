@@ -1,6 +1,8 @@
 import type { JSX } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { RotationTimeline } from "../components/RotationTimeline";
+import type { RotationStatus } from "../components/RotationTimeline";
 import { api, explorerAddress, explorerTx } from "../lib/api";
 import type { ServerState } from "../lib/types";
 
@@ -80,7 +82,8 @@ export function Play(): JSX.Element {
   const [last, setLast] = useState<Bet | null>(null);
   const [history, setHistory] = useState<Bet[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [rotateMsg, setRotateMsg] = useState<string | null>(null);
+  const [rotation, setRotation] = useState<RotationStatus | null>(null);
+  const [rotating, setRotating] = useState(false);
   const [burst, setBurst] = useState(0);
   const [sound, setSound] = useState(true);
   const raf = useRef<number | null>(null);
@@ -175,15 +178,27 @@ export function Play(): JSX.Element {
     return () => window.removeEventListener("keydown", onKey);
   });
 
+  /** Rotate and watch it happen: poll the server's step-by-step progress while the request runs. */
   async function rotate(dishonest: boolean): Promise<void> {
-    setRotateMsg(dishonest ? "rotating (fake reveal first)…" : "rotating…");
+    if (rotating) return;
+    setRotating(true);
+    const poll = window.setInterval(() => {
+      api
+        .rotation()
+        .then((r) => {
+          if ((r as RotationStatus).steps?.length) setRotation(r as RotationStatus);
+        })
+        .catch(() => undefined);
+    }, 500);
     try {
-      const r = await api.rotate(dishonest);
-      const cheat = (r.txs as { cheatAttempt?: { signature: string; error: string } }).cheatAttempt;
-      setRotateMsg(`cycle ${r.closedCycle} closed + revealed; cycle ${r.newCycle} sealed` + (cheat ? ` · fake reveal REJECTED on-chain (${cheat.error})` : ""));
+      await api.rotate(dishonest);
+    } catch {
+      /* the timeline below carries the error */
+    } finally {
+      window.clearInterval(poll);
+      api.rotation().then((r) => setRotation(r as RotationStatus)).catch(() => undefined);
+      setRotating(false);
       refresh();
-    } catch (e) {
-      setRotateMsg(`rotate failed: ${(e as Error).message}`);
     }
   }
 
@@ -339,9 +354,13 @@ export function Play(): JSX.Element {
 
       <section className="panel admin">
         <h3>Admin corner</h3>
-        <button onClick={() => void rotate(false)}>Rotate cycle (honest)</button>
-        <button className="danger" onClick={() => void rotate(true)}>Rotate with a fake reveal first</button>
-        {rotateMsg && <p className="muted">{rotateMsg}</p>}
+        <p className="muted admin-explain">
+          Rotating ends the current cycle: its Merkle root and totals go on-chain, the seed is revealed and hash-checked by the program, then a new
+          cycle is sealed. The second button first tries a <em>wrong</em> seed so you can watch the chain refuse it.
+        </p>
+        <button disabled={rotating} onClick={() => void rotate(false)}>Rotate cycle (honest)</button>
+        <button className="danger" disabled={rotating} onClick={() => void rotate(true)}>Rotate with a fake reveal first</button>
+        {rotation && <RotationTimeline r={rotation} verifyHref={`/verify?cycle=${rotation.cycleId}`} />}
         {state && (
           <p className="muted">
             on-chain RTP so far: {state.rtp.rtp === null ? "n/a" : `${(state.rtp.rtp * 100).toFixed(2)}%`} over {state.rtp.totalRounds} rounds (all games) · dice declared 99%

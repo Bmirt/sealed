@@ -24,6 +24,7 @@ export const api = {
     fetch(`${SERVER}/bet`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) }).then((r) =>
       json<{ roll: number; win: boolean; payoutMicros: number; nonce: number; roundIndex: number; clientSeed: string; cycleId: number; seedHash: string }>(r),
     ),
+  rotation: (): Promise<{ steps: unknown[] } | Record<string, unknown>> => fetch(`${SERVER}/cycle/rotation`).then((r) => json(r)),
   rotate: (dishonest: boolean) =>
     fetch(`${SERVER}/cycle/${dishonest ? "rotate-dishonest" : "rotate"}`, { method: "POST" }).then((r) =>
       json<{ closedCycle: number; newCycle: number; txs: Record<string, unknown> }>(r),

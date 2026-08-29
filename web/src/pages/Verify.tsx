@@ -35,8 +35,10 @@ export function Verify(): JSX.Element {
       .then((s) => {
         setState(s);
         if (cycleId === null) {
+          const wanted = Number(new URLSearchParams(window.location.search).get("cycle"));
           const revealed = s.cycles.filter((c) => c.status === "revealed");
-          setCycleId((revealed[revealed.length - 1] ?? s.cycles[s.cycles.length - 1])?.cycle_id ?? null);
+          const fromUrl = Number.isInteger(wanted) && s.cycles.some((c) => c.cycle_id === wanted) ? wanted : null;
+          setCycleId(fromUrl ?? (revealed[revealed.length - 1] ?? s.cycles[s.cycles.length - 1])?.cycle_id ?? null);
         }
       })
       .catch((e: Error) => setError(e.message));

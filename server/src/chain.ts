@@ -178,10 +178,27 @@ export class Chain {
     tx.sign(this.authority);
     const signature = await this.connection.sendRawTransaction(tx.serialize(), { skipPreflight: true });
     await this.connection.confirmTransaction({ signature, blockhash, lastValidBlockHeight }, "confirmed").catch(() => undefined);
-    const info = await this.connection.getTransaction(signature, { commitment: "confirmed", maxSupportedTransactionVersion: 0 });
-    const err = info?.meta?.err ?? null;
-    if (!err) return { signature, ok: true, logs: info?.meta?.logMessages ?? [] };
-    return { signature, ok: false, error: this.errorName(err), logs: info?.meta?.logMessages ?? [] };
+    // The verdict comes from the signature STATUS, polled until the cluster has it. A lookup that
+    // returns nothing means "not indexed yet", never "succeeded" — the old code conflated the two.
+    const err = await this.waitForStatus(signature);
+    const info = await this.connection.getTransaction(signature, { commitment: "confirmed", maxSupportedTransactionVersion: 0 }).catch(() => null);
+    const logs = info?.meta?.logMessages ?? [];
+    if (err === null) return { signature, ok: true, logs };
+    return { signature, ok: false, error: this.errorName(err), logs };
+  }
+
+  /** Poll getSignatureStatuses until confirmed/finalized; resolves the tx error (null = success). */
+  private async waitForStatus(signature: string, timeoutMs = 45_000): Promise<unknown> {
+    const started = Date.now();
+    let delay = 500;
+    for (;;) {
+      const res = await this.connection.getSignatureStatuses([signature], { searchTransactionHistory: true }).catch(() => null);
+      const st = res?.value[0] ?? null;
+      if (st && (st.confirmationStatus === "confirmed" || st.confirmationStatus === "finalized")) return st.err ?? null;
+      if (Date.now() - started > timeoutMs) throw new Error(`transaction ${signature.slice(0, 12)}… was not confirmed within ${timeoutMs / 1000}s — check the cluster and retry (rotation resumes)`);
+      await new Promise((r) => setTimeout(r, delay));
+      delay = Math.min(2500, delay * 1.5);
+    }
   }
 
   /**

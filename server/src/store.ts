@@ -24,6 +24,14 @@ export interface CycleData {
   merkle_root?: string;
   committed_at?: number;
   revealed_at?: number;
+  /** Set the moment a rotation starts: no bets are accepted after this. */
+  closing?: boolean;
+  /**
+   * Rounds that were accepted after the cycle had been closed on-chain (only possible via a bug or a
+   * crash mid-rotation). They are NOT part of the sealed Merkle root, so they are set aside here for
+   * transparency instead of being rewritten into the sealed set.
+   */
+  orphaned_records?: RoundRecord[];
 }
 
 export interface PlayerState {

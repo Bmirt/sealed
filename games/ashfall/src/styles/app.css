@@ -388,6 +388,32 @@ html, body {
 .admin-status a, .admin-panel a { color: var(--c-goldHi); }
 .admin-rejected { display: inline-block; padding: 1px 6px; border-radius: 5px; background: #b91c1c; color: #fff; font-weight: 800; font-size: 10px; letter-spacing: 1px; margin-right: 4px; }
 .admin-rtp { margin-top: 8px; color: var(--c-ashDark); }
+.admin-panel { max-height: min(70vh, 640px); overflow-y: auto; }
+.rotation { margin-top: 6px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--c-stoneEdge); background: rgba(8, 8, 12, 0.8); }
+.rotation.live { border-color: var(--c-gold); box-shadow: 0 0 18px rgba(242, 177, 52, 0.18); }
+.rotation.finished { border-color: rgba(46, 194, 126, 0.6); }
+.rotation.errored { border-color: var(--c-garnet); }
+.rot-head { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 8px; color: #fff4e6; }
+.rot-time { color: var(--c-ashDark); }
+.rot-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.rot-step { display: grid; grid-template-columns: 22px 1fr; gap: 8px; padding: 7px 8px; border-radius: 8px; border: 1px solid var(--c-stoneEdge); background: rgba(29, 27, 34, 0.7); }
+.rot-step.pending { opacity: 0.45; }
+.rot-step.running { border-color: var(--c-gold); }
+.rot-step.done { border-color: rgba(46, 194, 126, 0.55); }
+.rot-step.rejected { border-color: var(--c-garnet); background: rgba(143, 29, 44, 0.18); }
+.rot-step.failed { border-color: var(--c-garnet); }
+.rot-icon { font-weight: 800; font-size: 15px; text-align: center; }
+.rot-step.done .rot-icon { color: var(--c-emerald); }
+.rot-step.rejected .rot-icon, .rot-step.failed .rot-icon { color: #ff6b6b; }
+.rot-step.running .rot-icon { color: var(--c-goldHi); display: inline-block; animation: rot-spin 0.9s linear infinite; }
+.rot-body { display: flex; flex-direction: column; gap: 2px; }
+.rot-label { color: #fff4e6; font-weight: 600; }
+.rot-detail { color: var(--c-ash); font-size: 11px; }
+.rot-step.rejected .rot-detail { color: #ffb4b4; }
+.rot-tx { font-size: 11px; }
+.rot-foot { margin: 8px 0 0; color: #d8d4de; }
+.rot-err { color: #ffb4b4; }
+@keyframes rot-spin { to { transform: rotate(360deg); } }
 @media (orientation: portrait) {
   .admin-corner { top: auto; bottom: calc(var(--hud-h) + 96px); left: max(10px, env(safe-area-inset-left)); right: auto; align-items: flex-start; }
 }

@@ -4,6 +4,7 @@
  * chain rejects it with HashMismatch, then reveals honestly.
  */
 import { commitmentHex, newServerSeed, seedBytes } from "./crypto.js";
+import type { RoundRecord } from "./game.js";
 import { leafHash, merkleRoot } from "./merkle.js";
 import type { Chain } from "./chain.js";
 import type { CycleData, Store } from "./store.js";
@@ -15,11 +16,45 @@ export interface RotateResult {
   txs: { close: string; reveal: string; commit: string; cheatAttempt?: { signature: string; error: string } };
 }
 
+export type StepStatus = "pending" | "running" | "done" | "rejected" | "failed" | "skipped";
+export interface RotationStep {
+  key: "close" | "fake" | "reveal" | "commit";
+  label: string;
+  status: StepStatus;
+  detail?: string;
+  signature?: string;
+}
+/** Live view of the rotation in progress (polled by both games' admin corners). */
+export interface RotationStatus {
+  id: number;
+  cycleId: number;
+  dishonest: boolean;
+  startedAt: number;
+  finishedAt?: number;
+  ok?: boolean;
+  error?: string;
+  newCycle?: number;
+  steps: RotationStep[];
+}
+
 export class CycleService {
+  private rotation: RotationStatus | null = null;
+  private rotationSeq = 0;
+
   constructor(
     private readonly store: Store,
     private readonly chain: Chain,
   ) {}
+
+  /** The current (or most recent) rotation, step by step. */
+  get rotationStatus(): RotationStatus | null {
+    return this.rotation;
+  }
+
+  private step(key: RotationStep["key"], patch: Partial<RotationStep>): void {
+    const st = this.rotation?.steps.find((x) => x.key === key);
+    if (st) Object.assign(st, patch);
+  }
 
   /** Start a cycle: generate the seed, commit its hash on-chain, record everything. */
   async startCycle(): Promise<CycleData> {
@@ -94,34 +129,100 @@ export class CycleService {
    * (public devnet RPCs 429 freely) can simply be retried without double-closing.
    */
   async rotate(dishonest: boolean): Promise<RotateResult> {
+    if (this.rotation && !this.rotation.finishedAt) throw new Error("a rotation is already in progress");
     const cycle = this.store.activeCycle();
     if (!cycle) throw new Error("no active cycle");
+    cycle.closing = true; // from here on /bet and /slot/spin refuse this cycle
+    this.store.save();
     const t = this.totals(cycle);
-    const onChainBefore = await this.chain.fetchCycle(cycle.cycle_id);
+    this.rotation = {
+      id: ++this.rotationSeq,
+      cycleId: cycle.cycle_id,
+      dishonest,
+      startedAt: Date.now(),
+      steps: [
+        { key: "close", label: `Close cycle #${cycle.cycle_id} — Merkle root of ${t.rounds} round${t.rounds === 1 ? "" : "s"} + totals on-chain`, status: "pending" },
+        ...(dishonest ? [{ key: "fake" as const, label: "Try to reveal a WRONG seed (one hex digit flipped)", status: "pending" as const }] : []),
+        { key: "reveal", label: "Reveal the real seed — the program recomputes sha256 and checks it", status: "pending" },
+        { key: "commit", label: "Seal a new cycle — commit the next seed hash before any play", status: "pending" },
+      ],
+    };
+    try {
+      const result = await this.rotateInner(cycle, t, dishonest);
+      this.rotation.ok = true;
+      this.rotation.newCycle = result.newCycle;
+      this.rotation.finishedAt = Date.now();
+      return result;
+    } catch (e) {
+      const running = this.rotation.steps.find((x) => x.status === "running");
+      if (running) {
+        running.status = "failed";
+        running.detail = (e as Error).message;
+      }
+      this.rotation.ok = false;
+      this.rotation.error = (e as Error).message;
+      this.rotation.finishedAt = Date.now();
+      throw e;
+    }
+  }
 
+  private async rotateInner(cycle: CycleData, t: ReturnType<CycleService["totals"]>, dishonest: boolean): Promise<RotateResult> {
+    const onChainBefore = await this.chain.fetchCycle(cycle.cycle_id);
+    let rootHex = t.root.toString("hex");
+    const money = `wagered ${(t.wagered / 1e6).toFixed(2)} · paid ${(t.paid / 1e6).toFixed(2)}`;
+
+    this.step("close", { status: "running" });
     let close = cycle.txs.close ?? "";
     if (onChainBefore?.closed) {
-      if (onChainBefore.merkleRoot !== t.root.toString("hex")) {
-        throw new Error(`cycle ${cycle.cycle_id} was closed on-chain with a different Merkle root — rounds were played after close`);
+      if (onChainBefore.merkleRoot !== rootHex) {
+        // Rounds were accepted after the close landed (a crash or the old reveal bug). The sealed set
+        // is exactly the first `rounds` records — if those reproduce the on-chain root, set the rest
+        // aside as orphaned; anything else is real corruption and must stop here.
+        const sealed = cycle.records.slice(0, onChainBefore.rounds);
+        const sealedRoot = merkleRoot(sealed.map(leafHash)).toString("hex");
+        if (sealedRoot !== onChainBefore.merkleRoot) {
+          throw new Error(`cycle ${cycle.cycle_id} was closed on-chain with a different Merkle root — records do not reproduce it`);
+        }
+        const orphans: RoundRecord[] = cycle.records.slice(onChainBefore.rounds);
+        cycle.orphaned_records = [...(cycle.orphaned_records ?? []), ...orphans];
+        cycle.records = sealed;
+        this.store.save();
+        console.warn(`cycle ${cycle.cycle_id}: ${orphans.length} round(s) were accepted after the on-chain close — set aside as orphaned`);
+        t = this.totals(cycle);
+        rootHex = t.root.toString("hex");
+        this.step("close", { status: "done", signature: close, detail: `already closed on-chain · root ${rootHex.slice(0, 12)}… · ${orphans.length} round(s) played after close set aside (not sealed)` });
+      } else {
+        this.step("close", { status: "done", signature: close, detail: `already closed on-chain · root ${rootHex.slice(0, 12)}… · ${money}` });
       }
     } else {
       close = await this.chain.closeCycle(cycle.cycle_id, t.root, t.rounds, t.wagered, t.paid);
+      this.step("close", { status: "done", signature: close, detail: `root ${rootHex.slice(0, 12)}… · ${money}` });
     }
-    cycle.merkle_root = t.root.toString("hex");
+    cycle.merkle_root = rootHex;
     cycle.txs.close = close;
     this.store.save();
 
     let cheatAttempt: RotateResult["txs"]["cheatAttempt"];
-    if (dishonest && onChainBefore?.status !== "revealed") {
-      // Flip one hex digit of the real seed — the on-chain sha256 check must reject it.
-      const fake = flipOneHexDigit(cycle.server_seed);
-      const res = await this.chain.revealSeed(cycle.cycle_id, seedBytes(fake));
-      if (res.ok) throw new Error("dishonest reveal unexpectedly succeeded — the program is broken");
-      cheatAttempt = { signature: res.signature, error: res.error ?? "unknown" };
-      cycle.cheat_attempts.push({ signature: res.signature, error: res.error ?? "unknown", at: Date.now() });
-      this.store.save();
+    if (dishonest) {
+      if (onChainBefore?.status === "revealed") {
+        this.step("fake", { status: "skipped", detail: "cycle already revealed on-chain (resumed rotation)" });
+      } else {
+        this.step("fake", { status: "running" });
+        // Flip one hex digit of the real seed — the on-chain sha256 check must reject it.
+        const fake = flipOneHexDigit(cycle.server_seed);
+        const res = await this.chain.revealSeed(cycle.cycle_id, seedBytes(fake));
+        if (res.ok) {
+          this.step("fake", { status: "failed", signature: res.signature, detail: "the chain ACCEPTED a wrong seed — the program is broken" });
+          throw new Error("dishonest reveal unexpectedly succeeded — the program is broken");
+        }
+        cheatAttempt = { signature: res.signature, error: res.error ?? "unknown" };
+        cycle.cheat_attempts.push({ signature: res.signature, error: res.error ?? "unknown", at: Date.now() });
+        this.store.save();
+        this.step("fake", { status: "rejected", signature: res.signature, detail: `the program recomputed sha256(seed), it did not match the commitment → ${res.error ?? "unknown"}. The failed transaction stays in history forever.` });
+      }
     }
 
+    this.step("reveal", { status: "running" });
     let revealSig = cycle.txs.reveal ?? "";
     if (onChainBefore?.status !== "revealed") {
       const reveal = await this.chain.revealSeed(cycle.cycle_id, seedBytes(cycle.server_seed));
@@ -135,8 +236,11 @@ export class CycleService {
     cycle.revealed_at = onChain?.revealedAt;
     this.store.data.active_cycle = null;
     this.store.save();
+    this.step("reveal", { status: "done", signature: cycle.txs.reveal ?? "", detail: `seed ${cycle.server_seed.slice(0, 12)}… · sha256 matched the commitment · ${t.rounds} round${t.rounds === 1 ? "" : "s"} now publicly verifiable` });
 
+    this.step("commit", { status: "running" });
     const next = await this.startCycle();
+    this.step("commit", { status: "done", signature: next.txs.commit ?? "", detail: `cycle #${next.cycle_id} sealed · ${next.seed_hash.slice(0, 12)}…` });
     return {
       closedCycle: cycle.cycle_id,
       newCycle: next.cycle_id,

@@ -152,3 +152,29 @@ input.cell { margin: 0; padding: 4px 6px; font-size: 12px; width: 110px; }
 @keyframes fall { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(280px) rotate(540deg); opacity: 0; } }
 input.cell.wide { width: 150px; }
 tr.slot-row td:nth-child(2) { color: var(--gold); }
+
+/* ---------- rotation timeline ---------- */
+.admin-explain { font-size: 13px; line-height: 1.55; margin: 0 0 12px; }
+.rotation { margin-top: 14px; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--line); background: #08080f; }
+.rotation.live { border-color: var(--blue); box-shadow: 0 0 24px rgba(77, 166, 255, 0.15); }
+.rotation.finished { border-color: rgba(34, 197, 94, 0.5); }
+.rotation.errored { border-color: var(--red); }
+.rotation-head { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; }
+.rotation-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.step { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; padding: 8px 10px; border-radius: 8px; background: var(--panel); border: 1px solid var(--line); transition: border-color 200ms, background 200ms; }
+.step.pending { opacity: 0.45; }
+.step.running { border-color: var(--blue); background: rgba(77, 166, 255, 0.06); }
+.step.done { border-color: rgba(34, 197, 94, 0.45); }
+.step.rejected { border-color: var(--red); background: rgba(239, 68, 68, 0.08); }
+.step.failed { border-color: var(--red); }
+.step-icon { font-size: 18px; font-weight: 800; line-height: 1.2; text-align: center; }
+.step.done .step-icon { color: var(--green); }
+.step.rejected .step-icon, .step.failed .step-icon { color: var(--red); }
+.step.running .step-icon { color: var(--blue); animation: spin 0.9s linear infinite; display: inline-block; }
+.step-body { display: flex; flex-direction: column; gap: 3px; font-size: 13px; }
+.step-label { font-weight: 600; }
+.step-detail { color: var(--muted); font-size: 12px; }
+.step.rejected .step-detail { color: #ffb4b4; }
+.step-tx { font-size: 12px; }
+.rotation-foot { margin: 12px 0 0; font-size: 13px; color: #c9c9dd; }
+@keyframes spin { to { transform: rotate(360deg); } }
