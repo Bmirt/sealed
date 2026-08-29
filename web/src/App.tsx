@@ -1,5 +1,6 @@
 import type { JSX } from "react";
 import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { CLUSTER } from "./lib/api";
 import { Play } from "./pages/Play";
 import { Verify } from "./pages/Verify";
 
@@ -9,7 +10,7 @@ export function App(): JSX.Element {
     <div className="app">
       <header className="top">
         <div className="brand">
-          <span className="seal">◈</span> SEALED <span className="tag">provably fair · Solana localnet</span>
+          <span className="seal">◈</span> SEALED <span className="tag">provably fair · Solana {CLUSTER}</span>
         </div>
         <nav>
           <Link className={loc.pathname === "/play" ? "active" : ""} to="/play">Play</Link>

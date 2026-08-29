@@ -18,15 +18,17 @@ import { leafHash, merkleProof, merkleRoot } from "./merkle.js";
 import { Store } from "./store.js";
 
 const PORT = Number(process.env["PORT"] ?? 4000);
-const RPC = process.env["SOLANA_RPC"] ?? "http://127.0.0.1:8899";
+/** "localnet" (default) or "devnet". Selects the RPC and keeps a separate store per cluster. */
+const CLUSTER = process.env["SEALED_CLUSTER"] ?? "localnet";
+const RPC = process.env["SOLANA_RPC"] ?? (CLUSTER === "devnet" ? "https://api.devnet.solana.com" : "http://127.0.0.1:8899");
 const WALLET = process.env["SEALED_WALLET"] ?? "~/.config/solana/id.json";
 const IDL = process.env["SEALED_IDL"] ?? resolve(process.cwd(), "../target/idl/sealed_engine.json");
-const DATA = process.env["SEALED_DATA"] ?? resolve(process.cwd(), "data/store.json");
+const DATA = process.env["SEALED_DATA"] ?? resolve(process.cwd(), `data/store.${CLUSTER}.json`);
 
 async function main(): Promise<void> {
   const store = new Store(DATA);
   const chain = new Chain({ rpcUrl: RPC, walletPath: WALLET, idlPath: IDL });
-  await chain.ensureFunded();
+  await chain.ensureFunded(CLUSTER === "localnet");
   const init = await chain.ensureInitialized();
   const cycles = new CycleService(store, chain);
   if (!store.activeCycle()) await cycles.startCycle();
@@ -39,6 +41,7 @@ async function main(): Promise<void> {
     const rtp = await chain.fetchRtp();
     return {
       program_id: chain.programId.toBase58(),
+      cluster: CLUSTER,
       rpc: RPC,
       config_pda: chain.configPda.toBase58(),
       rtp_pda: chain.rtpPda.toBase58(),
@@ -117,7 +120,7 @@ async function main(): Promise<void> {
   }));
 
   await app.listen({ port: PORT, host: "0.0.0.0" });
-  app.log.info(`SEALED server on http://localhost:${PORT} — program ${chain.programId.toBase58()}, active cycle ${store.data.active_cycle}`);
+  app.log.info(`SEALED server on http://localhost:${PORT} — ${CLUSTER} ${RPC} — program ${chain.programId.toBase58()}, active cycle ${store.data.active_cycle}`);
 }
 
 main().catch((e: unknown) => {

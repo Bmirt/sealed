@@ -5,6 +5,7 @@
   "description": "SEALED — provably fair casino demo: seed commitments, reveals and round Merkle roots on Solana localnet.",
   "scripts": {
     "dev": "bash scripts/dev.sh",
+    "dev:devnet": "CLUSTER=devnet bash scripts/dev.sh",
     "server": "pnpm --filter server dev",
     "web": "pnpm --filter web dev",
     "watchdog": "pnpm --filter watchdog dev",

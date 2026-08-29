@@ -2,10 +2,12 @@ import type { CycleRounds, ServerState } from "./types";
 
 export const SERVER = (import.meta.env["VITE_SEALED_SERVER"] as string | undefined) ?? "http://localhost:4000";
 export const WATCHDOG = (import.meta.env["VITE_SEALED_WATCHDOG"] as string | undefined) ?? "http://localhost:4100";
-export const RPC = (import.meta.env["VITE_SOLANA_RPC"] as string | undefined) ?? "http://localhost:8899";
+export const CLUSTER = ((import.meta.env["VITE_SEALED_CLUSTER"] as string | undefined) ?? "localnet") as "localnet" | "devnet";
+export const RPC = (import.meta.env["VITE_SOLANA_RPC"] as string | undefined) ?? (CLUSTER === "devnet" ? "https://api.devnet.solana.com" : "http://localhost:8899");
 
-export const explorerAddress = (a: string): string => `https://explorer.solana.com/address/${a}?cluster=custom&customUrl=${encodeURIComponent(RPC)}`;
-export const explorerTx = (s: string): string => `https://explorer.solana.com/tx/${s}?cluster=custom&customUrl=${encodeURIComponent(RPC)}`;
+const clusterQuery = CLUSTER === "devnet" ? "cluster=devnet" : `cluster=custom&customUrl=${encodeURIComponent(RPC)}`;
+export const explorerAddress = (a: string): string => `https://explorer.solana.com/address/${a}?${clusterQuery}`;
+export const explorerTx = (s: string): string => `https://explorer.solana.com/tx/${s}?${clusterQuery}`;
 
 async function json<T>(res: Response): Promise<T> {
   if (!res.ok) throw new Error(`${res.status} ${await res.text()}`);

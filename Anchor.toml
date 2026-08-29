@@ -8,6 +8,9 @@ skip-lint = false
 [programs.localnet]
 sealed_engine = "86EtE7RmAxHX6P62evx5XB94TmbFa5cG7ST4aXpDMRvs"
 
+[programs.devnet]
+sealed_engine = "86EtE7RmAxHX6P62evx5XB94TmbFa5cG7ST4aXpDMRvs"
+
 [registry]
 url = "https://api.apr.dev"
 

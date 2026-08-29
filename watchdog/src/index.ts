@@ -9,9 +9,11 @@ import { decodeSeedCycle, verifyCycle } from "./verify.js";
 import type { CheckResult, RoundRecord } from "./verify.js";
 
 const SERVER = process.env["SEALED_SERVER"] ?? "http://localhost:4000";
-const RPC = process.env["SOLANA_RPC"] ?? "http://127.0.0.1:8899";
+const CLUSTER = process.env["SEALED_CLUSTER"] ?? "localnet";
+const RPC = process.env["SOLANA_RPC"] ?? (CLUSTER === "devnet" ? "https://api.devnet.solana.com" : "http://127.0.0.1:8899");
 const PORT = Number(process.env["WATCHDOG_PORT"] ?? 4100);
-const INTERVAL_MS = Number(process.env["WATCHDOG_INTERVAL_MS"] ?? 3000);
+// Public devnet RPC is rate-limited: poll more gently there.
+const INTERVAL_MS = Number(process.env["WATCHDOG_INTERVAL_MS"] ?? (CLUSTER === "devnet" ? 8000 : 3000));
 
 interface Status {
   rounds_verified: number;

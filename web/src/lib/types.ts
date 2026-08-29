@@ -32,6 +32,7 @@ export interface CycleRounds {
 }
 export interface ServerState {
   program_id: string;
+  cluster?: string;
   rpc: string;
   config_pda: string;
   rtp_pda: string;

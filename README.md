@@ -31,6 +31,23 @@ newest installed Agave release first on PATH for the build.
 
 Ports: web 5173 · server 4000 · watchdog 4100 · validator 8899.
 
+### Devnet
+
+The same stack runs against Solana **devnet** — no local validator, the program lives on the
+public cluster and every explorer link opens on `?cluster=devnet`:
+
+```bash
+solana address                        # the server's authority = fee payer; fund it with ≈3 SOL
+                                      # (solana airdrop 2 --url devnet, or https://faucet.solana.com)
+pnpm dev:devnet                       # builds SBPF v0, deploys once, starts server + web + watchdog
+SEALED_CLUSTER=devnet pnpm seed       # optional demo data (three on-chain txs per rotation)
+```
+
+`CLUSTER=devnet` selects the RPC (`https://api.devnet.solana.com`), a separate store
+(`server/data/store.devnet.json`), SBPF v0 for the deploy (SIMD-0500 is inactive on devnet) and a
+gentler watchdog poll (public RPC rate limits). The program id is the same on both clusters
+(`target/deploy/sealed_engine-keypair.json`). Players still need no wallet.
+
 ## The 2-minute stage demo
 
 1. Open **/play**. Point at the footer: *"Current cycle #N sealed: `a3f9…` 🔒 view on chain"* —

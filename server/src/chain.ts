@@ -92,13 +92,19 @@ export class Chain {
     return client.fetch(address);
   }
 
-  /** Airdrop to the authority on localnet if it is running low (server pays all fees). */
-  async ensureFunded(): Promise<void> {
+  /**
+   * The server pays every fee. On localnet it airdrops itself; on devnet airdrops are rate-limited,
+   * so it only warns — fund the authority via https://faucet.solana.com if the balance is low.
+   */
+  async ensureFunded(canAirdrop: boolean): Promise<void> {
     const bal = await this.connection.getBalance(this.authority.publicKey);
-    if (bal < 2e9) {
-      const sig = await this.connection.requestAirdrop(this.authority.publicKey, 10e9);
-      await this.connection.confirmTransaction(sig, "confirmed");
+    if (bal >= 0.5e9) return;
+    if (!canAirdrop) {
+      console.warn(`authority ${this.authority.publicKey.toBase58()} has ${bal / 1e9} SOL — fund it (faucet.solana.com) or transactions will fail`);
+      return;
     }
+    const sig = await this.connection.requestAirdrop(this.authority.publicKey, 10e9);
+    await this.connection.confirmTransaction(sig, "confirmed");
   }
 
   async ensureInitialized(): Promise<{ initialized: boolean; signature?: string }> {
