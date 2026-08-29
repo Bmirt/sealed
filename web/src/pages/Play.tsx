@@ -78,6 +78,7 @@ export function Play(): JSX.Element {
   const [rolling, setRolling] = useState(false);
   const [marker, setMarker] = useState<number | null>(null); // 0–99.99 marker position while animating
   const [display, setDisplay] = useState<number | null>(null);
+  const [precise, setPrecise] = useState(true); // whole numbers while the marker moves, exact roll once it locks
   const [last, setLast] = useState<Bet | null>(null);
   const [history, setHistory] = useState<Bet[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -103,39 +104,38 @@ export function Play(): JSX.Element {
   const chance = target - 0.01;
 
   /**
-   * Animate the marker: two decelerating laps that land exactly on the roll, then a small damped
-   * overshoot that returns to the roll. One continuous motion — no phase hand-off, no jump.
-   * The displayed number follows the marker during the sweep and locks to the exact roll for the
-   * settle, so it never flickers around the final value.
+   * Animate the marker: two decelerating laps (quintic ease-out) that come to rest exactly on the
+   * roll. One continuous motion, no overshoot, no phase hand-off. The displayed number follows the
+   * marker while it is moving fast and locks to the exact roll for the last stretch (the marker is
+   * within 0.1 pt of it by then), so nothing flickers around the final value.
    */
   const animateTo = useCallback(
     (roll: number, win: boolean): Promise<void> =>
       new Promise((resolve) => {
         const t0 = performance.now();
         const total = 1500;
-        const sweepEnd = 0.84; // fraction of `total` at which the marker reaches the roll
         const from = marker ?? 50;
         const distance = 200 + roll - from; // two laps plus the way to the roll
         let lastTickBucket = -1;
+        let locked = false;
         const step = (now: number): void => {
           const p = Math.min(1, (now - t0) / total);
-          let pos: number;
-          if (p < sweepEnd) {
-            const e = easeOutQuint(p / sweepEnd);
-            const unwrapped = from + e * distance;
-            pos = ((unwrapped % 100) + 100) % 100;
-            setDisplay(Math.round(pos * 100) / 100);
+          const e = easeOutQuint(p);
+          const unwrapped = from + e * distance;
+          const pos = ((unwrapped % 100) + 100) % 100; // the marker eases all the way — its last motion is sub-pixel
+          // The number locks to the exact roll once the marker is on its final approach (< 0.5 pt away,
+          // past the laps); from then on nothing on screen changes except the marker's last glide.
+          if (!locked && p > 0.5 && distance - e * distance < 0.5) {
+            locked = true;
+            setPrecise(true);
+          }
+          setDisplay(locked ? roll : Math.round(pos));
+          if (!locked) {
             const bucket = Math.floor((now - t0) / (40 + e * 140));
             if (bucket !== lastTickBucket) {
               lastTickBucket = bucket;
               if (sound) sfx.tick(0.8 + e * 0.6);
             }
-          } else {
-            // Damped overshoot past the roll (in the direction of travel), back to exactly the roll.
-            const q = (p - sweepEnd) / (1 - sweepEnd);
-            const overshoot = 2.2 * Math.sin(Math.PI * q) * (1 - q);
-            pos = Math.min(99.99, Math.max(0, roll + overshoot));
-            setDisplay(roll);
           }
           setMarker(pos);
           if (p < 1) {
@@ -158,6 +158,7 @@ export function Play(): JSX.Element {
     setError(null);
     setRolling(true);
     setLast(null);
+    setPrecise(false);
     try {
       const wagerMicros = Math.round(Number(wager) * 1e6);
       const r = await api.bet({ playerId, clientSeed, target, wagerMicros });
@@ -230,7 +231,7 @@ export function Play(): JSX.Element {
             </div>
           )}
           <div className="dice-num-wrap">
-            <span className="dice-num">{display === null ? "0.00" : display.toFixed(2)}</span>
+            <span className="dice-num">{display === null ? "0.00" : display.toFixed(precise ? 2 : 0)}</span>
             <span className="dice-verdict">
               {last && !rolling ? (won ? `WIN +${fmt(last.payoutMicros)}` : "no luck") : rolling ? "rolling…" : "press ROLL or Space"}
               {last && !rolling && <small> · nonce {last.nonce} · round #{last.roundIndex} · cycle {last.cycleId}</small>}
@@ -245,7 +246,7 @@ export function Play(): JSX.Element {
             </div>
             {marker !== null && (
               <div className={`marker ${rolling ? "" : won ? "win" : "lose"}`} style={{ left: `${marker}%` }}>
-                <span>{(display ?? 0).toFixed(2)}</span>
+                <span>{(display ?? 0).toFixed(precise ? 2 : 0)}</span>
               </div>
             )}
             <div className="ticks">
