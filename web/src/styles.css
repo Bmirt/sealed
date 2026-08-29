@@ -73,3 +73,76 @@ input.cell { margin: 0; padding: 4px 6px; font-size: 12px; width: 110px; }
 .cheats li { padding: 10px 0; border-bottom: 1px solid var(--line); }
 .watchdog.bad { border-color: var(--red); }
 @media (max-width: 800px) { .play { grid-template-columns: 1fr; } .head { flex-direction: column; } .head-controls label { min-width: 0; } }
+
+/* ---------- landing ---------- */
+.landing .hero { padding: 30px 0 10px; }
+.landing h1 { font-size: 42px; margin: 0 0 12px; letter-spacing: -0.5px; }
+.landing .hl { background: linear-gradient(90deg, var(--blue), var(--purple), var(--gold)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.landing .lede { color: var(--muted); font-size: 16px; max-width: 760px; line-height: 1.6; }
+.landing .chainline { font-size: 14px; }
+.landing .chainline code { color: var(--gold); }
+.games { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 22px 0; }
+.game-card { display: block; position: relative; padding: 18px; border-radius: 16px; border: 1px solid var(--line); background: var(--panel); color: var(--text); text-decoration: none; transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease; }
+.game-card:hover { transform: translateY(-3px); border-color: var(--blue); box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5); }
+.game-card.slot:hover { border-color: var(--gold); }
+.game-card h2 { margin: 14px 0 6px; font-size: 20px; }
+.game-card p { color: var(--muted); font-size: 14px; line-height: 1.55; min-height: 66px; }
+.game-art { height: 150px; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; overflow: hidden; }
+.dice-art { background: radial-gradient(circle at 30% 30%, #1d2a4a, #0a0e1c 70%); }
+.dice-art .die { font-size: 84px; color: var(--blue); filter: drop-shadow(0 0 22px rgba(77, 166, 255, 0.6)); animation: bob 2.6s ease-in-out infinite; }
+.slot-art { background: radial-gradient(circle at 50% 100%, #4a1a0c, #0b0a0d 70%); flex-direction: column; }
+.slot-art .sigil { font-size: 44px; color: var(--gold); filter: drop-shadow(0 0 18px rgba(240, 180, 41, 0.6)); animation: bob 2.6s ease-in-out infinite 0.4s; }
+.slot-art .slot-title { font-family: "Iowan Old Style", Palatino, Georgia, serif; letter-spacing: 6px; color: var(--gold); font-weight: 700; }
+.game-stats { display: flex; gap: 16px; font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+.game-card .cta { position: absolute; right: 18px; bottom: 16px; color: var(--blue); font-weight: 700; }
+.how { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.how .step { padding: 14px; border: 1px solid var(--line); border-radius: 10px; font-size: 13px; color: #c9c9dd; line-height: 1.5; }
+.how .step b { display: inline-block; width: 22px; height: 22px; line-height: 22px; text-align: center; border-radius: 50%; background: var(--purple); color: #fff; margin-right: 8px; font-size: 12px; }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+.brand-link { color: inherit; text-decoration: none; }
+@media (max-width: 800px) { .games, .how { grid-template-columns: 1fr; } }
+
+/* ---------- dice stage ---------- */
+.bet-head { display: flex; justify-content: space-between; align-items: center; }
+.sound { padding: 6px 10px; margin: 0; }
+.sound.off { opacity: 0.5; }
+.dice-stage { position: relative; padding: 18px 18px 26px; border-radius: 14px; background: radial-gradient(ellipse at 50% 0%, #131a33 0%, #08080f 65%); border: 1px solid var(--line); margin: 10px 0 14px; overflow: hidden; transition: box-shadow 220ms ease, border-color 220ms ease; }
+.dice-stage.win { border-color: var(--green); box-shadow: 0 0 0 1px var(--green), 0 0 40px rgba(34, 197, 94, 0.28), inset 0 0 60px rgba(34, 197, 94, 0.08); }
+.dice-stage.lose { border-color: #4a1d1d; box-shadow: inset 0 0 60px rgba(239, 68, 68, 0.06); }
+.dice-stage.rolling { border-color: var(--blue); box-shadow: 0 0 30px rgba(77, 166, 255, 0.25); }
+.dice-num-wrap { text-align: center; margin-bottom: 18px; }
+.dice-num { display: block; font-size: 64px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -1px; line-height: 1; text-shadow: 0 0 30px rgba(77, 166, 255, 0.35); transition: color 200ms; }
+.dice-stage.win .dice-num { color: var(--green); text-shadow: 0 0 34px rgba(34, 197, 94, 0.5); animation: pop 420ms cubic-bezier(0.2, 1.8, 0.4, 1); }
+.dice-stage.lose .dice-num { color: #ff8a8a; }
+.dice-verdict { display: block; margin-top: 6px; color: var(--muted); font-size: 13px; min-height: 18px; }
+.dice-stage.win .dice-verdict { color: var(--green); font-weight: 700; }
+@keyframes pop { 0% { transform: scale(0.8); } 60% { transform: scale(1.12); } 100% { transform: scale(1); } }
+
+.rollbar { position: relative; height: 26px; border-radius: 13px; background: #10101c; border: 1px solid var(--line); margin: 30px 10px 26px; }
+.rollbar .zone { position: absolute; top: 0; bottom: 0; }
+.rollbar .zone.win { left: 0; border-radius: 13px 0 0 13px; background: linear-gradient(90deg, #14532d, #22c55e); box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.4); transition: width 120ms ease; }
+.rollbar .zone.lose { border-radius: 0 13px 13px 0; background: linear-gradient(90deg, #ef4444, #7f1d1d); box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.4); transition: left 120ms ease, width 120ms ease; }
+.rollbar .target-line { position: absolute; top: -8px; bottom: -8px; width: 2px; background: #fff; transform: translateX(-1px); box-shadow: 0 0 8px rgba(255, 255, 255, 0.6); transition: left 120ms ease; }
+.rollbar .target-line span { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 11px; color: #fff; font-weight: 700; }
+.rollbar .marker { position: absolute; top: 50%; width: 30px; height: 30px; border-radius: 50%; transform: translate(-50%, -50%); background: #fff; border: 3px solid var(--blue); box-shadow: 0 0 0 4px rgba(77, 166, 255, 0.25), 0 6px 18px rgba(0, 0, 0, 0.6); will-change: left; }
+.rollbar .marker.win { border-color: var(--green); box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.35), 0 0 30px rgba(34, 197, 94, 0.6); }
+.rollbar .marker.lose { border-color: var(--red); box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.25); }
+.rollbar .marker span { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); font-size: 12px; font-weight: 800; color: #fff; background: #06060c; padding: 2px 6px; border-radius: 6px; border: 1px solid var(--line); white-space: nowrap; }
+.rollbar .ticks { position: absolute; left: 0; right: 0; top: 30px; }
+.rollbar .ticks em { position: absolute; transform: translateX(-50%); font-style: normal; font-size: 10px; color: var(--muted); }
+.slider { margin-top: 6px; }
+.slider-labels { display: flex; justify-content: space-between; font-size: 13px; }
+.slider-labels strong { color: var(--text); }
+.wager-row { display: flex; gap: 6px; }
+.wager-row input { flex: 1; }
+.wager-row button { margin: 6px 0 0; padding: 0 12px; }
+.streak { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.chip { padding: 3px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; background: #15152a; border: 1px solid var(--line); animation: chipin 260ms ease; }
+.chip.win { color: var(--green); border-color: rgba(34, 197, 94, 0.5); }
+.chip.lose { color: #ff8a8a; }
+@keyframes chipin { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.confetti { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.confetti i { position: absolute; top: -10px; width: 8px; height: 12px; border-radius: 2px; animation: fall 1.4s cubic-bezier(0.2, 0.6, 0.4, 1) forwards; opacity: 0.95; }
+@keyframes fall { 0% { transform: translateY(0) rotate(0deg); } 100% { transform: translateY(280px) rotate(540deg); opacity: 0; } }
+input.cell.wide { width: 150px; }
+tr.slot-row td:nth-child(2) { color: var(--gold); }

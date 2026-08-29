@@ -2,6 +2,7 @@ import type { CycleRounds, ServerState } from "./types";
 
 export const SERVER = (import.meta.env["VITE_SEALED_SERVER"] as string | undefined) ?? "http://localhost:4000";
 export const WATCHDOG = (import.meta.env["VITE_SEALED_WATCHDOG"] as string | undefined) ?? "http://localhost:4100";
+export const ASHFALL_URL = (import.meta.env["VITE_ASHFALL_URL"] as string | undefined) ?? "http://localhost:5174";
 export const CLUSTER = ((import.meta.env["VITE_SEALED_CLUSTER"] as string | undefined) ?? "localnet") as "localnet" | "devnet";
 export const RPC = (import.meta.env["VITE_SOLANA_RPC"] as string | undefined) ?? (CLUSTER === "devnet" ? "https://api.devnet.solana.com" : "http://localhost:8899");
 

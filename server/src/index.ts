@@ -15,6 +15,7 @@ import { Chain } from "./chain.js";
 import { CycleService } from "./cycles.js";
 import { DECLARED_RTP, playRound, validateBet } from "./game.js";
 import { leafHash, merkleProof, merkleRoot } from "./merkle.js";
+import { SLOT_CONFIG, playSlotRound, validateSlotBet } from "./slot.js";
 import { Store } from "./store.js";
 
 const PORT = Number(process.env["PORT"] ?? 4000);
@@ -74,8 +75,59 @@ async function main(): Promise<void> {
         .sort((a, b) => a.cycle_id - b.cycle_id)
         .map((c) => ({ cycle_id: c.cycle_id, status: c.status, rounds: c.records.length, pda: chain.cyclePda(c.cycle_id).toBase58(), cheat_attempts: c.cheat_attempts.length })),
       rtp: { ...rtp, rtp: rtp.totalWageredMicros > 0 ? rtp.totalPaidMicros / rtp.totalWageredMicros : null, declared: DECLARED_RTP },
+      games: perGameStats(),
       initialized_this_boot: init.initialized,
     };
+  });
+
+  /** Local (off-chain) per-game totals: on-chain RtpStats is one global counter. */
+  const perGameStats = (): Record<string, { rounds: number; wagered_micros: number; paid_micros: number; rtp: number | null; declared: number }> => {
+    const acc: Record<string, { rounds: number; wagered_micros: number; paid_micros: number }> = { dice: { rounds: 0, wagered_micros: 0, paid_micros: 0 }, ashfall: { rounds: 0, wagered_micros: 0, paid_micros: 0 } };
+    for (const c of Object.values(store.data.cycles)) {
+      for (const r of c.records) {
+        const g = r.game ?? "dice";
+        const a = acc[g] ?? (acc[g] = { rounds: 0, wagered_micros: 0, paid_micros: 0 });
+        a.rounds++;
+        a.wagered_micros += r.wager_micros;
+        a.paid_micros += r.payout_micros;
+      }
+    }
+    return Object.fromEntries(
+      Object.entries(acc).map(([g, a]) => [g, { ...a, rtp: a.wagered_micros ? a.paid_micros / a.wagered_micros : null, declared: g === "ashfall" ? SLOT_CONFIG.rtp.declaredBase : DECLARED_RTP }]),
+    );
+  };
+
+  /** Ashfall Dynasty spin on the sealed seed. Returns the full outcome for the client to present. */
+  app.post<{ Body: { playerId?: string; clientSeed?: string; bet?: number; buy?: string | null } }>("/slot/spin", async (req, reply) => {
+    const cycle = store.activeCycle();
+    if (!cycle) return reply.code(409).send({ error: "no active cycle" });
+    const body = req.body ?? {};
+    const playerId = String(body.playerId ?? "anon").slice(0, 64);
+    let bet;
+    try {
+      bet = validateSlotBet(body.bet, body.buy);
+    } catch (e) {
+      return reply.code(400).send({ error: (e as Error).message });
+    }
+    const player = store.player(playerId, () => randomBytes(8).toString("hex"));
+    if (typeof body.clientSeed === "string" && body.clientSeed.length > 0 && body.clientSeed !== player.client_seed) {
+      player.client_seed = body.clientSeed.slice(0, 64);
+      player.nonce = 0;
+    }
+    const { record, outcome } = playSlotRound(cycle.server_seed, {
+      cycleId: cycle.cycle_id,
+      roundIndex: cycle.records.length,
+      playerId,
+      clientSeed: player.client_seed,
+      nonce: player.nonce,
+      bet: bet.bet,
+      buy: bet.buy,
+      ts: Date.now(),
+    });
+    player.nonce += 1;
+    cycle.records.push(record);
+    store.save();
+    return { outcome, nonce: record.nonce, roundIndex: record.round_index, clientSeed: record.client_seed, cycleId: cycle.cycle_id, seedHash: cycle.seed_hash, cyclePda: chain.cyclePda(cycle.cycle_id).toBase58() };
   });
 
   app.post<{ Body: { playerId?: string; clientSeed?: string; target?: number; wagerMicros?: number } }>("/bet", async (req, reply) => {
@@ -94,7 +146,7 @@ async function main(): Promise<void> {
       player.client_seed = body.clientSeed.slice(0, 64);
       player.nonce = 0; // a new client seed starts a fresh nonce sequence
     }
-    const record = playRound(cycle.server_seed, {
+    const record = { game: "dice" as const, ...playRound(cycle.server_seed, {
       cycleId: cycle.cycle_id,
       roundIndex: cycle.records.length,
       playerId,
@@ -103,7 +155,7 @@ async function main(): Promise<void> {
       target: bet.target,
       wagerMicros: bet.wagerMicros,
       ts: Date.now(),
-    });
+    }) };
     player.nonce += 1;
     cycle.records.push(record);
     store.save();

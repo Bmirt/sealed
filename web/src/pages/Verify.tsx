@@ -3,12 +3,14 @@ import { useEffect, useMemo, useState } from "react";
 import { Check } from "../components/Check";
 import type { CheckState } from "../components/Check";
 import { api, explorerAddress, explorerTx } from "../lib/api";
-import { leafHex, merkleRootHex, rollFor, sha256Hex, verifyProofHex } from "../lib/crypto";
+import { leafHex, merkleRootHex, rederiveSlot, rollFor, sha256Hex, verifyProofHex } from "../lib/crypto";
 import { decodeRtp, decodeSeedCycle, fetchAccountBytes, fetchTx } from "../lib/rpc";
 import type { TxInfo } from "../lib/rpc";
 import type { ChainCycle, ChainRtp, CycleRounds, RoundRecord, ServerState } from "../lib/types";
+import { isSlot } from "../lib/types";
 
-const EDITABLE: (keyof RoundRecord)[] = ["client_seed", "nonce", "target", "wager_micros", "roll", "payout_micros"];
+const DICE_COLS = ["client_seed", "nonce", "target", "wager_micros", "roll", "payout_micros"] as const;
+const SLOT_COLS = ["client_seed", "nonce", "kind", "wager_micros", "stops", "total_win_coins", "payout_micros"] as const;
 const fmtTs = (s: number): string => (s ? new Date(s * 1000).toISOString() : "—");
 
 export function Verify(): JSX.Element {
@@ -60,15 +62,32 @@ export function Verify(): JSX.Element {
       .catch((e: Error) => setError(e.message));
   }, [cycleId, state]);
 
-  // Cheat attempts, each re-checked against the chain.
+  // Cheat attempts, each re-checked against the chain — sequentially and cached, because the
+  // public devnet RPC rate-limits bursts of getTransaction calls.
   useEffect(() => {
+    let cancelled = false;
     api
       .cheats()
       .then(async (c) => {
-        const withTx = await Promise.all(c.attempts.map(async (a) => ({ ...a, tx: await fetchTx(a.signature).catch(() => null) })));
-        setCheats(withTx);
+        const out: typeof cheats = [];
+        for (const a of c.attempts.slice(-8).reverse()) {
+          const key = `sealed.tx.${a.signature}`;
+          let tx: TxInfo | null = null;
+          const cached = sessionStorage.getItem(key);
+          if (cached) tx = JSON.parse(cached) as TxInfo;
+          else {
+            tx = await fetchTx(a.signature).catch(() => null);
+            if (tx) sessionStorage.setItem(key, JSON.stringify(tx));
+            await new Promise((r) => setTimeout(r, 350));
+          }
+          out.push({ ...a, tx });
+          if (!cancelled) setCheats([...out]);
+        }
       })
       .catch(() => setCheats([]));
+    return () => {
+      cancelled = true;
+    };
   }, [state]);
 
   const pristine = useMemo(() => JSON.stringify(server?.records ?? []), [server]);
@@ -114,18 +133,33 @@ export function Verify(): JSX.Element {
 
       const bad: string[] = [];
       const sample: string[] = [];
+      let diceN = 0;
+      let slotN = 0;
       if (revealed && localSeed) {
         for (const r of local) {
-          const roll = await rollFor(localSeed, r.client_seed, r.nonce);
-          if (roll !== r.roll) bad.push(`round ${r.round_index}: recorded ${r.roll} but HMAC gives ${roll}`);
-          if (sample.length < 3) sample.push(`round ${r.round_index}: HMAC(seed, "${r.client_seed}:${r.nonce}") → ${roll}  (recorded ${r.roll})`);
+          if (isSlot(r)) {
+            slotN++;
+            const d = await rederiveSlot(localSeed, r);
+            if (!d.ok) bad.push(`slot round ${r.round_index}: recorded stops [${r.stops.join(",")}] win ${r.total_win_coins} but the maths gives [${d.stops.join(",")}] win ${d.totalWinCoins}`);
+            if (sample.length < 3) sample.push(`slot round ${r.round_index} (${r.kind}): spin(HMAC(seed, "${r.client_seed}:${r.nonce}")) → stops [${d.stops.join(",")}] win ${d.totalWinCoins} coins, outcome sha256 ${d.outcomeHash.slice(0, 12)}…  (recorded [${r.stops.join(",")}] / ${r.total_win_coins} / ${r.outcome_hash.slice(0, 12)}…)`);
+          } else {
+            diceN++;
+            const roll = await rollFor(localSeed, r.client_seed, r.nonce);
+            if (roll !== r.roll) bad.push(`dice round ${r.round_index}: recorded ${r.roll} but HMAC gives ${roll}`);
+            if (sample.length < 3) sample.push(`dice round ${r.round_index}: HMAC(seed, "${r.client_seed}:${r.nonce}") → ${roll}  (recorded ${r.roll})`);
+          }
         }
       }
       out.push({
-        title: "Every roll re-derives from HMAC(seed, client_seed:nonce)",
+        title: "Every outcome re-derives from HMAC(seed, client_seed:nonce)",
         ok: revealed ? bad.length === 0 : null,
-        summary: !revealed ? "pending reveal" : bad.length === 0 ? `${local.length}/${local.length} rolls reproduced in this browser` : `${bad.length} roll(s) do not reproduce`,
-        math: [`roll = uint32(HMAC_SHA256(key=utf8(seed), msg="client_seed:nonce")[0..4]) % 10000 / 100`, ...sample, ...bad.slice(0, 10)],
+        summary: !revealed ? "pending reveal" : bad.length === 0 ? `${local.length}/${local.length} outcomes reproduced in this browser${slotN ? ` (${diceN} dice, ${slotN} slot spins incl. free spins)` : ""}` : `${bad.length} outcome(s) do not reproduce`,
+        math: [
+          `dice: roll = uint32(HMAC_SHA256(key=utf8(seed), msg="client_seed:nonce")[0..4]) % 10000 / 100`,
+          `slot: spinSeed = hex(HMAC_SHA256(seed, "client_seed:nonce")); outcome = ashfall spin(config, spinSeed, 0) — the full pure maths re-run here`,
+          ...sample,
+          ...bad.slice(0, 10),
+        ],
         tampered: isTampered,
       });
 
@@ -175,15 +209,20 @@ export function Verify(): JSX.Element {
   const allGreen = checks.length > 0 && checks.every((c) => c.ok !== false);
   const anyRed = checks.some((c) => c.ok === false);
 
-  function edit(i: number, key: keyof RoundRecord, value: string): void {
+  function edit(i: number, key: string, value: string): void {
     setLocal((rows) =>
       rows.map((r, idx) => {
         if (idx !== i) return r;
-        const num = ["nonce", "target", "wager_micros", "roll", "payout_micros"].includes(key);
-        return { ...r, [key]: num ? Number(value) : value };
+        if (key === "stops") return { ...r, stops: value.split(",").map((x) => Number(x.trim())) } as RoundRecord;
+        const num = ["nonce", "target", "wager_micros", "roll", "payout_micros", "total_win_coins", "bet_micros"].includes(key);
+        return { ...r, [key]: num ? Number(value) : value } as RoundRecord;
       }),
     );
   }
+  const cellValue = (r: RoundRecord, k: string): string => {
+    const v = (r as unknown as Record<string, unknown>)[k];
+    return Array.isArray(v) ? v.join(",") : v === undefined ? "" : String(v);
+  };
 
   return (
     <main className="verify">
@@ -247,22 +286,32 @@ export function Verify(): JSX.Element {
           <table>
             <thead>
               <tr>
-                <th>#</th><th>player</th><th>client_seed</th><th>nonce</th><th>target</th><th>wager</th><th>roll</th><th>payout</th><th>ts</th>
+                <th>#</th><th>game</th><th>player</th><th>client_seed</th><th>nonce</th><th>target / kind</th><th>wager</th><th>roll / stops</th><th>win</th><th>payout</th><th>ts</th>
               </tr>
             </thead>
             <tbody>
-              {local.slice(0, 60).map((r, i) => (
-                <tr key={r.round_index}>
-                  <td>{r.round_index}</td>
-                  <td>{r.player_id}</td>
-                  {EDITABLE.map((k) => (
-                    <td key={k}>
-                      {tamper ? <input className="cell" value={String(r[k])} onChange={(e) => edit(i, k, e.target.value)} /> : String(r[k])}
-                    </td>
-                  ))}
-                  <td className="muted">{new Date(r.ts).toLocaleTimeString()}</td>
-                </tr>
-              ))}
+              {local.slice(0, 60).map((r, i) => {
+                const cols = isSlot(r) ? (SLOT_COLS as readonly string[]) : (DICE_COLS as readonly string[]);
+                const cell = (k: string): JSX.Element => (
+                  <td key={k}>{tamper ? <input className={`cell ${k === "stops" ? "wide" : ""}`} value={cellValue(r, k)} onChange={(e) => edit(i, k, e.target.value)} /> : cellValue(r, k)}</td>
+                );
+                return (
+                  <tr key={r.round_index} className={isSlot(r) ? "slot-row" : ""}>
+                    <td>{r.round_index}</td>
+                    <td>{isSlot(r) ? "🐉 ashfall" : "🎲 dice"}</td>
+                    <td>{r.player_id}</td>
+                    {cell("client_seed")}
+                    {cell("nonce")}
+                    {isSlot(r) ? cell("kind") : cell("target")}
+                    {cell("wager_micros")}
+                    {isSlot(r) ? cell("stops") : cell("roll")}
+                    {isSlot(r) ? cell("total_win_coins") : <td className="muted">—</td>}
+                    {cell("payout_micros")}
+                    <td className="muted">{new Date(r.ts).toLocaleTimeString()}</td>
+                    {cols.length === 0 && <td />}
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
           {local.length > 60 && <p className="muted">showing 60 of {local.length}; all {local.length} are verified.</p>}

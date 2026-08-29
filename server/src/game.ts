@@ -8,7 +8,9 @@ export const MIN_TARGET = 2;
 export const MAX_TARGET = 98;
 export const DECLARED_RTP = 0.99;
 
-export interface RoundRecord {
+/** A dice round (records without `game` are dice rounds from before the slot was added). */
+export interface DiceRecord {
+  game?: "dice";
   cycle_id: number;
   round_index: number;
   player_id: string;
@@ -21,6 +23,34 @@ export interface RoundRecord {
   /** Unix milliseconds when the round was played. */
   ts: number;
 }
+
+/**
+ * An Ashfall Dynasty round. The spin seed is HMAC(server_seed, client_seed:nonce) (hex) and the
+ * outcome is `spin(config, spinSeed, 0)` / `buySpin(config, spinSeed, 0, tier)` — pure, so anyone
+ * with the revealed seed re-runs the slot maths and must land on the same stops and win.
+ */
+export interface SlotRecord {
+  game: "ashfall";
+  cycle_id: number;
+  round_index: number;
+  player_id: string;
+  client_seed: string;
+  nonce: number;
+  /** 'base' | 'buyFree' | 'buySuper' */
+  kind: string;
+  /** Bet per spin in micro-units (the buy tiers stake a multiple of it). */
+  bet_micros: number;
+  wager_micros: number;
+  payout_micros: number;
+  /** Base-spin reel stops — the verifier compares these first. */
+  stops: number[];
+  total_win_coins: number;
+  /** sha256(canonical JSON of the full SpinOutcome) — pins every free spin too. */
+  outcome_hash: string;
+  ts: number;
+}
+
+export type RoundRecord = DiceRecord | SlotRecord;
 
 export function validateBet(target: unknown, wagerMicros: unknown): { target: number; wagerMicros: number } {
   const t = Number(target);
@@ -37,7 +67,7 @@ export function payoutFor(win: boolean, wagerMicros: number, target: number): nu
 export function playRound(
   serverSeedHex: string,
   input: { cycleId: number; roundIndex: number; playerId: string; clientSeed: string; nonce: number; target: number; wagerMicros: number; ts: number },
-): RoundRecord {
+): DiceRecord {
   const roll = rollFor(serverSeedHex, input.clientSeed, input.nonce);
   const win = roll < input.target;
   return {

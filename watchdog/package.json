@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@fastify/cors": "^10.0.1",
+    "ashfall-math": "workspace:*",
     "fastify": "^5.2.0"
   },
   "devDependencies": {

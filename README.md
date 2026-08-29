@@ -3,15 +3,23 @@
 Trust infrastructure for casino games: the game **commits to its randomness on Solana before
 play, reveals it after, and lets anyone verify** — including catching the operator red-handed.
 
-This repository is a localnet demo with four parts:
+Two games run on it — a **dice** game and the **Ashfall Dynasty** 243-ways slot — from one landing
+page, both on the same sealed randomness and both verifiable round by round.
+
+This repository has these parts:
 
 1. **`programs/sealed_engine`** — Anchor program holding seed commitments, reveals, Merkle roots
    of played rounds and running RTP stats. `reveal_seed` recomputes `sha256(seed)` **on-chain**
    and rejects mismatches with `HashMismatch`.
 2. **`server/`** — Fastify game server: a "roll under" dice game on commit-reveal randomness,
    round records, Merkle proofs, cycle rotation (honest and deliberately dishonest).
-3. **`web/`** — `/play` (the game, with the trust ritual always visible) and `/verify` (six
-   checks recomputed live in the browser, **tamper mode**, on-chain cheat-attempt panel).
+3. **`web/`** — `/` (choose a game), `/play` (dice, with the trust ritual always visible) and
+   `/verify` (six checks recomputed live in the browser for **both games**, **tamper mode**,
+   on-chain cheat-attempt panel).
+5. **`games/ashfall/`** — the Ashfall Dynasty slot (Pixi/GSAP/Howler). In SEALED mode every
+   spin's RNG seed is `HMAC(server_seed, client_seed:nonce)` served by the server, and a trust bar
+   shows the sealed cycle + your client seed. **`packages/ashfall-math`** holds the slot's pure
+   maths so the server (Node) and the verifier (browser) run the identical code.
 4. **`watchdog/`** — an independent re-verifier with its own crypto and account decoder.
 
 Localnet only, no wallets for players (the server pays), no real money.
@@ -29,7 +37,7 @@ Requirements: Node ≥ 20 + pnpm, Rust, Solana CLI (Agave ≥ 2.2) and Anchor 0.
 installed Anchor with `avm`, note it flips the active Solana release to 2.1.0; `dev.sh` puts the
 newest installed Agave release first on PATH for the build.
 
-Ports: web 5173 · server 4000 · watchdog 4100 · validator 8899.
+Ports: web 5173 · ashfall 5174 · server 4000 · watchdog 4100 · validator 8899.
 
 ### Devnet
 
@@ -89,6 +97,14 @@ come from the Clock sysvar, never from the client. Money is integer micro-units;
 off-chain. `anchor test` covers the happy path, wrong-seed `HashMismatch`, reveal-before-close,
 double commit, double close, reveal-after-reveal and non-authority rejection.
 
+### Ashfall Dynasty on SEALED randomness
+Round records for the slot carry `kind`, `bet_micros`, `wager_micros`, `payout_micros`, the base
+`stops`, `total_win_coins` and `outcome_hash = sha256(canonical(SpinOutcome))`. The verifier
+derives `spinSeed = hex(HMAC(seed, client_seed:nonce))`, runs `spin(config, spinSeed, 0)` (or
+`buySpin`) from `ashfall-math` in the browser — free spins, meter and cap included — and compares
+stops, total win and the outcome hash. One Merkle tree and one on-chain RTP counter cover both
+games; `/state.games` breaks RTP down per game (dice declared 99 %, slot 96.56 %).
+
 ### `server/` (Fastify + Anchor client)
 - `crypto.ts` — sha256, seed generation, HMAC roll derivation, canonical JSON.
 - `merkle.ts` — pairwise sha256 tree (odd → duplicate last), `merkleRoot`, `merkleProof`, `verifyProof`.
@@ -97,8 +113,10 @@ double commit, double close, reveal-after-reveal and non-authority rejection.
 - `chain.ts` — commit / close / reveal; the reveal is sent without preflight so a bad seed
   produces a real failed transaction.
 - `cycles.ts` — cycle lifecycle; `rotate(dishonest)` flips one hex digit of the seed first.
-- Endpoints: `POST /bet`, `POST /cycle/rotate`, `POST /cycle/rotate-dishonest`,
-  `GET /rounds?cycle=N`, `GET /state`, `GET /cheats`. Unit tests: `pnpm test:server`.
+- `slot.ts` — Ashfall rounds: per-spin seed derivation, outcome hash, bet validation.
+- Endpoints: `POST /bet` (dice), `POST /slot/spin` (Ashfall), `POST /cycle/rotate`,
+  `POST /cycle/rotate-dishonest`, `GET /rounds?cycle=N`, `GET /state`, `GET /cheats`.
+  Unit tests: `pnpm test:server`; slot maths tests: `pnpm --filter ashfall test` (174).
 
 ### `web/` (Vite + React)
 - `/play` — bet panel, roll animation, history, the always-visible trust ritual, admin rotate buttons.
@@ -145,6 +163,17 @@ Screenshots of each state were captured with headless Chrome (`verify-green`, `v
 | Watchdog | `rounds verified: 200, cycles: 2, mismatches: 0` |
 
 Devnet cost: ~1.76 SOL for program rent, then ≈ 0.00001 SOL per instruction.
+
+### Two games, one seal (2026-08-29, devnet)
+
+| | |
+|---|---|
+| Landing `/` | both games listed with live per-game rounds/RTP and the current sealed cycle |
+| Dice `/play` | roll-bar animation (sweep → spring settle on the roll), synthesised ticks/thud/chime, win confetti, streak chips |
+| Ashfall `http://localhost:5174` | trust bar shows `cycle #7 sealed: 1ceb…` + editable client seed; a spin was served by `/slot/spin` and recorded (cycle rounds 1 → 2) |
+| `/verify` cycle #6 | two slot spins (a base spin and a **super buy with 8 free spins**) re-derived in the browser from the revealed seed: stops, total win and outcome hash all match — all six checks green |
+| tamper one reel stop | verdict flips to **✗ TAMPERING DETECTED**; checks 4 (outcome) and 5 (Merkle) red |
+| watchdog | re-runs the shared slot maths for `ashfall` rounds: `233 rounds, 7 cycles, 0 mismatches` |
 
 **Public devnet RPC rate limits (429 "Connection rate limits exceeded")** took the server down once
 mid-rotation. Hardening that followed, all of which also holds on localnet:

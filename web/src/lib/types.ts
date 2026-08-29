@@ -1,4 +1,5 @@
-export interface RoundRecord {
+export interface DiceRecord {
+  game?: "dice";
   cycle_id: number;
   round_index: number;
   player_id: string;
@@ -10,6 +11,24 @@ export interface RoundRecord {
   payout_micros: number;
   ts: number;
 }
+export interface SlotRecord {
+  game: "ashfall";
+  cycle_id: number;
+  round_index: number;
+  player_id: string;
+  client_seed: string;
+  nonce: number;
+  kind: string;
+  bet_micros: number;
+  wager_micros: number;
+  payout_micros: number;
+  stops: number[];
+  total_win_coins: number;
+  outcome_hash: string;
+  ts: number;
+}
+export type RoundRecord = DiceRecord | SlotRecord;
+export const isSlot = (r: RoundRecord): r is SlotRecord => r.game === "ashfall";
 export interface ProofStep {
   hash: string;
   side: "left" | "right";
@@ -39,6 +58,7 @@ export interface ServerState {
   active_cycle: { cycle_id: number; seed_hash: string; pda: string; committed_at?: number; rounds: number; commit_tx?: string } | null;
   cycles: { cycle_id: number; status: "active" | "revealed"; rounds: number; pda: string; cheat_attempts: number }[];
   rtp: { totalRounds: number; totalWageredMicros: number; totalPaidMicros: number; rtp: number | null; declared: number };
+  games?: Record<string, { rounds: number; wagered_micros: number; paid_micros: number; rtp: number | null; declared: number }>;
 }
 export interface ChainCycle {
   cycleId: number;

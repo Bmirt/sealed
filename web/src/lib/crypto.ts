@@ -1,5 +1,6 @@
 /** Browser re-derivation with WebCrypto — mirrors server/src/crypto.ts and merkle.ts exactly. */
-import type { ProofStep, RoundRecord } from "./types";
+import { GAME_CONFIG, buySpin, spin } from "ashfall-math";
+import type { ProofStep, RoundRecord, SlotRecord } from "./types";
 
 const enc = new TextEncoder();
 export const toHex = (u: ArrayBuffer | Uint8Array): string => Array.from(new Uint8Array(u), (b) => b.toString(16).padStart(2, "0")).join("");
@@ -53,4 +54,27 @@ export async function verifyProofHex(leaf: string, proof: ProofStep[], root: str
   let h = leaf;
   for (const s of proof) h = s.side === "right" ? await parentHex(h, s.hash) : await parentHex(s.hash, h);
   return h === root;
+}
+
+/** HMAC(seed, client_seed:nonce) as hex — the per-spin seed the slot maths consumes. */
+export async function spinSeedFor(seedHex: string, clientSeed: string, nonce: number): Promise<string> {
+  const key = await crypto.subtle.importKey("raw", enc.encode(seedHex), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  return toHex(await crypto.subtle.sign("HMAC", key, enc.encode(`${clientSeed}:${nonce}`)));
+}
+
+export interface SlotCheck {
+  ok: boolean;
+  stops: number[];
+  totalWinCoins: number;
+  outcomeHash: string;
+}
+
+/** Re-run Ashfall Dynasty's pure maths for a recorded round and compare stops, win and outcome hash. */
+export async function rederiveSlot(seedHex: string, r: SlotRecord): Promise<SlotCheck> {
+  const spinSeed = await spinSeedFor(seedHex, r.client_seed, r.nonce);
+  const outcome = r.kind === "buyFree" ? buySpin(GAME_CONFIG, spinSeed, 0, "free") : r.kind === "buySuper" ? buySpin(GAME_CONFIG, spinSeed, 0, "super") : spin(GAME_CONFIG, spinSeed, 0);
+  const outcomeHash = await sha256Hex(canonicalJson(outcome));
+  const stops = [...outcome.base.stops];
+  const ok = stops.join(",") === r.stops.join(",") && outcome.totalWinCoins === r.total_win_coins && outcomeHash === r.outcome_hash;
+  return { ok, stops, totalWinCoins: outcome.totalWinCoins, outcomeHash };
 }

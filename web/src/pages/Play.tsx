@@ -1,5 +1,5 @@
 import type { JSX } from "react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { api, explorerAddress, explorerTx } from "../lib/api";
 import type { ServerState } from "../lib/types";
@@ -15,68 +15,172 @@ interface Bet {
 }
 
 const fmt = (micros: number): string => (micros / 1e6).toFixed(2);
+const easeOutBack = (t: number): number => 1 + 2.4 * Math.pow(t - 1, 3) + 1.4 * Math.pow(t - 1, 2);
+const easeOutQuint = (t: number): number => 1 - Math.pow(1 - t, 5);
+
+/** Tiny synthesised sounds (no assets): tick loop while rolling, a thud on land, a chime on a win. */
+class Sfx {
+  private ctx: AudioContext | null = null;
+  private ensure(): AudioContext {
+    this.ctx ??= new AudioContext();
+    if (this.ctx.state === "suspended") void this.ctx.resume();
+    return this.ctx;
+  }
+  tick(pitch = 1): void {
+    const c = this.ensure();
+    const o = c.createOscillator();
+    const g = c.createGain();
+    o.type = "square";
+    o.frequency.value = 900 * pitch;
+    g.gain.setValueAtTime(0.05, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + 0.05);
+    o.connect(g).connect(c.destination);
+    o.start();
+    o.stop(c.currentTime + 0.06);
+  }
+  land(win: boolean): void {
+    const c = this.ensure();
+    const o = c.createOscillator();
+    const g = c.createGain();
+    o.type = "sine";
+    o.frequency.setValueAtTime(win ? 520 : 140, c.currentTime);
+    o.frequency.exponentialRampToValueAtTime(win ? 1040 : 60, c.currentTime + (win ? 0.25 : 0.18));
+    g.gain.setValueAtTime(0.18, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + (win ? 0.6 : 0.3));
+    o.connect(g).connect(c.destination);
+    o.start();
+    o.stop(c.currentTime + 0.7);
+    if (win) {
+      for (const [f, d] of [[784, 0.08], [988, 0.16], [1318, 0.24]] as const) {
+        const b = c.createOscillator();
+        const bg = c.createGain();
+        b.type = "triangle";
+        b.frequency.value = f;
+        bg.gain.setValueAtTime(0.0001, c.currentTime + d);
+        bg.gain.exponentialRampToValueAtTime(0.12, c.currentTime + d + 0.02);
+        bg.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + d + 0.5);
+        b.connect(bg).connect(c.destination);
+        b.start(c.currentTime + d);
+        b.stop(c.currentTime + d + 0.55);
+      }
+    }
+  }
+}
+const sfx = new Sfx();
 
 export function Play(): JSX.Element {
   const [state, setState] = useState<ServerState | null>(null);
-  const [playerId, setPlayerId] = useState("you");
-  const [clientSeed, setClientSeed] = useState(() => Math.random().toString(16).slice(2, 12));
+  const [playerId, setPlayerId] = useState(() => localStorage.getItem("sealed.player") ?? "you");
+  const [clientSeed, setClientSeed] = useState(() => localStorage.getItem("sealed.clientSeed") ?? Math.random().toString(16).slice(2, 12));
   const [target, setTarget] = useState(50);
   const [wager, setWager] = useState("1.00");
   const [rolling, setRolling] = useState(false);
+  const [marker, setMarker] = useState<number | null>(null); // 0–99.99 marker position while animating
   const [display, setDisplay] = useState<number | null>(null);
   const [last, setLast] = useState<Bet | null>(null);
   const [history, setHistory] = useState<Bet[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [rotateMsg, setRotateMsg] = useState<string | null>(null);
-  const spinTimer = useRef<number | null>(null);
+  const [burst, setBurst] = useState(0);
+  const [sound, setSound] = useState(true);
+  const raf = useRef<number | null>(null);
 
-  const refresh = (): void => {
+  useEffect(() => localStorage.setItem("sealed.player", playerId), [playerId]);
+  useEffect(() => localStorage.setItem("sealed.clientSeed", clientSeed), [clientSeed]);
+
+  const refresh = useCallback((): void => {
     api.state().then(setState).catch((e: Error) => setError(e.message));
-  };
+  }, []);
   useEffect(() => {
     refresh();
     const id = window.setInterval(refresh, 8000);
     return () => window.clearInterval(id);
-  }, []);
+  }, [refresh]);
 
   const multiplier = 99 / target;
-  const chance = target - 0.01; // roll < target over 0.00–99.99 (10,000 outcomes) ≈ target %
+  const chance = target - 0.01;
+
+  /** Animate the marker: fast sweep (with ticks), then a spring settle onto the roll. */
+  const animateTo = useCallback(
+    (roll: number, win: boolean): Promise<void> =>
+      new Promise((resolve) => {
+        const t0 = performance.now();
+        const sweep = 900;
+        const settle = 700;
+        let lastTickBucket = -1;
+        const from = marker ?? 50;
+        const step = (now: number): void => {
+          const t = now - t0;
+          if (t < sweep) {
+            // Two full sweeps of the bar decelerating into the neighbourhood of the roll.
+            const p = easeOutQuint(t / sweep);
+            const pos = ((from + p * (200 + roll - from)) % 100 + 100) % 100;
+            setMarker(pos);
+            setDisplay(Math.round(pos * 100) / 100);
+            const bucket = Math.floor(t / (40 + p * 120));
+            if (bucket !== lastTickBucket) {
+              lastTickBucket = bucket;
+              if (sound) sfx.tick(0.8 + p * 0.6);
+            }
+            raf.current = requestAnimationFrame(step);
+          } else if (t < sweep + settle) {
+            const p = easeOutBack((t - sweep) / settle);
+            const overshoot = roll + (1 - Math.min(1, p)) * 6 * Math.sign(0.5 - roll / 100);
+            const pos = Math.max(0, Math.min(99.99, roll + (overshoot - roll) * (1 - Math.min(1, p))));
+            setMarker(pos);
+            setDisplay(Math.round((roll + (pos - roll) * 0.4) * 100) / 100);
+            raf.current = requestAnimationFrame(step);
+          } else {
+            setMarker(roll);
+            setDisplay(roll);
+            if (sound) sfx.land(win);
+            if (win) setBurst((b) => b + 1);
+            resolve();
+          }
+        };
+        raf.current = requestAnimationFrame(step);
+      }),
+    [marker, sound],
+  );
 
   async function roll(): Promise<void> {
     if (rolling) return;
     setError(null);
     setRolling(true);
-    // Spin the display while the server resolves the round.
-    spinTimer.current = window.setInterval(() => setDisplay(Math.floor(Math.random() * 10000) / 100), 40);
-    const started = Date.now();
+    setLast(null);
     try {
       const wagerMicros = Math.round(Number(wager) * 1e6);
       const r = await api.bet({ playerId, clientSeed, target, wagerMicros });
-      const remaining = Math.max(0, 600 - (Date.now() - started));
-      await new Promise((res) => setTimeout(res, remaining));
-      if (spinTimer.current) window.clearInterval(spinTimer.current);
-      setDisplay(r.roll);
+      await animateTo(r.roll, r.win);
       const bet: Bet = { roundIndex: r.roundIndex, nonce: r.nonce, target, roll: r.roll, wagerMicros, payoutMicros: r.payoutMicros, cycleId: r.cycleId };
       setLast(bet);
-      setHistory((h) => [bet, ...h].slice(0, 30));
+      setHistory((h) => [bet, ...h].slice(0, 40));
       refresh();
     } catch (e) {
-      if (spinTimer.current) window.clearInterval(spinTimer.current);
-      setDisplay(null);
+      if (raf.current) cancelAnimationFrame(raf.current);
       setError((e as Error).message);
     } finally {
       setRolling(false);
     }
   }
 
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent): void => {
+      if (e.code === "Space" && !(e.target instanceof HTMLInputElement)) {
+        e.preventDefault();
+        void roll();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  });
+
   async function rotate(dishonest: boolean): Promise<void> {
-    setRotateMsg(dishonest ? "rotating (dishonest reveal first)…" : "rotating…");
+    setRotateMsg(dishonest ? "rotating (fake reveal first)…" : "rotating…");
     try {
       const r = await api.rotate(dishonest);
       const cheat = (r.txs as { cheatAttempt?: { signature: string; error: string } }).cheatAttempt;
-      setRotateMsg(
-        `cycle ${r.closedCycle} closed + revealed; cycle ${r.newCycle} sealed` + (cheat ? ` · cheat attempt REJECTED on-chain (${cheat.error}) ${cheat.signature.slice(0, 12)}…` : ""),
-      );
+      setRotateMsg(`cycle ${r.closedCycle} closed + revealed; cycle ${r.newCycle} sealed` + (cheat ? ` · fake reveal REJECTED on-chain (${cheat.error})` : ""));
       refresh();
     } catch (e) {
       setRotateMsg(`rotate failed: ${(e as Error).message}`);
@@ -85,19 +189,68 @@ export function Play(): JSX.Element {
 
   const active = state?.active_cycle ?? null;
   const won = last ? last.payoutMicros > 0 : null;
+  const streak = history.slice(0, 12);
 
   return (
     <main className="play">
       <section className="panel bet">
-        <h2>Roll under</h2>
-        <label>
-          Target <strong>{target}</strong> · win chance ≈ <strong>{chance.toFixed(2)}%</strong> · payout <strong>×{multiplier.toFixed(4)}</strong>
-          <input type="range" min={2} max={98} value={target} onChange={(e) => setTarget(Number(e.target.value))} />
+        <div className="bet-head">
+          <h2>Roll under</h2>
+          <button className={`sound ${sound ? "" : "off"}`} onClick={() => setSound(!sound)} aria-label="sound">{sound ? "🔊" : "🔈"}</button>
+        </div>
+
+        <div className={`dice-stage ${won === null ? "" : won ? "win" : "lose"} ${rolling ? "rolling" : ""}`}>
+          {burst > 0 && (
+            <div className="confetti" key={burst}>
+              {Array.from({ length: 28 }, (_, i) => (
+                <i key={i} style={{ left: `${(i * 37) % 100}%`, animationDelay: `${(i % 7) * 40}ms`, background: ["#4da6ff", "#a855f7", "#f0b429", "#22c55e"][i % 4] }} />
+              ))}
+            </div>
+          )}
+          <div className="dice-num-wrap">
+            <span className="dice-num">{display === null ? "0.00" : display.toFixed(2)}</span>
+            <span className="dice-verdict">
+              {last && !rolling ? (won ? `WIN +${fmt(last.payoutMicros)}` : "no luck") : rolling ? "rolling…" : "press ROLL or Space"}
+              {last && !rolling && <small> · nonce {last.nonce} · round #{last.roundIndex} · cycle {last.cycleId}</small>}
+            </span>
+          </div>
+
+          <div className="rollbar">
+            <div className="zone win" style={{ width: `${target}%` }} />
+            <div className="zone lose" style={{ left: `${target}%`, width: `${100 - target}%` }} />
+            <div className="target-line" style={{ left: `${target}%` }}>
+              <span>{target}</span>
+            </div>
+            {marker !== null && (
+              <div className={`marker ${rolling ? "" : won ? "win" : "lose"}`} style={{ left: `${marker}%` }}>
+                <span>{(display ?? 0).toFixed(2)}</span>
+              </div>
+            )}
+            <div className="ticks">
+              {[0, 25, 50, 75, 100].map((t) => (
+                <em key={t} style={{ left: `${t}%` }}>{t}</em>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <label className="slider">
+          <span className="slider-labels">
+            <span>roll under <strong>{target}</strong></span>
+            <span>chance <strong>{chance.toFixed(2)}%</strong></span>
+            <span>payout <strong>×{multiplier.toFixed(4)}</strong></span>
+          </span>
+          <input type="range" min={2} max={98} value={target} onChange={(e) => setTarget(Number(e.target.value))} disabled={rolling} />
         </label>
+
         <div className="row">
           <label>
             Wager
-            <input value={wager} onChange={(e) => setWager(e.target.value)} inputMode="decimal" />
+            <div className="wager-row">
+              <input value={wager} onChange={(e) => setWager(e.target.value)} inputMode="decimal" />
+              <button onClick={() => setWager((w) => (Math.max(0.01, Number(w) / 2)).toFixed(2))}>½</button>
+              <button onClick={() => setWager((w) => (Number(w) * 2).toFixed(2))}>2×</button>
+            </div>
           </label>
           <label>
             Player
@@ -105,12 +258,17 @@ export function Play(): JSX.Element {
           </label>
         </div>
         <button className="primary" disabled={rolling || !active} onClick={() => void roll()}>
-          {rolling ? "rolling…" : "ROLL"}
+          {rolling ? "ROLLING…" : "ROLL"}
         </button>
-        <div className={`dice ${won === null ? "" : won ? "win" : "lose"}`}>
-          <span className="dice-num">{display === null ? "—" : display.toFixed(2)}</span>
-          {last && !rolling && <span className="dice-verdict">{won ? `WIN +${fmt(last.payoutMicros)}` : "lose"} · nonce {last.nonce} · round #{last.roundIndex}</span>}
-        </div>
+        {streak.length > 0 && (
+          <div className="streak">
+            {streak.map((b) => (
+              <span key={`${b.cycleId}-${b.roundIndex}`} className={`chip ${b.payoutMicros > 0 ? "win" : "lose"}`} title={`target ${b.target} · ${b.payoutMicros > 0 ? "+" + fmt(b.payoutMicros) : "lost " + fmt(b.wagerMicros)}`}>
+                {b.roll.toFixed(2)}
+              </span>
+            ))}
+          </div>
+        )}
         {error && <p className="err">{error}</p>}
       </section>
 
@@ -169,7 +327,7 @@ export function Play(): JSX.Element {
         {rotateMsg && <p className="muted">{rotateMsg}</p>}
         {state && (
           <p className="muted">
-            on-chain RTP so far: {state.rtp.rtp === null ? "n/a" : `${(state.rtp.rtp * 100).toFixed(2)}%`} over {state.rtp.totalRounds} rounds · declared {(state.rtp.declared * 100).toFixed(0)}%
+            on-chain RTP so far: {state.rtp.rtp === null ? "n/a" : `${(state.rtp.rtp * 100).toFixed(2)}%`} over {state.rtp.totalRounds} rounds (all games) · dice declared 99%
           </p>
         )}
       </section>

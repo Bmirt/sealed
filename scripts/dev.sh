@@ -28,6 +28,8 @@ else
   ARCH="v3"        # Agave ≥ 4 localnet only accepts SBPF v3 deployments
 fi
 export SEALED_CLUSTER="$CLUSTER" SOLANA_RPC="$RPC_URL" VITE_SEALED_CLUSTER="$CLUSTER" VITE_SOLANA_RPC="$RPC_URL"
+# Ashfall Dynasty runs in provably-fair mode: outcomes come from the SEALED server.
+export VITE_SEALED_SERVER="http://localhost:4000" VITE_SEALED_VERIFY_URL="http://localhost:5173/verify" VITE_ASHFALL_URL="http://localhost:5174"
 
 # 1. Validator (localnet only)
 if [[ "$CLUSTER" == "localnet" ]] && ! curl -s http://127.0.0.1:8899 -X POST -H 'content-type: application/json' -d '{"jsonrpc":"2.0","id":1,"method":"getHealth"}' | grep -q ok; then
@@ -68,18 +70,21 @@ else
 fi
 
 # 3. Services
-echo "▶ starting server (4000), watchdog (4100), web (5173)"
+echo "▶ starting server (4000), watchdog (4100), web (5173), ashfall (5174)"
 trap 'kill 0' EXIT
 pnpm --filter server dev &
 sleep 2
 pnpm --filter watchdog dev &
 pnpm --filter web dev &
+pnpm --filter ashfall dev &
 sleep 2
 cat <<MSG
 
   ┌───────────────────────────────────────────────────────────┐
   │  SEALED is up                                             │
-  │  play      http://localhost:5173/play                     │
+  │  games     http://localhost:5173/                         │
+  │  dice      http://localhost:5173/play                     │
+  │  ashfall   http://localhost:5174/                         │
   │  verify    http://localhost:5173/verify                   │
   │  server    http://localhost:4000/state                    │
   │  watchdog  http://localhost:4100/status                   │
