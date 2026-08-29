@@ -17,7 +17,6 @@ interface Bet {
 }
 
 const fmt = (micros: number): string => (micros / 1e6).toFixed(2);
-const easeOutBack = (t: number): number => 1 + 2.4 * Math.pow(t - 1, 3) + 1.4 * Math.pow(t - 1, 2);
 const easeOutQuint = (t: number): number => 1 - Math.pow(1 - t, 5);
 
 /** Tiny synthesised sounds (no assets): tick loop while rolling, a thud on land, a chime on a win. */
@@ -103,35 +102,43 @@ export function Play(): JSX.Element {
   const multiplier = 99 / target;
   const chance = target - 0.01;
 
-  /** Animate the marker: fast sweep (with ticks), then a spring settle onto the roll. */
+  /**
+   * Animate the marker: two decelerating laps that land exactly on the roll, then a small damped
+   * overshoot that returns to the roll. One continuous motion — no phase hand-off, no jump.
+   * The displayed number follows the marker during the sweep and locks to the exact roll for the
+   * settle, so it never flickers around the final value.
+   */
   const animateTo = useCallback(
     (roll: number, win: boolean): Promise<void> =>
       new Promise((resolve) => {
         const t0 = performance.now();
-        const sweep = 900;
-        const settle = 700;
-        let lastTickBucket = -1;
+        const total = 1500;
+        const sweepEnd = 0.84; // fraction of `total` at which the marker reaches the roll
         const from = marker ?? 50;
+        const distance = 200 + roll - from; // two laps plus the way to the roll
+        let lastTickBucket = -1;
         const step = (now: number): void => {
-          const t = now - t0;
-          if (t < sweep) {
-            // Two full sweeps of the bar decelerating into the neighbourhood of the roll.
-            const p = easeOutQuint(t / sweep);
-            const pos = ((from + p * (200 + roll - from)) % 100 + 100) % 100;
-            setMarker(pos);
+          const p = Math.min(1, (now - t0) / total);
+          let pos: number;
+          if (p < sweepEnd) {
+            const e = easeOutQuint(p / sweepEnd);
+            const unwrapped = from + e * distance;
+            pos = ((unwrapped % 100) + 100) % 100;
             setDisplay(Math.round(pos * 100) / 100);
-            const bucket = Math.floor(t / (40 + p * 120));
+            const bucket = Math.floor((now - t0) / (40 + e * 140));
             if (bucket !== lastTickBucket) {
               lastTickBucket = bucket;
-              if (sound) sfx.tick(0.8 + p * 0.6);
+              if (sound) sfx.tick(0.8 + e * 0.6);
             }
-            raf.current = requestAnimationFrame(step);
-          } else if (t < sweep + settle) {
-            const p = easeOutBack((t - sweep) / settle);
-            const overshoot = roll + (1 - Math.min(1, p)) * 6 * Math.sign(0.5 - roll / 100);
-            const pos = Math.max(0, Math.min(99.99, roll + (overshoot - roll) * (1 - Math.min(1, p))));
-            setMarker(pos);
-            setDisplay(Math.round((roll + (pos - roll) * 0.4) * 100) / 100);
+          } else {
+            // Damped overshoot past the roll (in the direction of travel), back to exactly the roll.
+            const q = (p - sweepEnd) / (1 - sweepEnd);
+            const overshoot = 2.2 * Math.sin(Math.PI * q) * (1 - q);
+            pos = Math.min(99.99, Math.max(0, roll + overshoot));
+            setDisplay(roll);
+          }
+          setMarker(pos);
+          if (p < 1) {
             raf.current = requestAnimationFrame(step);
           } else {
             setMarker(roll);
