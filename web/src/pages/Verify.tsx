@@ -71,7 +71,14 @@ export function Verify(): JSX.Element {
       setTamper(false);
       const pda = state.cycles.find((c) => c.cycle_id === cycleId)?.pda ?? rounds.pda;
       try {
-        const [bytes, rtpBytes] = await fetchAccountsBytes([pda, state.rtp_pda]);
+        let pair: (Uint8Array | null)[];
+        try {
+          pair = await fetchAccountsBytes([pda, state.rtp_pda]);
+        } catch {
+          await new Promise((r) => setTimeout(r, 2500)); // public RPC rate limit — one more try
+          pair = await fetchAccountsBytes([pda, state.rtp_pda]);
+        }
+        const [bytes, rtpBytes] = pair;
         if (cancelled) return;
         const decoded = bytes ? decodeSeedCycle(bytes) : null;
         setChain(decoded);
@@ -136,11 +143,18 @@ export function Verify(): JSX.Element {
       });
 
       const seedHash = localSeed ? await sha256Hex(localSeed) : "";
-      const c2ok = revealed ? seedHash === chain?.seedHash : null;
+      const haveSeed = Boolean(localSeed);
+      const c2ok = haveSeed && chain ? seedHash === chain.seedHash : null;
       out.push({
         title: "sha256(revealed seed) equals the commitment",
         ok: c2ok,
-        summary: !revealed ? "pending — seed not revealed yet" : c2ok ? "seed matches the hash sealed before play" : "seed does NOT hash to the commitment",
+        summary: !haveSeed
+          ? "pending — seed not revealed yet (simulate a forged reveal below to see what a wrong seed does)"
+          : c2ok
+            ? "seed matches the hash sealed before play"
+            : revealed
+              ? "seed does NOT hash to the commitment"
+              : "this (simulated) seed does NOT hash to the on-chain commitment — no seed but the real one can",
         math: [`seed (utf8)      ${localSeed || "—"}`, `sha256(seed)     ${seedHash || "—"}`, `on-chain hash    ${chain?.seedHash ?? "—"}`],
         tampered: isTampered,
       });
@@ -161,7 +175,7 @@ export function Verify(): JSX.Element {
       const sample: string[] = [];
       let diceN = 0;
       let slotN = 0;
-      if (revealed && localSeed) {
+      if (haveSeed) {
         for (const r of local) {
           if (isSlot(r)) {
             slotN++;
@@ -178,8 +192,14 @@ export function Verify(): JSX.Element {
       }
       out.push({
         title: "Every outcome re-derives from HMAC(seed, client_seed:nonce)",
-        ok: revealed ? bad.length === 0 : null,
-        summary: !revealed ? "pending reveal" : bad.length === 0 ? `${local.length}/${local.length} outcomes reproduced in this browser${slotN ? ` (${diceN} dice, ${slotN} slot spins incl. free spins)` : ""}` : `${bad.length} outcome(s) do not reproduce`,
+        ok: haveSeed && local.length > 0 ? bad.length === 0 : null,
+        summary: !haveSeed
+          ? "pending reveal"
+          : local.length === 0
+            ? "no rounds in this cycle"
+            : bad.length === 0
+              ? `${local.length}/${local.length} outcomes reproduced in this browser${slotN ? ` (${diceN} dice, ${slotN} slot spins incl. free spins)` : ""}`
+              : `${bad.length} outcome(s) do not reproduce${revealed ? "" : " under this simulated seed"}`,
         math: [
           `dice: roll = uint32(HMAC_SHA256(key=utf8(seed), msg="client_seed:nonce")[0..4]) % 10000 / 100`,
           `slot: spinSeed = hex(HMAC_SHA256(seed, "client_seed:nonce")); outcome = ashfall spin(config, spinSeed, 0) — the full pure maths re-run here`,
@@ -233,9 +253,13 @@ export function Verify(): JSX.Element {
   }, [server, chain, local, localSeed, rtp, isTampered]);
 
   const allGreen = checks.length > 0 && checks.every((c) => c.ok !== false);
-  const anyRed = checks.some((c) => c.ok === false);
+  const chainUnreadable = chainWarning !== null;
+  const anyRed = !chainUnreadable && checks.some((c) => c.ok === false);
   const revealedSeedKnown = Boolean(chain?.revealedSeed || server?.server_seed);
-  const canTamper = revealedSeedKnown && (server?.status === "revealed" || chain?.revealed === true);
+  const isRevealed = server?.status === "revealed" || chain?.revealed === true;
+  const canTamper = chain !== null && chain !== undefined;
+  const simulatedSeed = tamper && !isRevealed && Boolean(localSeed);
+  const randomSeed = (): string => Array.from(crypto.getRandomValues(new Uint8Array(32)), (b) => b.toString(16).padStart(2, "0")).join("");
 
   function edit(i: number, key: string, value: string): void {
     setLocal((rows) =>
@@ -297,7 +321,7 @@ export function Verify(): JSX.Element {
           <button
             className={`tamper ${tamper ? "on" : ""}`}
             disabled={!canTamper}
-            title={canTamper ? "Edit the local copy and watch the checks flip" : "This cycle is still sealed — its seed is not revealed yet, so there is nothing to tamper with. Pick a revealed cycle."}
+            title={isRevealed ? "Edit the local copy and watch the checks flip" : "The seed is still sealed — simulate a forged reveal: any seed you type is checked against the on-chain commitment"}
             onClick={() => setTamper(!tamper)}
           >
             🧪 {tamper ? "Simulation ON — editing local copy" : "Simulate tampering (local)"}
@@ -315,13 +339,15 @@ export function Verify(): JSX.Element {
         </div>
       </section>
 
-      <div className={`verdict ${anyRed ? "bad" : allGreen ? "ok" : ""}`}>
-        {anyRed
+      <div className={`verdict ${anyRed ? "bad" : chainUnreadable ? "warn" : allGreen ? "ok" : ""}`}>
+        {chainUnreadable
+          ? "⚠ Could not read this cycle's account from the chain (public RPC rate limit) — nothing verified yet. Re-select the cycle to retry."
+          : anyRed
           ? "✗ TAMPERING DETECTED — your local copy no longer matches what was sealed on-chain (simulation: nothing was posted)"
           : allGreen
-            ? canTamper
+            ? isRevealed
               ? "✓ All checks pass — this cycle is exactly what was sealed before play"
-              : "🔒 This cycle is still sealed — the commitment is on-chain; the seed is revealed when the cycle closes. Checks 2–6 run then."
+              : "🔒 This cycle is still sealed — the commitment is on-chain; the seed is revealed when the cycle closes. Checks 2–6 run then (or simulate a forged reveal below)."
             : "computing…"}
       </div>
       {chainWarning && <p className="err">{chainWarning}</p>}
@@ -332,6 +358,7 @@ export function Verify(): JSX.Element {
         ))}
       </section>
 
+      {local.length > 0 && (
       <section className="panel derivation-panel">
         <h3>How a round is derived — server seed + client seed + nonce</h3>
         <p className="muted">
@@ -348,8 +375,9 @@ export function Verify(): JSX.Element {
             ))}
           </select>
         </label>
-        <Derivation seedHex={localSeed} chain={chain ?? null} pda={server?.pda ?? ""} record={local[Math.min(derivIndex, Math.max(0, local.length - 1))] ?? null} revealed={revealedSeedKnown} />
+        <Derivation seedHex={localSeed} chain={chain ?? null} pda={server?.pda ?? ""} record={local[Math.min(derivIndex, Math.max(0, local.length - 1))] ?? null} revealed={revealedSeedKnown} simulated={simulatedSeed} />
       </section>
+      )}
 
       <section className={`panel tamper-panel ${tamper ? "on" : ""}`}>
         <h3>1 · Simulate tampering — a local what-if</h3>
@@ -358,14 +386,23 @@ export function Verify(): JSX.Element {
           <em> if the operator had altered any value after the fact, would the checks catch it?</em> They do — instantly — because the true values are
           pinned by the on-chain commitment and Merkle root.
         </p>
-        {!canTamper && <p className="muted">Available once this cycle's seed is revealed (rotate the cycle first).</p>}
+        {!isRevealed && (
+          <p className="muted">
+            <strong>This cycle's seed is still sealed</strong> — only its hash is on-chain. So the what-if here is a <em>forged reveal</em>: type any seed
+            (or generate one) and see it fail check 2 against the commitment and check 4 against the rounds. That is precisely what the chain refuses in
+            section 2 — except here nothing leaves your browser.
+          </p>
+        )}
         {tamper && (
           <label>
-            Revealed seed — change one hex digit and watch checks 2 and 4 flip
-            <input className="mono" value={localSeed} placeholder="(seed not revealed yet)" onChange={(e) => setLocalSeed(e.target.value)} />
+            {isRevealed ? "Revealed seed — change one hex digit and watch checks 2 and 4 flip" : "Pretend seed — the real one is sealed; try to find one that passes check 2"}
+            <div className="seed-row">
+              <input className="mono" value={localSeed} placeholder="type any 64-hex seed, or generate one" onChange={(e) => setLocalSeed(e.target.value)} />
+              {!isRevealed && <button onClick={() => setLocalSeed(randomSeed())}>Generate a fake seed</button>}
+            </div>
           </label>
         )}
-        {tamper && <p className="muted">…or click any cell in the round table below to change a roll, a stop, a nonce or a payout.</p>}
+        {tamper && local.length > 0 && <p className="muted">…or click any cell in the round table below to change a roll, a stop, a nonce or a payout.</p>}
       </section>
 
       <section className={`panel cheat-panel ${rotation ? "active" : ""}`}>

@@ -11,6 +11,8 @@ interface Props {
   pda: string;
   record: RoundRecord | null;
   revealed: boolean;
+  /** The seed is a local guess (the real one is still sealed) — say so on the card. */
+  simulated?: boolean;
 }
 
 interface Derived {
@@ -27,7 +29,7 @@ interface Derived {
  * its commitment), what came from the player (client seed, nonce) and what falls out of HMAC.
  * This is what "provably fair" concretely means — and what tampering breaks.
  */
-export function Derivation({ seedHex, chain, pda, record, revealed }: Props): JSX.Element {
+export function Derivation({ seedHex, chain, pda, record, revealed, simulated = false }: Props): JSX.Element {
   const [d, setD] = useState<Derived | null>(null);
 
   useEffect(() => {
@@ -71,10 +73,16 @@ export function Derivation({ seedHex, chain, pda, record, revealed }: Props): JS
       <div className="deriv-grid">
         <div className="deriv-row chain">
           <span className="deriv-k">server seed</span>
-          <span className="deriv-v mono">{revealed ? seedHex || "—" : "🔒 not revealed yet — only its hash is on-chain"}</span>
+          <span className="deriv-v mono">{simulated ? seedHex : revealed ? seedHex || "—" : "🔒 not revealed yet — only its hash is on-chain"}</span>
           <span className="deriv-src">
-            from the chain: <code>revealed_seed</code> ·{" "}
-            <a href={explorerAddress(pda)} target="_blank" rel="noreferrer">account ↗</a>
+            {simulated ? (
+              <b className="red">SIMULATED — a seed you typed; the real one is still sealed on-chain</b>
+            ) : (
+              <>
+                from the chain: <code>revealed_seed</code>
+              </>
+            )}{" "}
+            · <a href={explorerAddress(pda)} target="_blank" rel="noreferrer">account ↗</a>
           </span>
         </div>
         <div className="deriv-row chain">
