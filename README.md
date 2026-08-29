@@ -146,6 +146,16 @@ Screenshots of each state were captured with headless Chrome (`verify-green`, `v
 
 Devnet cost: ~1.76 SOL for program rent, then ≈ 0.00001 SOL per instruction.
 
+**Public devnet RPC rate limits (429 "Connection rate limits exceeded")** took the server down once
+mid-rotation. Hardening that followed, all of which also holds on localnet:
+- the server and watchdog log unhandled rejections instead of exiting;
+- `/state` serves on-chain RTP from a 10 s cache; the play page polls every 8 s; the watchdog
+  re-verifies clean cycles only once a minute (still every tick for anything not yet green);
+- `rotate` is **resumable** — every step first reads the cycle account, so a retry after a crash
+  skips whatever already landed (no double close, no double reveal);
+- reveal and cheat-attempt signatures are recovered from `getSignaturesForAddress(cycle PDA)`
+  when a rotation resumes, and on startup for any revealed cycle that lost its reveal signature.
+
 ### Toolchain notes that cost time (so you don't repeat them)
 - `avm install` switches the active Solana release to an old one (2.1.0 for Anchor 0.31); its
   platform-tools (rustc 1.79) cannot compile 2026 crates that need `edition2024`. `dev.sh` puts the

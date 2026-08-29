@@ -25,20 +25,42 @@ const WALLET = process.env["SEALED_WALLET"] ?? "~/.config/solana/id.json";
 const IDL = process.env["SEALED_IDL"] ?? resolve(process.cwd(), "../target/idl/sealed_engine.json");
 const DATA = process.env["SEALED_DATA"] ?? resolve(process.cwd(), `data/store.${CLUSTER}.json`);
 
+// A public RPC can 429 at any moment; a stray rejection must never take the game server down.
+process.on("unhandledRejection", (reason) => console.error("unhandled rejection (kept running):", reason));
+process.on("uncaughtException", (err) => console.error("uncaught exception (kept running):", err));
+
 async function main(): Promise<void> {
   const store = new Store(DATA);
   const chain = new Chain({ rpcUrl: RPC, walletPath: WALLET, idlPath: IDL });
   await chain.ensureFunded(CLUSTER === "localnet");
   const init = await chain.ensureInitialized();
   const cycles = new CycleService(store, chain);
+  const repaired = await cycles.repairFromChain();
+  if (repaired) console.log(`repaired ${repaired} cycle record(s) from chain history`);
   if (!store.activeCycle()) await cycles.startCycle();
 
   const app = Fastify({ logger: { level: "info" } });
   await app.register(cors, { origin: true });
 
+  // /state is polled by every open tab — serve chain stats from a short cache to spare the RPC.
+  let rtpCache: { at: number; value: Awaited<ReturnType<typeof chain.fetchRtp>> } | null = null;
+  const cachedRtp = async (): Promise<Awaited<ReturnType<typeof chain.fetchRtp>>> => {
+    if (rtpCache && Date.now() - rtpCache.at < 10_000) return rtpCache.value;
+    try {
+      rtpCache = { at: Date.now(), value: await chain.fetchRtp() };
+    } catch (e) {
+      if (!rtpCache) throw e;
+      app.log.warn(`rtp fetch failed, serving cached: ${(e as Error).message}`);
+    }
+    return rtpCache.value;
+  };
+  const invalidateRtp = (): void => {
+    rtpCache = null;
+  };
+
   app.get("/state", async () => {
     const active = store.activeCycle();
-    const rtp = await chain.fetchRtp();
+    const rtp = await cachedRtp();
     return {
       program_id: chain.programId.toBase58(),
       cluster: CLUSTER,
@@ -97,8 +119,16 @@ async function main(): Promise<void> {
     };
   });
 
-  app.post("/cycle/rotate", async () => cycles.rotate(false));
-  app.post("/cycle/rotate-dishonest", async () => cycles.rotate(true));
+  app.post("/cycle/rotate", async () => {
+    const r = await cycles.rotate(false);
+    invalidateRtp();
+    return r;
+  });
+  app.post("/cycle/rotate-dishonest", async () => {
+    const r = await cycles.rotate(true);
+    invalidateRtp();
+    return r;
+  });
 
   app.get<{ Querystring: { cycle?: string } }>("/rounds", async (req, reply) => {
     const id = Number(req.query.cycle ?? store.data.active_cycle);

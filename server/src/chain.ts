@@ -184,6 +184,21 @@ export class Chain {
     return { signature, ok: false, error: this.errorName(err), logs: info?.meta?.logMessages ?? [] };
   }
 
+  /**
+   * Reveal history of a cycle straight from the chain: every failed transaction touching the cycle
+   * PDA (cheat attempts, with their error name) and the successful transactions that are neither
+   * the commit nor the close (i.e. the reveal). Lets a rotation resume after a crash without losing
+   * the signatures the demo shows.
+   */
+  async revealHistory(cycleId: number, known: { commit?: string; close?: string }): Promise<{ reveal?: string; failed: { signature: string; error: string; blockTime: number | null }[] }> {
+    const sigs = await this.connection.getSignaturesForAddress(this.cyclePda(cycleId), { limit: 100 }, "confirmed");
+    const failed = sigs.filter((x) => x.err).map((x) => ({ signature: x.signature, error: this.errorName(x.err), blockTime: x.blockTime ?? null }));
+    const ok = sigs.filter((x) => !x.err && x.signature !== known.commit && x.signature !== known.close);
+    // Newest first; the reveal is the most recent successful non-commit/close transaction.
+    const reveal = ok[0]?.signature;
+    return reveal ? { reveal, failed } : { failed };
+  }
+
   /** Map a transaction error object to the Anchor error name via the IDL. */
   errorName(err: unknown): string {
     const json = JSON.stringify(err);

@@ -38,6 +38,10 @@ async function fetchAccount(pda: string): Promise<Buffer | null> {
   return r.value ? Buffer.from(r.value.data[0], "base64") : null;
 }
 
+// Cycles that verified clean are re-checked only every FULL_RECHECK_MS (public RPCs rate-limit).
+const FULL_RECHECK_MS = Number(process.env["WATCHDOG_RECHECK_MS"] ?? 60_000);
+const lastFullCheck = new Map<string, number>();
+
 async function tick(): Promise<void> {
   const state = (await (await fetch(`${SERVER}/state`)).json()) as { cycles: { cycle_id: number; status: string; pda: string }[] };
   let rounds = 0;
@@ -45,6 +49,13 @@ async function tick(): Promise<void> {
   let mismatches = 0;
   for (const c of state.cycles) {
     if (c.status !== "revealed") continue;
+    const key = String(c.cycle_id);
+    const prev = status.cycles[key];
+    if (prev?.ok && Date.now() - (lastFullCheck.get(key) ?? 0) < FULL_RECHECK_MS) {
+      cycles++;
+      rounds += prev.rounds;
+      continue;
+    }
     const raw = await fetchAccount(c.pda);
     if (!raw) continue;
     const chain = decodeSeedCycle(raw);
@@ -52,7 +63,8 @@ async function tick(): Promise<void> {
     const rounds_ = (await (await fetch(`${SERVER}/rounds?cycle=${c.cycle_id}`)).json()) as { records: RoundRecord[] };
     const checks = verifyCycle(chain, rounds_.records);
     const ok = checks.every((x) => x.ok);
-    status.cycles[String(c.cycle_id)] = { ok, rounds: rounds_.records.length, checks, verified_at: new Date().toISOString() };
+    status.cycles[key] = { ok, rounds: rounds_.records.length, checks, verified_at: new Date().toISOString() };
+    lastFullCheck.set(key, Date.now());
     cycles++;
     rounds += rounds_.records.length;
     if (!ok) {
@@ -68,6 +80,8 @@ async function tick(): Promise<void> {
   const colour = mismatches > 0 ? "\x1b[31m" : "\x1b[32m";
   process.stdout.write(`\r${colour}rounds verified: ${rounds}, cycles: ${cycles}, mismatches: ${mismatches}, last check: ${status.last_check}\x1b[0m   `);
 }
+
+process.on("unhandledRejection", (reason) => console.error("\nwatchdog: unhandled rejection (kept running):", reason));
 
 async function main(): Promise<void> {
   const app = Fastify({ logger: false });
