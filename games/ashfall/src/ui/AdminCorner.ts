@@ -120,17 +120,18 @@ export class AdminCorner {
 
     this.honestBtn = button('Rotate cycle (honest)', 'btn btn-admin', () => void rotate(false));
     this.fakeBtn = button('Rotate with a fake reveal first', 'btn btn-admin btn-admin-danger', () => void rotate(true));
-    this.panel = el('div', { class: 'admin-panel', hidden: true }, [
-      el('div', { class: 'admin-title', text: 'Admin corner' }),
+    const collapse = button('hide', 'btn btn-admin-collapse', () => {
+      this.root.classList.toggle('collapsed');
+      collapse.textContent = this.root.classList.contains('collapsed') ? 'show' : 'hide';
+    }, { 'aria-label': 'Collapse admin corner' });
+    this.panel = el('div', { class: 'admin-panel' }, [
+      el('div', { class: 'admin-title' }, [el('span', { text: '⚙ Admin corner' }), collapse]),
+      el('div', { class: 'admin-sub', text: 'Provably-fair cycle controls (the same ones the dice page has).' }),
       el('div', { class: 'admin-buttons' }, [this.honestBtn, this.fakeBtn]),
       this.statusEl,
       this.rtpEl,
     ]);
-    const toggle = button('⚙ Admin', 'btn btn-admin-toggle', () => {
-      this.panel.hidden = !this.panel.hidden;
-      if (!this.panel.hidden) void this.loadRtp();
-    }, { 'aria-label': 'Admin corner' });
-    this.root = el('div', { class: 'admin-corner' }, [toggle, this.panel]);
+    this.root = el('div', { class: 'admin-corner' }, [this.panel]);
     host.appendChild(this.root);
 
     this.loadRtp = async (): Promise<void> => {
@@ -144,6 +145,7 @@ export class AdminCorner {
         this.rtpEl.textContent = 'server offline';
       }
     };
+    void this.loadRtp();
     store.subscribe((st) => this.render(st.phase));
     this.render(store.get().phase);
   }

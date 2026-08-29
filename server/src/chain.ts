@@ -44,6 +44,21 @@ interface MethodsBuilderLike {
   instruction(): Promise<TransactionInstruction>;
 }
 
+/** Retry an RPC call on rate limiting (public devnet RPCs 429 freely) with exponential backoff. */
+async function withRetry<T>(fn: () => Promise<T>, attempts = 6, baseDelayMs = 500): Promise<T> {
+  let delay = baseDelayMs;
+  for (let i = 0; ; i++) {
+    try {
+      return await fn();
+    } catch (e) {
+      const msg = (e as Error).message ?? String(e);
+      if (i >= attempts - 1 || !/429|rate limit|Too Many Requests/i.test(msg)) throw e;
+      await new Promise((r) => setTimeout(r, delay));
+      delay = Math.min(8000, delay * 2);
+    }
+  }
+}
+
 const le64 = (n: number): Buffer => {
   const b = Buffer.alloc(8);
   b.writeBigUInt64LE(BigInt(n));
@@ -89,7 +104,7 @@ export class Chain {
     const ns = this.program.account as unknown as Record<string, { fetch(pk: PublicKey): Promise<Record<string, unknown>> } | undefined>;
     const client = ns[name];
     if (!client) throw new Error(`IDL has no account named ${name}`);
-    return client.fetch(address);
+    return withRetry(() => client.fetch(address));
   }
 
   /**
@@ -108,7 +123,7 @@ export class Chain {
   }
 
   async ensureInitialized(): Promise<{ initialized: boolean; signature?: string }> {
-    const info = await this.connection.getAccountInfo(this.configPda);
+    const info = await withRetry(() => this.connection.getAccountInfo(this.configPda));
     if (info) return { initialized: false };
     const signature = await this.method("initialize").accounts({ authority: this.authority.publicKey }).rpc();
     return { initialized: true, signature };
@@ -125,7 +140,7 @@ export class Chain {
   }
 
   async fetchCycle(cycleId: number): Promise<ChainCycle | null> {
-    const info = await this.connection.getAccountInfo(this.cyclePda(cycleId));
+    const info = await withRetry(() => this.connection.getAccountInfo(this.cyclePda(cycleId)));
     if (!info) return null;
     const c = await this.fetchAccount("seedCycle", this.cyclePda(cycleId));
     const status = c["status"] as Record<string, unknown>;
@@ -154,13 +169,18 @@ export class Chain {
   }
 
   async commitSeed(seedHash: Buffer): Promise<string> {
-    return this.method("commitSeed", [...seedHash]).accounts({ authority: this.authority.publicKey }).rpc();
+    return withRetry(() => this.method("commitSeed", [...seedHash]).accounts({ authority: this.authority.publicKey }).rpc(), 4, 1000);
   }
 
   async closeCycle(cycleId: number, merkleRoot: Buffer, rounds: number, wageredMicros: number, paidMicros: number): Promise<string> {
-    return this.method("closeCycle", new BN(cycleId), [...merkleRoot], new BN(rounds), new BN(wageredMicros), new BN(paidMicros))
-      .accounts({ authority: this.authority.publicKey })
-      .rpc();
+    return withRetry(
+      () =>
+        this.method("closeCycle", new BN(cycleId), [...merkleRoot], new BN(rounds), new BN(wageredMicros), new BN(paidMicros))
+          .accounts({ authority: this.authority.publicKey })
+          .rpc(),
+      4,
+      1000,
+    );
   }
 
   /**
@@ -172,11 +192,11 @@ export class Chain {
       .accounts({ authority: this.authority.publicKey })
       .instruction();
     const tx = new Transaction().add(ix);
-    const { blockhash, lastValidBlockHeight } = await this.connection.getLatestBlockhash("confirmed");
+    const { blockhash, lastValidBlockHeight } = await withRetry(() => this.connection.getLatestBlockhash("confirmed"));
     tx.recentBlockhash = blockhash;
     tx.feePayer = this.authority.publicKey;
     tx.sign(this.authority);
-    const signature = await this.connection.sendRawTransaction(tx.serialize(), { skipPreflight: true });
+    const signature = await withRetry(() => this.connection.sendRawTransaction(tx.serialize(), { skipPreflight: true }));
     await this.connection.confirmTransaction({ signature, blockhash, lastValidBlockHeight }, "confirmed").catch(() => undefined);
     // The verdict comes from the signature STATUS, polled until the cluster has it. A lookup that
     // returns nothing means "not indexed yet", never "succeeded" — the old code conflated the two.

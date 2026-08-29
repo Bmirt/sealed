@@ -1,8 +1,11 @@
 import type { JSX } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { Check } from "../components/Check";
+import { Derivation } from "../components/Derivation";
+import { RotationTimeline } from "../components/RotationTimeline";
+import type { RotationStatus } from "../components/RotationTimeline";
 import type { CheckState } from "../components/Check";
-import { api, explorerAddress, explorerTx } from "../lib/api";
+import { CLUSTER, api, explorerAddress, explorerTx } from "../lib/api";
 import { leafHex, merkleRootHex, rederiveSlot, rollFor, sha256Hex, verifyProofHex } from "../lib/crypto";
 import { decodeRtp, decodeSeedCycle, fetchAccountsBytes, fetchTx } from "../lib/rpc";
 import type { TxInfo } from "../lib/rpc";
@@ -20,6 +23,9 @@ export function Verify(): JSX.Element {
   const [chain, setChain] = useState<ChainCycle | null | undefined>(undefined);
   const [rtp, setRtp] = useState<ChainRtp | null>(null);
   const [tamper, setTamper] = useState(false);
+  const [derivIndex, setDerivIndex] = useState(0);
+  const [rotation, setRotation] = useState<RotationStatus | null>(null);
+  const [cheating, setCheating] = useState(false);
   const [localSeed, setLocalSeed] = useState("");
   const [local, setLocal] = useState<RoundRecord[]>([]);
   const [checks, setChecks] = useState<CheckState[]>([]);
@@ -241,6 +247,30 @@ export function Verify(): JSX.Element {
       }),
     );
   }
+  /** The real thing: rotate-dishonest, watched live, then jump to the freshly revealed cycle. */
+  async function cheatForReal(): Promise<void> {
+    if (cheating) return;
+    setCheating(true);
+    const poll = window.setInterval(() => {
+      api.rotation().then((r) => { if ((r as RotationStatus).steps?.length) setRotation(r as RotationStatus); }).catch(() => undefined);
+    }, 500);
+    try {
+      await api.rotate(true);
+    } catch {
+      /* the timeline carries the error */
+    } finally {
+      window.clearInterval(poll);
+      const r = (await api.rotation().catch(() => null)) as RotationStatus | null;
+      if (r) setRotation(r);
+      setCheating(false);
+      const st = await api.state().catch(() => null);
+      if (st) {
+        setState(st);
+        if (r?.ok) setCycleId(r.cycleId);
+      }
+    }
+  }
+
   const cellValue = (r: RoundRecord, k: string): string => {
     const v = (r as unknown as Record<string, unknown>)[k];
     return Array.isArray(v) ? v.join(",") : v === undefined ? "" : String(v);
@@ -270,7 +300,7 @@ export function Verify(): JSX.Element {
             title={canTamper ? "Edit the local copy and watch the checks flip" : "This cycle is still sealed — its seed is not revealed yet, so there is nothing to tamper with. Pick a revealed cycle."}
             onClick={() => setTamper(!tamper)}
           >
-            🔴 {tamper ? "Tamper mode ON" : "Try to cheat"}
+            🧪 {tamper ? "Simulation ON — editing local copy" : "Simulate tampering (local)"}
           </button>
           {tamper && (
             <button
@@ -287,7 +317,7 @@ export function Verify(): JSX.Element {
 
       <div className={`verdict ${anyRed ? "bad" : allGreen ? "ok" : ""}`}>
         {anyRed
-          ? "✗ TAMPERING DETECTED — this cycle does not match what was sealed on-chain"
+          ? "✗ TAMPERING DETECTED — your local copy no longer matches what was sealed on-chain (simulation: nothing was posted)"
           : allGreen
             ? canTamper
               ? "✓ All checks pass — this cycle is exactly what was sealed before play"
@@ -302,15 +332,54 @@ export function Verify(): JSX.Element {
         ))}
       </section>
 
-      {tamper && (
-        <section className="panel">
-          <h3>Tamper with the local copy</h3>
+      <section className="panel derivation-panel">
+        <h3>How a round is derived — server seed + client seed + nonce</h3>
+        <p className="muted">
+          Pick a round. Everything below is recomputed in your browser from three inputs: the server seed (revealed on-chain, whose hash was
+          committed <em>before</em> play), the player's client seed and the nonce.
+        </p>
+        <label>
+          Round
+          <select value={Math.min(derivIndex, Math.max(0, local.length - 1))} onChange={(e) => setDerivIndex(Number(e.target.value))}>
+            {local.map((r, i) => (
+              <option key={r.round_index} value={i}>
+                #{r.round_index} · {isSlot(r) ? `🐉 ashfall ${r.kind}` : `🎲 dice target ${r.target}`} · {r.player_id} · nonce {r.nonce}
+              </option>
+            ))}
+          </select>
+        </label>
+        <Derivation seedHex={localSeed} chain={chain ?? null} pda={server?.pda ?? ""} record={local[Math.min(derivIndex, Math.max(0, local.length - 1))] ?? null} revealed={revealedSeedKnown} />
+      </section>
+
+      <section className={`panel tamper-panel ${tamper ? "on" : ""}`}>
+        <h3>1 · Simulate tampering — a local what-if</h3>
+        <p className="muted">
+          This edits <strong>your browser's copy</strong> of the records or the seed. Nothing is sent to the server or to Solana. It answers one question:
+          <em> if the operator had altered any value after the fact, would the checks catch it?</em> They do — instantly — because the true values are
+          pinned by the on-chain commitment and Merkle root.
+        </p>
+        {!canTamper && <p className="muted">Available once this cycle's seed is revealed (rotate the cycle first).</p>}
+        {tamper && (
           <label>
-            Revealed seed (edit one hex digit)
+            Revealed seed — change one hex digit and watch checks 2 and 4 flip
             <input className="mono" value={localSeed} placeholder="(seed not revealed yet)" onChange={(e) => setLocalSeed(e.target.value)} />
           </label>
-        </section>
-      )}
+        )}
+        {tamper && <p className="muted">…or click any cell in the round table below to change a roll, a stop, a nonce or a payout.</p>}
+      </section>
+
+      <section className={`panel cheat-panel ${rotation ? "active" : ""}`}>
+        <h3>2 · Try to cheat for real — on Solana {CLUSTER}</h3>
+        <p className="muted">
+          This is the opposite of a simulation: the server will <strong>post a transaction</strong> revealing a <em>wrong</em> seed for the currently active cycle.
+          The program recomputes sha256 on-chain and refuses it — the failed transaction is permanent. Then the honest reveal follows and the cycle becomes
+          verifiable here. (It closes the active cycle, like the admin buttons in the games.)
+        </p>
+        <button className="danger" disabled={cheating} onClick={() => void cheatForReal()}>
+          {cheating ? "posting to the chain…" : `Submit a fake reveal on ${CLUSTER}`}
+        </button>
+        {rotation && <RotationTimeline r={rotation} verifyHref={`/verify?cycle=${rotation.cycleId}`} />}
+      </section>
 
       <section className="panel rounds">
         <h3>
