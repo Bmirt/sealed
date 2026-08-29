@@ -11,7 +11,7 @@ const PLAYERS = [
 ];
 
 async function post<T>(path: string, body?: unknown): Promise<T> {
-  const res = await fetch(`${SERVER}${path}`, { method: "POST", headers: { "content-type": "application/json" }, body: body ? JSON.stringify(body) : undefined });
+  const res = await fetch(`${SERVER}${path}`, body ? { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) } : { method: "POST" });
   if (!res.ok) throw new Error(`${path} → ${res.status} ${await res.text()}`);
   return (await res.json()) as T;
 }
@@ -40,12 +40,12 @@ async function playRounds(n: number): Promise<{ wagered: number; paid: number }>
 
 async function main(): Promise<void> {
   console.log(`seeding demo data on ${SERVER}`);
-  const a = await playRounds(100);
+  const a = await playRounds(Number(process.env["ROUNDS_A"] ?? 100));
   console.log(`cycle A: wagered ${a.wagered / 1e6} paid ${a.paid / 1e6} → rotating honestly`);
   const ra = await post<{ closedCycle: number; txs: Record<string, unknown> }>("/cycle/rotate");
   console.log(`  closed cycle ${ra.closedCycle}`, ra.txs);
 
-  const b = await playRounds(100);
+  const b = await playRounds(Number(process.env["ROUNDS_B"] ?? 100));
   console.log(`cycle B: wagered ${b.wagered / 1e6} paid ${b.paid / 1e6} → rotating DISHONESTLY (expect an on-chain HashMismatch)`);
   const rb = await post<{ closedCycle: number; txs: { cheatAttempt?: { signature: string; error: string } } }>("/cycle/rotate-dishonest");
   console.log(`  closed cycle ${rb.closedCycle}; cheat attempt:`, rb.txs.cheatAttempt);

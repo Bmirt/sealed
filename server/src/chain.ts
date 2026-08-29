@@ -4,7 +4,11 @@
  * failing transaction actually lands in history — that failed signature is the demo artifact.
  */
 import * as anchor from "@coral-xyz/anchor";
+import anchorCjs from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
+
+// Under ESM the CJS package's re-exported BN is invisible on the namespace; module.exports has it.
+const BN = (anchorCjs as unknown as { BN: typeof anchor.BN }).BN;
 import type { Idl } from "@coral-xyz/anchor";
 import { Connection, Keypair, PublicKey, Transaction } from "@solana/web3.js";
 import type { TransactionInstruction } from "@solana/web3.js";
@@ -148,7 +152,7 @@ export class Chain {
   }
 
   async closeCycle(cycleId: number, merkleRoot: Buffer, rounds: number, wageredMicros: number, paidMicros: number): Promise<string> {
-    return this.method("closeCycle", new anchor.BN(cycleId), [...merkleRoot], new anchor.BN(rounds), new anchor.BN(wageredMicros), new anchor.BN(paidMicros))
+    return this.method("closeCycle", new BN(cycleId), [...merkleRoot], new BN(rounds), new BN(wageredMicros), new BN(paidMicros))
       .accounts({ authority: this.authority.publicKey })
       .rpc();
   }
@@ -158,7 +162,7 @@ export class Chain {
    * (with preflight the RPC would reject it locally and nothing would be recorded).
    */
   async revealSeed(cycleId: number, seed: Buffer): Promise<RevealResult> {
-    const ix = await this.method("revealSeed", new anchor.BN(cycleId), seed)
+    const ix = await this.method("revealSeed", new BN(cycleId), seed)
       .accounts({ authority: this.authority.publicKey })
       .instruction();
     const tx = new Transaction().add(ix);

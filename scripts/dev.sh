@@ -32,13 +32,17 @@ solana config set --url localhost > /dev/null
 [[ -f "$HOME/.config/solana/id.json" ]] || solana-keygen new --no-bip39-passphrase -s -o "$HOME/.config/solana/id.json"
 solana airdrop 100 > /dev/null 2>&1 || true
 if [[ ! -f target/idl/sealed_engine.json ]]; then
-  echo "▶ anchor build"
+  echo "▶ anchor build (IDL + types)"
   anchor build
   anchor keys sync
   anchor build
 fi
-echo "▶ anchor deploy"
-anchor deploy --provider.cluster localnet
+# Agave ≥ 4 validators only accept SBPF v3 deployments (SIMD-0500); Anchor 0.31 cannot pass
+# --arch through, so the deployable binary is produced by cargo-build-sbf directly.
+echo "▶ cargo build-sbf --arch v3"
+(cd programs/sealed_engine && cargo build-sbf --arch v3)
+echo "▶ deploy"
+solana program deploy target/deploy/sealed_engine.so --program-id target/deploy/sealed_engine-keypair.json
 
 # 3. Services
 echo "▶ starting server (4000), watchdog (4100), web (5173)"

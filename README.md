@@ -97,5 +97,31 @@ implementation, prints `rounds verified: N, mismatches: 0, last check: …`, ser
 ### `scripts/`
 `dev.sh` (one-command stack), `demo-seed.ts` (200 rounds / 3 players / 2 cycles).
 
-## Verification
-See the "Verification" section appended below once the acceptance run is complete.
+## Verification (acceptance run, 2026-08-29)
+
+Toolchain: Rust 1.98, Agave 4.2.1 (`solana-test-validator`), Anchor CLI 0.31.1, Node 22, pnpm 11.
+
+| Check | Result |
+|---|---|
+| `anchor test` | 4 passing — init; commit → close → reveal with field + RtpStats assertions; reveal-before-close → `CycleNotClosed`; second commit while active → `CycleStillActive`; **wrong seed → `HashMismatch`**; double close → `CycleAlreadyClosed`; reveal after reveal → `CycleNotActive`; non-authority → `Unauthorized` |
+| `pnpm test:server` | 12 passing — sha256 vector, commitment encoding, pinned HMAC roll vector, canonical JSON, Merkle (empty/single/pair/odd/proofs/tamper), dice rules |
+| `scripts/dev.sh` + `pnpm seed` | 300 rounds over cycles 0–1 (cycle 0 honest, cycle 1 dishonest), cycle 2 sealed and active |
+| `/verify` cycle #1 | **all six checks green** |
+| tamper mode, one roll digit changed | verdict flips to **✗ TAMPERING DETECTED**; check 4 (rolls) and check 5 (Merkle) red |
+| tamper mode, one seed hex digit changed | check 2 (commitment) and check 4 red |
+| cheat attempts panel | 1 failed `reveal_seed` on cycle #1, `err: {"InstructionError":[0,{"Custom":6000}]}`, log `Error Code: HashMismatch` |
+| watchdog | `rounds verified: 300, cycles: 2, mismatches: 0` |
+
+Screenshots of each state were captured with headless Chrome (`verify-green`, `verify-tampered`,
+`verify-seed-tampered`, `play`).
+
+### Toolchain notes that cost time (so you don't repeat them)
+- `avm install` switches the active Solana release to an old one (2.1.0 for Anchor 0.31); its
+  platform-tools (rustc 1.79) cannot compile 2026 crates that need `edition2024`. `dev.sh` puts the
+  newest installed Agave release first on PATH.
+- Agave ≥ 4 validators have SIMD-0500 active: **only SBPF v3 programs can be deployed**. Anchor
+  0.31 cannot pass `--arch`, so `dev.sh` builds the deployable with `cargo build-sbf --arch v3`
+  (Anchor still produces the IDL/types). `anchor test` never hit this because it genesis-loads the
+  program.
+- Under Node ≥ 22.18 the `.ts` tests/servers run as native ESM, where `@coral-xyz/anchor`'s
+  re-exported `BN` is invisible on the namespace import — take it from the default import.
