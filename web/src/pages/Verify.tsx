@@ -4,7 +4,7 @@ import { Check } from "../components/Check";
 import type { CheckState } from "../components/Check";
 import { api, explorerAddress, explorerTx } from "../lib/api";
 import { leafHex, merkleRootHex, rederiveSlot, rollFor, sha256Hex, verifyProofHex } from "../lib/crypto";
-import { decodeRtp, decodeSeedCycle, fetchAccountBytes, fetchTx } from "../lib/rpc";
+import { decodeRtp, decodeSeedCycle, fetchAccountsBytes, fetchTx } from "../lib/rpc";
 import type { TxInfo } from "../lib/rpc";
 import type { ChainCycle, ChainRtp, CycleRounds, RoundRecord, ServerState } from "../lib/types";
 import { isSlot } from "../lib/types";
@@ -26,6 +26,7 @@ export function Verify(): JSX.Element {
   const [cheats, setCheats] = useState<{ signature: string; error: string; cycle_id: number; tx?: TxInfo | null }[]>([]);
   const [watchdog, setWatchdog] = useState<Awaited<ReturnType<typeof api.watchdog>> | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [chainWarning, setChainWarning] = useState<string | null>(null);
 
   // Cycle list + default selection (latest revealed).
   useEffect(() => {
@@ -45,21 +46,38 @@ export function Verify(): JSX.Element {
     return () => window.clearInterval(id);
   }, [cycleId]);
 
-  // Load the chosen cycle: server records + raw chain account (decoded here, not by the server).
+  // Load the chosen cycle: server records first, then the raw chain accounts in ONE RPC call
+  // (decoded here, not by the server). A rate-limited chain read must not blank the page.
   useEffect(() => {
     if (cycleId === null || !state) return;
+    let cancelled = false;
     setChain(undefined);
-    Promise.all([api.rounds(cycleId), fetchAccountBytes(state.cycles.find((c) => c.cycle_id === cycleId)?.pda ?? ""), fetchAccountBytes(state.rtp_pda)])
-      .then(([rounds, bytes, rtpBytes]) => {
-        setServer(rounds);
+    setChainWarning(null);
+    setError(null);
+    (async () => {
+      const rounds = await api.rounds(cycleId);
+      if (cancelled) return;
+      setServer(rounds);
+      setLocal(rounds.records.map((r) => ({ ...r })));
+      setLocalSeed(rounds.server_seed ?? "");
+      setTamper(false);
+      const pda = state.cycles.find((c) => c.cycle_id === cycleId)?.pda ?? rounds.pda;
+      try {
+        const [bytes, rtpBytes] = await fetchAccountsBytes([pda, state.rtp_pda]);
+        if (cancelled) return;
         const decoded = bytes ? decodeSeedCycle(bytes) : null;
         setChain(decoded);
         setRtp(rtpBytes ? decodeRtp(rtpBytes) : null);
-        setLocal(rounds.records.map((r) => ({ ...r })));
-        setLocalSeed(decoded?.revealedSeed || rounds.server_seed || "");
-        setTamper(false);
-      })
-      .catch((e: Error) => setError(e.message));
+        if (decoded?.revealedSeed) setLocalSeed(decoded.revealedSeed);
+      } catch (e) {
+        if (cancelled) return;
+        setChain(null);
+        setChainWarning(`Chain read failed (${(e as Error).message}) — the public devnet RPC rate-limits; pick the cycle again to retry.`);
+      }
+    })().catch((e: Error) => setError(e.message));
+    return () => {
+      cancelled = true;
+    };
   }, [cycleId, state]);
 
   // Cheat attempts, each re-checked against the chain — sequentially and cached, because the
@@ -208,6 +226,8 @@ export function Verify(): JSX.Element {
 
   const allGreen = checks.length > 0 && checks.every((c) => c.ok !== false);
   const anyRed = checks.some((c) => c.ok === false);
+  const revealedSeedKnown = Boolean(chain?.revealedSeed || server?.server_seed);
+  const canTamper = revealedSeedKnown && (server?.status === "revealed" || chain?.revealed === true);
 
   function edit(i: number, key: string, value: string): void {
     setLocal((rows) =>
@@ -242,7 +262,12 @@ export function Verify(): JSX.Element {
               ))}
             </select>
           </label>
-          <button className={`tamper ${tamper ? "on" : ""}`} onClick={() => setTamper(!tamper)}>
+          <button
+            className={`tamper ${tamper ? "on" : ""}`}
+            disabled={!canTamper}
+            title={canTamper ? "Edit the local copy and watch the checks flip" : "This cycle is still sealed — its seed is not revealed yet, so there is nothing to tamper with. Pick a revealed cycle."}
+            onClick={() => setTamper(!tamper)}
+          >
             🔴 {tamper ? "Tamper mode ON" : "Try to cheat"}
           </button>
           {tamper && (
@@ -259,8 +284,15 @@ export function Verify(): JSX.Element {
       </section>
 
       <div className={`verdict ${anyRed ? "bad" : allGreen ? "ok" : ""}`}>
-        {anyRed ? "✗ TAMPERING DETECTED — this cycle does not match what was sealed on-chain" : allGreen ? "✓ All checks pass — this cycle is exactly what was sealed before play" : "computing…"}
+        {anyRed
+          ? "✗ TAMPERING DETECTED — this cycle does not match what was sealed on-chain"
+          : allGreen
+            ? canTamper
+              ? "✓ All checks pass — this cycle is exactly what was sealed before play"
+              : "🔒 This cycle is still sealed — the commitment is on-chain; the seed is revealed when the cycle closes. Checks 2–6 run then."
+            : "computing…"}
       </div>
+      {chainWarning && <p className="err">{chainWarning}</p>}
 
       <section className="checks">
         {checks.map((c, i) => (
@@ -273,7 +305,7 @@ export function Verify(): JSX.Element {
           <h3>Tamper with the local copy</h3>
           <label>
             Revealed seed (edit one hex digit)
-            <input className="mono" value={localSeed} onChange={(e) => setLocalSeed(e.target.value)} />
+            <input className="mono" value={localSeed} placeholder="(seed not revealed yet)" onChange={(e) => setLocalSeed(e.target.value)} />
           </label>
         </section>
       )}

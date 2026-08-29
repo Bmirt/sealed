@@ -5,11 +5,27 @@
 import { RPC } from "./api";
 import type { ChainCycle, ChainRtp } from "./types";
 
-async function call<T>(method: string, params: unknown[]): Promise<T> {
-  const res = await fetch(RPC, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }) });
-  const body = (await res.json()) as { result?: T; error?: { message: string } };
-  if (body.error) throw new Error(body.error.message);
-  return body.result as T;
+/** JSON-RPC with exponential backoff — public devnet RPCs return 429 on bursts. */
+async function call<T>(method: string, params: unknown[], attempts = 4): Promise<T> {
+  let delay = 600;
+  for (let i = 0; ; i++) {
+    const res = await fetch(RPC, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }) });
+    if (res.status === 429 && i < attempts - 1) {
+      await new Promise((r) => setTimeout(r, delay));
+      delay *= 2;
+      continue;
+    }
+    const body = (await res.json().catch(() => ({ error: { message: `${res.status} ${res.statusText}` } }))) as { result?: T; error?: { message: string } };
+    if (body.error) {
+      if (/429|rate/i.test(body.error.message) && i < attempts - 1) {
+        await new Promise((r) => setTimeout(r, delay));
+        delay *= 2;
+        continue;
+      }
+      throw new Error(body.error.message);
+    }
+    return body.result as T;
+  }
 }
 
 function b64(s: string): Uint8Array {
@@ -20,6 +36,12 @@ function b64(s: string): Uint8Array {
 }
 
 export const hex = (u: Uint8Array): string => Array.from(u, (b) => b.toString(16).padStart(2, "0")).join("");
+
+/** Several accounts in ONE request (getMultipleAccounts) — fewer calls, fewer 429s. */
+export async function fetchAccountsBytes(addresses: string[]): Promise<(Uint8Array | null)[]> {
+  const r = await call<{ value: ({ data: [string, string] } | null)[] }>("getMultipleAccounts", [addresses, { encoding: "base64", commitment: "confirmed" }]);
+  return r.value.map((v) => (v ? b64(v.data[0]) : null));
+}
 
 export async function fetchAccountBytes(address: string): Promise<Uint8Array | null> {
   const r = await call<{ value: { data: [string, string] } | null }>("getAccountInfo", [address, { encoding: "base64", commitment: "confirmed" }]);
