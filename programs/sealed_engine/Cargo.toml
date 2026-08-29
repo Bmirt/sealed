@@ -1,0 +1,20 @@
+[package]
+name = "sealed_engine"
+version = "0.1.0"
+description = "SEALED — seed commitments, reveals and round Merkle roots for provably fair games"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "sealed_engine"
+
+[features]
+default = []
+cpi = ["no-entrypoint"]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+idl-build = ["anchor-lang/idl-build"]
+
+[dependencies]
+anchor-lang = "0.31.1"
