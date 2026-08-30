@@ -8,3 +8,4 @@ test-ledger/
 server/data/
 watchdog/data/
 .env
+.validator.pid

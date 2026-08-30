@@ -56,6 +56,50 @@ SEALED_CLUSTER=devnet pnpm seed       # optional demo data (three on-chain txs p
 gentler watchdog poll (public RPC rate limits). The program id is the same on both clusters
 (`target/deploy/sealed_engine-keypair.json`). Players still need no wallet.
 
+## Deploying
+
+`pnpm dev` runs four processes; a deployment has two halves:
+
+| Half | What | Where | How |
+|---|---|---|---|
+| **Static site** | landing `/` · dice `/play` · verifier `/verify` · slot `/ashfall/` | Vercel (or any static host) | `pnpm build:site` → `dist/` — [`vercel.json`](vercel.json) sets install/build/output and the SPA rewrites |
+| **Server** (+ optional watchdog) | Fastify: seeds, rounds, rotations, signs devnet transactions | any Node host — Render, Railway, Fly, a VPS | [`Dockerfile`](Dockerfile) (`pnpm --filter server start`), or `pnpm --filter server start` on a box with Node 22 |
+
+The static site works with **no server**: the verifier reads the chain directly, the slot plays
+locally (with a visible "not sealed" note), and the dice/landing say "no SEALED server configured".
+To make the deployed site provably fair, host the server and point the site at it.
+
+**1. Static site on Vercel** — import the repo (root directory `/`, framework *Other*; the settings
+come from `vercel.json`). Environment variables (build-time — redeploy after changing):
+
+| Variable | Value |
+|---|---|
+| `VITE_SEALED_SERVER` | `https://<your-server-host>` (omit until the server exists) |
+| `VITE_SEALED_WATCHDOG` | `https://<your-watchdog-host>` (optional) |
+| `VITE_SEALED_CLUSTER` | `devnet` (the production default) |
+| `VITE_SOLANA_RPC` | a devnet RPC (default `https://api.devnet.solana.com`; a Helius/QuickNode URL avoids public 429s) |
+
+`VITE_ASHFALL_URL` and `VITE_SEALED_VERIFY_URL` default to `/ashfall/` and `/verify` on the same
+origin in production, so they need no value. If the install step complains about pnpm, set
+`ENABLE_EXPERIMENTAL_COREPACK=1` — the root `package.json` pins `pnpm@11.23.0`.
+
+**2. Server** — build the [`Dockerfile`](Dockerfile) and run it with:
+
+| Variable | Value |
+|---|---|
+| `SEALED_CLUSTER` | `devnet` |
+| `SEALED_WALLET_JSON` | the contents of `~/.config/solana/id.json` (the program authority — it pays fees; keep it funded) |
+| `SOLANA_RPC` | optional, same advice as above |
+| `PORT` | `4000` (hosts that inject their own `PORT` are respected) |
+
+Mount a volume at `/app/server/data` — `store.devnet.json` is the off-chain round log; losing it
+loses the rounds of the active (not yet closed) cycle. The IDL the server needs is committed at
+`server/idl/sealed_engine.json` (`scripts/dev.sh` refreshes it after every `anchor build`).
+The watchdog is the same image with `pnpm --filter watchdog start` and `SEALED_SERVER=<server url>`.
+
+Local rehearsal of the exact production build: `pnpm build:site`, then serve `dist/` with SPA
+fallback (e.g. `npx serve -s dist` and open `/ashfall/`).
+
 ## The 2-minute stage demo
 
 1. Open **/play**. Point at the footer: *"Current cycle #N sealed: `a3f9…` 🔒 view on chain"* —

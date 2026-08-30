@@ -2,7 +2,7 @@
   "name": "sealed",
   "private": true,
   "version": "0.1.0",
-  "description": "SEALED — provably fair casino demo: seed commitments, reveals and round Merkle roots on Solana localnet.",
+  "description": "SEALED \u2014 provably fair casino demo: seed commitments, reveals and round Merkle roots on Solana localnet.",
   "scripts": {
     "dev": "bash scripts/dev.sh",
     "dev:devnet": "CLUSTER=devnet bash scripts/dev.sh",
@@ -12,7 +12,9 @@
     "seed": "pnpm --filter scripts seed",
     "test:server": "pnpm --filter server test",
     "test:anchor": "anchor test",
-    "typecheck": "pnpm -r typecheck"
+    "typecheck": "pnpm -r typecheck",
+    "build": "pnpm build:site",
+    "build:site": "pnpm --filter web build && pnpm --filter ashfall build && node scripts/build-site.mjs"
   },
   "devDependencies": {
     "@coral-xyz/anchor": "^0.31.1",
@@ -23,5 +25,9 @@
     "mocha": "^10.8.2",
     "ts-mocha": "^10.1.0",
     "typescript": "^5.9.3"
+  },
+  "packageManager": "pnpm@11.23.0",
+  "engines": {
+    "node": ">=22"
   }
 }

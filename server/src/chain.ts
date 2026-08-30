@@ -74,9 +74,9 @@ export class Chain {
   readonly rtpPda: PublicKey;
   private readonly idl: Idl;
 
-  constructor(opts: { rpcUrl: string; walletPath: string; idlPath: string }) {
+  constructor(opts: { rpcUrl: string; walletPath: string; walletJson?: string; idlPath: string }) {
     this.connection = new Connection(opts.rpcUrl, "confirmed");
-    const secret = JSON.parse(readFileSync(opts.walletPath.replace(/^~/, homedir()), "utf8")) as number[];
+    const secret = JSON.parse(opts.walletJson ?? readFileSync(opts.walletPath.replace(/^~/, homedir()), "utf8")) as number[];
     this.authority = Keypair.fromSecretKey(Uint8Array.from(secret));
     this.idl = JSON.parse(readFileSync(resolve(opts.idlPath), "utf8")) as Idl;
     const wallet = new anchor.Wallet(this.authority);

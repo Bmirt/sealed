@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "pnpm install --frozen-lockfile",
+  "buildCommand": "pnpm build:site",
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/ashfall", "destination": "/ashfall/index.html" },
+    { "source": "/ashfall/(.*)", "destination": "/ashfall/index.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

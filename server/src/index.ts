@@ -23,7 +23,10 @@ const PORT = Number(process.env["PORT"] ?? 4000);
 const CLUSTER = process.env["SEALED_CLUSTER"] ?? "localnet";
 const RPC = process.env["SOLANA_RPC"] ?? (CLUSTER === "devnet" ? "https://api.devnet.solana.com" : "http://127.0.0.1:8899");
 const WALLET = process.env["SEALED_WALLET"] ?? "~/.config/solana/id.json";
-const IDL = process.env["SEALED_IDL"] ?? resolve(process.cwd(), "../target/idl/sealed_engine.json");
+/** Hosted deployments have no ~/.config/solana: pass the keypair file's JSON array via SEALED_WALLET_JSON. */
+const WALLET_JSON = process.env["SEALED_WALLET_JSON"];
+/** The IDL is committed under server/idl so a git checkout can run without `anchor build`; dev.sh refreshes it. */
+const IDL = process.env["SEALED_IDL"] ?? resolve(process.cwd(), "idl/sealed_engine.json");
 const DATA = process.env["SEALED_DATA"] ?? resolve(process.cwd(), `data/store.${CLUSTER}.json`);
 
 // A public RPC can 429 at any moment; a stray rejection must never take the game server down.
@@ -32,7 +35,7 @@ process.on("uncaughtException", (err) => console.error("uncaught exception (kept
 
 async function main(): Promise<void> {
   const store = new Store(DATA);
-  const chain = new Chain({ rpcUrl: RPC, walletPath: WALLET, idlPath: IDL });
+  const chain = new Chain({ rpcUrl: RPC, walletPath: WALLET, walletJson: WALLET_JSON, idlPath: IDL });
   await chain.ensureFunded(CLUSTER === "localnet");
   const init = await chain.ensureInitialized();
   const cycles = new CycleService(store, chain);

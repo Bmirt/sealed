@@ -22,7 +22,7 @@ export class TrustBar {
   readonly refresh: () => Promise<void>;
 
   constructor(host: HTMLElement, source: SealedOutcomeSource, clientSeedKey: string, store: GameStore) {
-    const verifyUrl = (import.meta.env['VITE_SEALED_VERIFY_URL'] as string | undefined) ?? 'http://localhost:5173/verify';
+    const verifyUrl = (import.meta.env['VITE_SEALED_VERIFY_URL'] as string | undefined) ?? (import.meta.env.PROD ? '/verify' : 'http://localhost:5173/verify');
     this.cycleEl = el('span', { class: 'trust-cycle', text: 'cycle —' });
     this.hashEl = el('code', { class: 'trust-hash', text: '…' });
     this.linkEl = el('a', { class: 'trust-link', href: '#', target: '_blank', rel: 'noreferrer', text: 'view on chain' }) as HTMLAnchorElement;

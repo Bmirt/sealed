@@ -56,6 +56,7 @@ if [[ ! -f target/idl/sealed_engine.json ]]; then
   anchor keys sync
   anchor build
 fi
+cp target/idl/sealed_engine.json server/idl/sealed_engine.json   # the server reads the tracked copy
 # Anchor 0.31 cannot pass --arch through, so the deployable binary is produced by cargo-build-sbf
 # directly with the SBPF version the target cluster accepts.
 echo "▶ cargo build-sbf --arch $ARCH"

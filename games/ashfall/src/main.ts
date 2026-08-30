@@ -95,7 +95,20 @@ async function boot(): Promise<void> {
   localStorage.setItem('ashfall.player', playerId);
   const clientSeedKey = 'ashfall.clientSeed';
   if (!localStorage.getItem(clientSeedKey)) localStorage.setItem(clientSeedKey, Math.random().toString(16).slice(2, 12));
-  const sealed = sealedUrl ? new SealedOutcomeSource(sealedUrl, playerId, () => localStorage.getItem(clientSeedKey) ?? 'seed') : null;
+  // A deployed slot must never be un-spinnable: if the server is configured but unreachable, play
+  // locally (same maths, but NOT provable) and say so instead of failing every spin.
+  let sealed = sealedUrl ? new SealedOutcomeSource(sealedUrl, playerId, () => localStorage.getItem(clientSeedKey) ?? 'seed') : null;
+  let fallbackNote: string | null = null;
+  if (sealed) {
+    try {
+      const res = await fetch(`${sealedUrl}/state`, { signal: AbortSignal.timeout(6000) });
+      if (!res.ok) throw new Error(`${res.status}`);
+    } catch (e) {
+      sealed = null;
+      fallbackNote = `Provably-fair server unreachable (${sealedUrl}) — playing locally; spins are NOT sealed on-chain.`;
+      console.warn(fallbackNote, e);
+    }
+  }
   const controller = new GameController(
     GAME_CONFIG,
     store,
@@ -128,6 +141,8 @@ async function boot(): Promise<void> {
     openInfo: () => openPaytableModal(uiHost, GAME_CONFIG, store, scene.textures),
     openSettings: () => openSettingsModal(uiHost, GAME_CONFIG, store),
   });
+
+  if (fallbackNote) hud.showMessage(fallbackNote, 8000);
 
   // Keyboard: Space = the spin button (ignored while a dialog is open).
   window.addEventListener('keydown', (e) => {

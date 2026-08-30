@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "tsx src/index.ts",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "start": "tsx src/index.ts"
   },
   "dependencies": {
     "@coral-xyz/anchor": "^0.31.1",

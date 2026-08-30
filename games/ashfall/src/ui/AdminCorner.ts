@@ -51,7 +51,7 @@ export class AdminCorner {
     this.statusEl = el('div', { class: 'admin-status', text: 'Rotating ends this cycle: its Merkle root + totals go on-chain, the seed is revealed and hash-checked by the program, then a new cycle is sealed. The second button first tries a WRONG seed so you can watch the chain refuse it.' });
     this.rtpEl = el('div', { class: 'admin-rtp', text: '' });
 
-    const verifyUrl = (import.meta.env['VITE_SEALED_VERIFY_URL'] as string | undefined) ?? 'http://localhost:5173/verify';
+    const verifyUrl = (import.meta.env['VITE_SEALED_VERIFY_URL'] as string | undefined) ?? (import.meta.env.PROD ? '/verify' : 'http://localhost:5173/verify');
 
     /** Render the server's step-by-step rotation status (polled live, then final). */
     const renderTimeline = (r: RotationStatus): void => {
