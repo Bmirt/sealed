@@ -6,8 +6,7 @@
   "description": "Ashfall Dynasty — 5x3, 243-ways video slot. Dark medieval dragon-dynasty theme.",
   "scripts": {
     "dev": "vite",
-    "build": "vite",
-    "build1": "tsc --noEmit -p tsconfig.json && vite build",
+    "build": "tsc --noEmit -p tsconfig.json && vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
