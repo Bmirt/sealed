@@ -67,10 +67,12 @@ export function Landing(): JSX.Element {
       </section>
 
       <section className="how">
-        <div className="step"><b>1</b> Commit — <code>commit_seed(sha256(seed))</code> lands on-chain before the first bet.</div>
-        <div className="step"><b>2</b> Play — dice rolls and slot spins are HMAC(seed, your client seed : nonce). Rounds are recorded off-chain; nothing is written per bet.</div>
-        <div className="step"><b>3</b> Close — the Merkle root of every round and the money totals are written on-chain, sealing the whole cycle at once.</div>
-        <div className="step"><b>4</b> Reveal — the chain recomputes sha256 and refuses any other seed. Then <Link to="/verify">verify it yourself →</Link></div>
+        {/* each step is a two-column grid (badge, copy) — keep the copy in ONE span so inline
+            elements like <code> and links stay in the text flow instead of becoming grid cells */}
+        <div className="step"><b>1</b><span>Commit — <code>commit_seed(sha256(seed))</code> lands on-chain before the first bet.</span></div>
+        <div className="step"><b>2</b><span>Play — dice rolls and slot spins are HMAC(seed, your client seed : nonce). Rounds are recorded off-chain; nothing is written per bet.</span></div>
+        <div className="step"><b>3</b><span>Close — the Merkle root of every round and the money totals are written on-chain, sealing the whole cycle at once.</span></div>
+        <div className="step"><b>4</b><span>Reveal — the chain recomputes sha256 and refuses any other seed. Then <Link to="/verify">verify it yourself{"\u00a0"}→</Link></span></div>
       </section>
     </main>
   );
