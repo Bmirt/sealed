@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "vite --port 5173",
     "build": "tsc --noEmit -p tsconfig.json && vite build",
-    "typecheck": "tsc --noEmit -p tsconfig.json",
-    "sounds": "node scripts/generate-sounds.mjs"
+    "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
     "react": "^19.0.0",

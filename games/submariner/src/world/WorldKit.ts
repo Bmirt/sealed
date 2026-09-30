@@ -112,37 +112,46 @@ export class WorldKit {
     this.group.add(cable);
     const buoyGeo = new THREE.SphereGeometry(0.28, 16, 12);
     const ringGeo = new THREE.TorusGeometry(0.3, 0.05, 6, 20);
-    for (let d = 100; d <= deepest; d += 100) {
+    // All depth labels live in one atlas texture (one GPU upload); each sprite shows its own cell.
+    const depths: number[] = [];
+    for (let d = 100; d <= deepest; d += 100) depths.push(d);
+    const cols = 4;
+    const rows = Math.ceil(depths.length / cols);
+    const cellW = 256;
+    const cellH = 96;
+    const atlas = canvasTexture(cols * cellW, rows * cellH, (g) => {
+      depths.forEach((d, i) => {
+        const ox = (i % cols) * cellW;
+        const oy = Math.floor(i / cols) * cellH;
+        g.fillStyle = 'rgba(8,20,30,0.72)';
+        g.beginPath();
+        g.roundRect(ox + 8, oy + 16, 240, 64, 12);
+        g.fill();
+        g.strokeStyle = 'rgba(255,160,80,0.9)';
+        g.lineWidth = 4;
+        g.stroke();
+        g.fillStyle = '#ffe2c4';
+        g.font = 'bold 44px system-ui, sans-serif';
+        g.textAlign = 'center';
+        g.textBaseline = 'middle';
+        g.fillText(`${d} m`, ox + 128, oy + 50);
+      });
+    });
+    depths.forEach((d, i) => {
       const y = SURFACE_Y - d * WORLD_PER_METRE;
       const buoy = new THREE.Mesh(buoyGeo, m.buoy);
       buoy.position.set(x, y, z);
       const ring = new THREE.Mesh(ringGeo, m.darkSteel);
       ring.rotation.x = Math.PI / 2;
       ring.position.set(x, y, z);
-      const label = new THREE.Sprite(
-        new THREE.SpriteMaterial({
-          map: canvasTexture(256, 96, (g) => {
-            g.fillStyle = 'rgba(8,20,30,0.72)';
-            g.beginPath();
-            g.roundRect(8, 16, 240, 64, 12);
-            g.fill();
-            g.strokeStyle = 'rgba(255,160,80,0.9)';
-            g.lineWidth = 4;
-            g.stroke();
-            g.fillStyle = '#ffe2c4';
-            g.font = 'bold 44px system-ui, sans-serif';
-            g.textAlign = 'center';
-            g.textBaseline = 'middle';
-            g.fillText(`${d} m`, 128, 50);
-          }),
-          transparent: true,
-          depthWrite: false,
-        }),
-      );
+      const cell = atlas.clone(); // shares the atlas image: no extra upload
+      cell.repeat.set(1 / cols, 1 / rows);
+      cell.offset.set((i % cols) / cols, 1 - (Math.floor(i / cols) + 1) / rows);
+      const label = new THREE.Sprite(new THREE.SpriteMaterial({ map: cell, transparent: true, depthWrite: false }));
       label.scale.set(1.6, 0.6, 1);
       label.position.set(x + 1.2, y, z);
       this.group.add(buoy, ring, label);
-    }
+    });
   }
 
   update(elapsed: number, cameraY: number, depth: number, look: DepthLook): void {

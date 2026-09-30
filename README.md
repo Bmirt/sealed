@@ -18,6 +18,9 @@ Opening the site shows the lobby: one card per game. Clicking a card opens that 
 | [`packages/ashfall-math/`](packages/ashfall-math) | The slot's pure maths and config (RNG, reel strips, ways evaluation, free-spin feature). |
 | [`scripts/build-site.mjs`](scripts/build-site.mjs) | Assembles the three builds into one static site in `dist/`. |
 
+Dice audio is synthesized live with the Web Audio API (`web/src/audio/`: sound effects and a soft lounge
+music loop, no audio files); "Sound on/off" and "Music on/off" sit above the dice, and M toggles sound.
+
 Every game keeps its own play-money balance in the browser's `localStorage` (each starts at
 $1,000.00 and can be refilled).
 

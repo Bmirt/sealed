@@ -8,6 +8,8 @@ interface ThreeGameDiagnostics {
   depth: number;
   balanceCents: number;
   round: number;
+  /** CPU ms of the last frame's simulation and render calls. */
+  timing?: { update: number; render: number };
   renderer: {
     calls: number;
     triangles: number;

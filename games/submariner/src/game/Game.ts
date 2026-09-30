@@ -82,6 +82,11 @@ export class Game {
   private paused = false;
   private reducedMotion = false;
   private muted = false;
+  private updateMs = 0;
+  private markReadyFn: () => void = () => undefined;
+  /** Resolves once warm-up is done and the splash is gone (test hooks wait for it). */
+  private readonly ready = new Promise<void>((resolve) => (this.markReadyFn = resolve));
+  private renderMs = 0;
 
   constructor(private readonly canvas: HTMLCanvasElement) {
     this.renderer = createRenderer(canvas);
@@ -154,6 +159,42 @@ export class Game {
     this.loop.start();
   }
 
+  markReady(): void {
+    this.markReadyFn();
+  }
+
+  /**
+   * GPU warm-up, run once behind the splash: every object is made visible and un-culled (hidden
+   * effects, the buoy template, creatures far below), its shaders are compiled, and one full frame
+   * is drawn so instance buffers, textures and post-processing targets are uploaded. Without this
+   * the first implosion (or the first jellyfish) stalls ~100 ms while the driver compiles.
+   */
+  async warmup(): Promise<void> {
+    this.vfx.setWarmup(true, this.sub.root.position);
+    const saved: [THREE.Object3D, boolean, boolean][] = [];
+    this.scene.traverse((o) => {
+      saved.push([o, o.visible, o.frustumCulled]);
+      o.visible = true;
+      o.frustumCulled = false;
+    });
+    try {
+      await this.renderer.compileAsync(this.scene, this.camera);
+    } catch {
+      this.renderer.compile(this.scene, this.camera);
+    }
+    this.render();
+    for (const [o, visible, culled] of saved) {
+      o.visible = visible;
+      o.frustumCulled = culled;
+    }
+    this.vfx.setWarmup(false, this.sub.root.position);
+
+    this.vfx.reset();
+    this.step(1 / 60);
+    this.render();
+    await new Promise((r) => requestAnimationFrame(() => r(undefined)));
+  }
+
   dispose(): void {
     this.loop.stop();
     this.audio.dispose();
@@ -173,9 +214,11 @@ export class Game {
       this.publishDiagnostics();
       return;
     }
+    const t0 = performance.now();
     this.handle(this.state.update(delta));
     this.step(delta);
     this.hud.update();
+    this.updateMs = performance.now() - t0;
     this.publishDiagnostics();
   }
 
@@ -261,8 +304,11 @@ export class Game {
 
   private render(): void {
     // Count every pass of the frame (the composer would otherwise leave only its last quad in info).
+    const t0 = performance.now();
     this.renderer.info.reset();
     this.pipeline.render();
+    this.renderMs = performance.now() - t0;
+    if (window.__THREE_GAME_DIAGNOSTICS__) window.__THREE_GAME_DIAGNOSTICS__.timing = { update: this.updateMs, render: this.renderMs };
   }
 
   private placeSub(): void {
@@ -362,8 +408,9 @@ export class Game {
         this.rng = createSeededRandom(value);
         this.state.setRng(createSeededRandom(value + 1));
       },
-      setState: (name: string) => {
+      setState: async (name: string) => {
         if (!(TEST_STATES as readonly string[]).includes(name)) throw new Error(`Unknown test state: ${name}`);
+        await this.ready;
         this.applyTestState(name as (typeof TEST_STATES)[number]);
         return { state: name };
       },

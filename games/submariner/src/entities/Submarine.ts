@@ -13,6 +13,12 @@ export class Submarine {
   readonly root = new THREE.Group();
   /** Everything that tilts/shakes; `root` only carries position. */
   private readonly body = new THREE.Group();
+  /**
+   * The searchlight lives outside `body` and is never hidden: three.js builds lit shaders for a
+   * fixed light count, so hiding it when the hull is crushed would recompile every lit material
+   * on screen (a ~170 ms freeze in Firefox the first time). It is dimmed to 0 instead.
+   */
+  private readonly lightRig = new THREE.Group();
   private readonly prop = new THREE.Group();
   private readonly lampMat: THREE.MeshStandardMaterial;
   private readonly lampGlow: THREE.Sprite;
@@ -26,7 +32,7 @@ export class Submarine {
 
   constructor(m: Materials) {
     this.root.name = 'submarine';
-    this.root.add(this.body);
+    this.root.add(this.body, this.lightRig);
     this.lampMat = m.hazard.clone();
 
     this.buildHull(m);
@@ -41,7 +47,7 @@ export class Submarine {
     this.searchlight.position.set(2.3, -0.3, 0);
     const target = new THREE.Object3D();
     target.position.set(9, -3.2, 0);
-    this.body.add(this.searchlight, target);
+    this.lightRig.add(this.searchlight, target);
     this.searchlight.target = target;
 
     const beamGeo = new THREE.ConeGeometry(2.1, 8, 32, 1, true);
@@ -323,7 +329,7 @@ export class Submarine {
 
   reset(): void {
     this.crush = 0;
-    this.root.visible = true;
+    this.body.visible = true;
     this.body.scale.set(1, 1, 1);
     this.body.rotation.set(0, 0, 0);
     this.body.position.set(0, 0, 0);
@@ -350,6 +356,8 @@ export class Submarine {
     const tremble = stress * stress * 0.025;
     this.body.position.x = Math.sin(elapsed * 61) * tremble;
     this.body.position.z = Math.cos(elapsed * 47) * tremble;
+    this.lightRig.position.copy(this.body.position);
+    this.lightRig.rotation.copy(this.body.rotation);
 
     // Warning lamp: slow blink at the surface, frantic in the deep.
     const rate = 0.8 + stress * 5;
@@ -370,7 +378,7 @@ export class Submarine {
     const squeeze = 1 - p * 0.75;
     this.body.scale.set(1 - p * 0.35, squeeze, squeeze);
     this.body.position.x = Math.sin(this.time * 90) * 0.06 * (1 - p);
-    this.root.visible = p < 1;
+    this.body.visible = p < 1;
     this.searchlight.intensity *= 1 - p;
   }
 

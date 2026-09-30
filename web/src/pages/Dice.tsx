@@ -1,7 +1,9 @@
 import type { JSX } from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Link } from "react-router-dom";
-import { DiceSound } from "../lib/diceSound";
+import { audioManager } from "../audio/AudioManager";
+import { loungeBgm } from "../audio/music";
+import * as sfx from "../audio/sfx";
 
 interface Bet {
   id: number;
@@ -13,7 +15,6 @@ interface Bet {
 
 const START_BALANCE_CENTS = 100_000; // $1,000.00 play money
 const BALANCE_KEY = "dice.balance";
-const SOUND_KEY = "dice.sound";
 
 const usd = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
 const fmt = (cents: number): string => usd.format(cents / 100);
@@ -46,8 +47,6 @@ function rollDice(): number {
   return ((buf[0] ?? 0) % 10_000) / 100;
 }
 
-const sfx = new DiceSound();
-
 function SoundIcon({ on }: { on: boolean }): JSX.Element {
   return (
     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -64,6 +63,20 @@ function SoundIcon({ on }: { on: boolean }): JSX.Element {
   );
 }
 
+function MusicIcon({ on }: { on: boolean }): JSX.Element {
+  return (
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M9 18V6l10-2v12" />
+      <circle cx="6.5" cy="18" r="2.5" fill="currentColor" />
+      <circle cx="16.5" cy="16" r="2.5" fill="currentColor" />
+      {!on && <path d="M3 3l18 18" />}
+    </svg>
+  );
+}
+
+const subscribeAudio = (cb: () => void): (() => void) => audioManager.subscribe(cb);
+const audioSnapshot = () => audioManager.snapshot;
+
 export function Dice(): JSX.Element {
   const [balance, setBalance] = useState(() => readNumber(BALANCE_KEY, START_BALANCE_CENTS));
   const [target, setTarget] = useState(50);
@@ -76,24 +89,23 @@ export function Dice(): JSX.Element {
   const [history, setHistory] = useState<Bet[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [burst, setBurst] = useState(0);
-  const [sound, setSound] = useState(() => readNumber(SOUND_KEY, 1) === 1);
+  const audio = useSyncExternalStore(subscribeAudio, audioSnapshot);
   const raf = useRef<number | null>(null);
+  const rollSound = useRef<{ stop(): void } | null>(null);
   const nextId = useRef(1);
   const pendingPayout = useRef(0); // a win still animating: already decided, not yet credited
 
   useEffect(() => write(BALANCE_KEY, String(balance)), [balance]);
   useEffect(() => {
-    sfx.enabled = sound;
-    write(SOUND_KEY, sound ? "1" : "0");
-  }, [sound]);
-  useEffect(() => {
     // Audio may only start inside a user gesture, and browsers disagree on which events count,
-    // so try on all of them.
-    const unlock = (): void => sfx.unlock();
+    // so try on all of them. The lounge music starts with the first one and stops when you leave.
+    const unlock = (): void => audioManager.init();
     const events = ["pointerdown", "pointerup", "click", "touchend", "keydown"] as const;
     for (const ev of events) window.addEventListener(ev, unlock, true);
+    audioManager.playMusic(loungeBgm);
     return () => {
       for (const ev of events) window.removeEventListener(ev, unlock, true);
+      audioManager.stopMusic();
     };
   }, []);
   useEffect(() => {
@@ -106,7 +118,7 @@ export function Dice(): JSX.Element {
     return () => {
       window.removeEventListener("pagehide", settle);
       if (raf.current) cancelAnimationFrame(raf.current);
-      sfx.stopRoll();
+      rollSound.current?.stop();
       settle();
     };
   }, []);
@@ -127,7 +139,7 @@ export function Dice(): JSX.Element {
       new Promise((resolve) => {
         const t0 = performance.now();
         const total = 1500;
-        sfx.roll(); // 1.5 s bed shaped to this motion
+        rollSound.current = sfx.rollSfx(total / 1000); // rattle shaped to this motion
         const from = marker ?? 50;
         const distance = 200 + roll - from; // two laps plus the way to the roll
         let nextTick = t0; // ratchet ticks: every ~35 ms at full speed, spreading out as the marker slows
@@ -142,13 +154,13 @@ export function Dice(): JSX.Element {
           if (!locked && p > 0.5 && distance - e * distance < 0.5) {
             locked = true;
             setPrecise(true);
-            sfx.lock();
+            sfx.lockSfx();
           }
           setDisplay(locked ? roll : Math.round(pos));
           if (!locked) {
             if (now >= nextTick) {
               nextTick = now + 35 + e * 110;
-              sfx.tick(0.8 + e * 0.6);
+              sfx.tickSfx(0.8 + e * 0.6);
             }
           }
           setMarker(pos);
@@ -157,7 +169,7 @@ export function Dice(): JSX.Element {
           } else {
             setMarker(roll);
             setDisplay(roll);
-            sfx.land();
+            sfx.landSfx();
             resolve();
           }
         };
@@ -168,9 +180,9 @@ export function Dice(): JSX.Element {
 
   async function roll(): Promise<void> {
     if (rolling) return;
-    sfx.unlock();
+    audioManager.init();
     const reject = (message: string): void => {
-      sfx.error();
+      sfx.errorSfx();
       setError(message);
     };
     if (!Number.isFinite(wagerCents) || wagerCents < 1) return reject("Enter a wager of at least $0.01");
@@ -180,7 +192,7 @@ export function Dice(): JSX.Element {
     setLast(null);
     setPrecise(false);
     setBalance((b) => b - wagerCents);
-    sfx.bet();
+    sfx.betSfx();
     const r = rollDice();
     const win = r < target;
     const bet: Bet = { id: nextId.current++, target, roll: r, wagerCents, payoutCents: win ? Math.floor(wagerCents * (99 / target)) : 0 };
@@ -188,10 +200,10 @@ export function Dice(): JSX.Element {
     await animateTo(r);
     pendingPayout.current = 0;
     if (win) {
-      sfx.win(99 / target);
+      sfx.winSfx(99 / target);
       setBurst((b) => b + 1);
     } else {
-      sfx.lose();
+      sfx.loseSfx();
     }
     setBalance((b) => b + bet.payoutCents);
     setLast(bet);
@@ -201,9 +213,12 @@ export function Dice(): JSX.Element {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent): void => {
-      if (e.code === "Space" && !(e.target instanceof HTMLInputElement) && !(e.target instanceof HTMLButtonElement)) {
+      if (e.target instanceof HTMLInputElement) return;
+      if (e.code === "Space" && !(e.target instanceof HTMLButtonElement)) {
         e.preventDefault();
         void roll();
+      } else if (e.code === "KeyM" && !e.repeat) {
+        toggleSound();
       }
     };
     window.addEventListener("keydown", onKey);
@@ -211,18 +226,24 @@ export function Dice(): JSX.Element {
   });
 
   const setWagerCents = (cents: number): void => {
-    sfx.click();
+    sfx.clickSfx();
     setWager((Math.max(1, Math.min(cents, balance)) / 100).toFixed(2));
   };
   const resetBalance = (): void => {
-    sfx.coins();
+    sfx.coinsSfx();
     setBalance(START_BALANCE_CENTS);
     setError(null);
   };
-  const toggleSound = (): void => {
-    sfx.enabled = !sound;
-    sfx.click();
-    setSound(!sound);
+  function toggleSound(): void {
+    audioManager.init();
+    const muted = !audioManager.snapshot.muted;
+    audioManager.setMuted(muted);
+    if (!muted) sfx.clickSfx();
+  }
+  const toggleMusic = (): void => {
+    audioManager.init();
+    audioManager.setMusic(!audio.music);
+    sfx.clickSfx();
   };
 
   const won = last ? last.payoutCents > 0 : null;
@@ -244,10 +265,23 @@ export function Dice(): JSX.Element {
         <section className="panel bet">
           <div className="bet-head">
             <h2>Roll under</h2>
-            <button className={`sound ${sound ? "" : "off"}`} onClick={toggleSound} aria-label={sound ? "Mute sound" : "Unmute sound"} aria-pressed={!sound}>
-              <SoundIcon on={sound} />
-            </button>
+            <div className="audio-controls">
+              <button className={`audio-toggle ${audio.muted ? "off" : ""}`} onClick={toggleSound} aria-pressed={!audio.muted} title="Sound (M)">
+                <SoundIcon on={!audio.muted} />
+                <span>{audio.muted ? "Sound off" : "Sound on"}</span>
+              </button>
+              <button className={`audio-toggle ${audio.music ? "" : "off"}`} onClick={toggleMusic} aria-pressed={audio.music} title="Music">
+                <MusicIcon on={audio.music} />
+                <span>{audio.music ? "Music on" : "Music off"}</span>
+              </button>
+            </div>
           </div>
+          {audio.status === "blocked" && (
+            <p className="audio-hint" role="status">
+              Your browser is holding the sound back. Click anywhere on the page, and make sure this tab isn't muted.
+            </p>
+          )}
+          {audio.status === "unsupported" && <p className="audio-hint" role="status">This browser can't play Web Audio, so the game is silent.</p>}
 
           <div className={`dice-stage ${won === null ? "" : won ? "win" : "lose"} ${rolling ? "rolling" : ""}`}>
             {burst > 0 && (
@@ -296,7 +330,7 @@ export function Dice(): JSX.Element {
               value={target}
               onChange={(e) => {
                 const t = Number(e.target.value);
-                sfx.slide(t);
+                sfx.slideSfx(t);
                 setTarget(t);
               }}
               disabled={rolling}

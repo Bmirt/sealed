@@ -3,7 +3,7 @@ import { canvasTexture, glowTexture, type Materials } from '../world/palette';
 
 type Bubble = { alive: boolean; p: THREE.Vector3; v: THREE.Vector3; size: number; life: number; age: number; wobble: number };
 type Shard = { p: THREE.Vector3; v: THREE.Vector3; r: THREE.Euler; w: THREE.Vector3; s: number };
-type Buoy = { root: THREE.Group; label: THREE.Sprite; age: number; lamp: THREE.MeshStandardMaterial };
+type Buoy = { root: THREE.Group; label: THREE.Sprite; age: number };
 
 const MAX_BUBBLES = 320;
 const SHARDS = 34;
@@ -24,6 +24,11 @@ export class Vfx {
   private readonly shock: THREE.Mesh<THREE.SphereGeometry, THREE.ShaderMaterial>;
   private readonly flashLight = new THREE.PointLight(0xbfe9ff, 0, 30, 1.6);
   private readonly buoys: Buoy[] = [];
+  private readonly buoyGeo: { float: THREE.BufferGeometry; band: THREE.BufferGeometry; mast: THREE.BufferGeometry; bulb: THREE.BufferGeometry };
+  private readonly buoyLamp = new THREE.MeshStandardMaterial({ color: 0x111111, emissive: 0x5dff9b, emissiveIntensity: 4 });
+  private readonly buoyGlow = new THREE.SpriteMaterial({ map: glowTexture(), color: 0x5dff9b, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
+  /** Hidden template: only ever shown during warm-up so its shaders compile before the first cash out. */
+  private readonly buoyProto: THREE.Group;
   private implodeAge = -1;
   private readonly tmp = new THREE.Matrix4();
   private readonly q = new THREE.Quaternion();
@@ -72,7 +77,15 @@ export class Vfx {
       }),
     );
     this.shock.visible = false;
-    this.group.add(this.bubbleMesh, this.shardMesh, this.flash, this.shock, this.flashLight);
+    this.buoyGeo = {
+      float: new THREE.CapsuleGeometry(0.22, 0.34, 6, 14),
+      band: new THREE.TorusGeometry(0.23, 0.035, 6, 20),
+      mast: new THREE.CylinderGeometry(0.015, 0.015, 0.4, 6),
+      bulb: new THREE.SphereGeometry(0.05, 10, 8),
+    };
+    this.buoyProto = this.buildBuoy(new THREE.SpriteMaterial({ map: glowTexture(), transparent: true, depthWrite: false }));
+    this.buoyProto.visible = false;
+    this.group.add(this.bubbleMesh, this.shardMesh, this.flash, this.shock, this.flashLight, this.buoyProto);
   }
 
   // ------------------------------------------------------------ emitters
@@ -117,21 +130,40 @@ export class Vfx {
     for (let i = 0; i < 90; i++) this.bubble(at, 2.2, 3.5 + this.rng() * 3, 0.12);
   }
 
-  cashout(from: THREE.Vector3, label: string): void {
+  /** Show every pooled effect (for shader warm-up) or put them back. */
+  setWarmup(on: boolean, at: THREE.Vector3): void {
+    for (const o of [this.flash, this.shock, this.shardMesh, this.buoyProto]) {
+      o.visible = on;
+      if (on) o.position.copy(at);
+    }
+    if (on) this.shock.material.uniforms.uAlpha!.value = 0.001;
+    this.flash.material.opacity = 0;
+  }
+
+  private buildBuoy(tagMaterial: THREE.SpriteMaterial): THREE.Group {
     const m = this.materials;
+    const g = this.buoyGeo;
     const root = new THREE.Group();
-    const float = new THREE.Mesh(new THREE.CapsuleGeometry(0.22, 0.34, 6, 14), m.buoy);
-    const band = new THREE.Mesh(new THREE.TorusGeometry(0.23, 0.035, 6, 20), m.hullWhite);
+    const float = new THREE.Mesh(g.float, m.buoy);
+    const band = new THREE.Mesh(g.band, m.hullWhite);
     band.rotation.x = Math.PI / 2;
-    const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.4, 6), m.darkSteel);
+    const mast = new THREE.Mesh(g.mast, m.darkSteel);
     mast.position.y = 0.45;
-    const lamp = new THREE.MeshStandardMaterial({ color: 0x111111, emissive: 0x5dff9b, emissiveIntensity: 4 });
-    const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.05, 10, 8), lamp);
+    const bulb = new THREE.Mesh(g.bulb, this.buoyLamp);
     bulb.position.y = 0.67;
-    const glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTexture(), color: 0x5dff9b, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+    const glow = new THREE.Sprite(this.buoyGlow);
     glow.scale.setScalar(0.9);
     glow.position.y = 0.67;
-    const tag = new THREE.Sprite(
+    const tag = new THREE.Sprite(tagMaterial);
+    tag.name = 'tag';
+    tag.scale.set(1.9, 0.57, 1);
+    tag.position.set(0, 1.25, 0);
+    root.add(float, band, mast, bulb, glow, tag);
+    return root;
+  }
+
+  cashout(from: THREE.Vector3, label: string): void {
+    const root = this.buildBuoy(
       new THREE.SpriteMaterial({
         map: canvasTexture(320, 96, (g) => {
           g.fillStyle = 'rgba(6,30,24,0.85)';
@@ -151,12 +183,9 @@ export class Vfx {
         depthWrite: false,
       }),
     );
-    tag.scale.set(1.9, 0.57, 1);
-    tag.position.set(0, 1.25, 0);
-    root.add(float, band, mast, bulb, glow, tag);
     root.position.copy(from);
     this.group.add(root);
-    this.buoys.push({ root, label: tag, age: 0, lamp });
+    this.buoys.push({ root, label: root.getObjectByName('tag') as THREE.Sprite, age: 0 });
   }
 
   reset(): void {
@@ -232,7 +261,7 @@ export class Vfx {
       b.age += delta;
       b.root.position.y += (0.9 + b.age * 1.5) * delta;
       b.root.rotation.z = Math.sin(b.age * 3) * 0.12;
-      b.lamp.emissiveIntensity = Math.sin(b.age * 14) > 0 ? 5 : 1;
+      this.buoyLamp.emissiveIntensity = Math.sin(b.age * 14) > 0 ? 5 : 1;
       if (i % 1 === 0 && this.rng() < delta * 18) this.bubble(b.root.position, 0.2, 1.5, 0.05);
       if (b.age > 6) {
         this.disposeBuoy(b);
@@ -243,13 +272,8 @@ export class Vfx {
 
   private disposeBuoy(b: Buoy): void {
     this.group.remove(b.root);
-    b.root.traverse((o) => {
-      if (o instanceof THREE.Mesh) o.geometry.dispose();
-      if (o instanceof THREE.Sprite) {
-        o.material.map?.dispose();
-        o.material.dispose();
-      }
-    });
-    b.lamp.dispose();
+    // Geometry and the lamp/glow materials are shared; only the payout tag belongs to this buoy.
+    b.label.material.map?.dispose();
+    b.label.material.dispose();
   }
 }

@@ -77,3 +77,24 @@ authored abyss geometry (vents, whale fall) to lift that view; per-zone ambience
 - Safari/iOS audio unlock verified only in Chrome with the strict gesture policy; confirm on a real iPhone.
 - Audio ships as WAV (about 2.6 MB for this game); convert to AAC/Opus if bandwidth matters.
 - The crash point is generated in the browser, which is fine for play money but not for a real-money game.
+
+## Fixes, 2026-10-01
+Both reported problems were reproduced first, then fixed and re-measured.
+
+**White screen with a black triangle for ~3 s on the first visit.**
+- Cause: in dev the stylesheet was injected by JavaScript, so until three.js and the game had loaded the page was unstyled, and the "Games" chevron SVG (no size) filled the screen as a black triangle.
+- Fix: the stylesheet is a real `<link>` in `index.html`; critical styles and a splash ("Preparing the dive") are inline in the head; the icons have explicit sizes; Vite pre-bundles three.js and warms the entry at server start.
+- Result, cold dev server, Chrome: at 17 ms the page shows the styled splash; the splash fades once the game is warm. Production build: splash at 15 ms, game visible by about 1.1 s.
+
+**Stutter the first time the sub implodes.**
+- Cause, measured in Firefox (real GPU): the first implosion had a 166 to 190 ms frame, all of it inside the render call, about 0.24 s in. At that moment the crushed sub was hidden, and hiding it also hid its searchlight. three.js builds lit shaders for a fixed light count, so every lit material on screen was recompiled for "no spotlight"; the second time those programs were cached.
+- Fix: the searchlight lives outside the hull group and is dimmed to 0 instead of hidden, so the light count never changes. Also, a GPU warm-up runs behind the splash (compiles every material and draws every hidden effect, the buoy template and far-away creatures once), and the buoys share geometry and materials.
+- Result, first implosion, worst frames: Firefox 34 to 42 ms (was 166 to 190; the remainder is the flash's fill cost, the same on later implosions); Chrome 16.8 ms. First cash out in Firefox: worst frame 33 ms, render 1 to 2 ms.
+- A/B: removing only the warm-up left the Firefox stall in place; the light-count fix removed it.
+
+**Other changes in this pass.**
+- The 30 depth-marker labels are one atlas texture: textures 48 → 19 per frame (mobile budget 40).
+- Test hooks wait until the game is warm and the splash has gone.
+- `renderer.info` timing fields (`timing.update`, `timing.render`) in the diagnostics.
+
+Evidence: manifest run `pass-8`, 11/11 captures PASS within budget; `check_evidence.py` passed (15 artifacts); production playtest: every check PASS, no errors.
