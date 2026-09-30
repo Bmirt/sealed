@@ -4,7 +4,7 @@ export type TurboMode = 'normal' | 'turbo' | 'quick';
 /**
  * Every presentation duration, per speed mode. Seconds.
  * Anticipation and the Big-Win+ tier sequences are deliberately NOT part of the profile:
- * they play at full length in every mode (the payoff is never auto-skipped — a deliberate
+ * they play at full length in every mode (the payoff is never auto-skipped - a deliberate
  * click/Space still skips them).
  */
 export interface SpeedProfile {

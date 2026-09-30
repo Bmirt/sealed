@@ -1,5 +1,5 @@
 /**
- * RTP lock. These sims are seeded, so they are deterministic — they fail only when the maths changes.
+ * RTP lock. These sims are seeded, so they are deterministic - they fail only when the maths changes.
  * If you changed the maths on purpose: run `pnpm sim` (1M), update `rtp.declared*` in game.config.ts,
  * bump `version`, and run `pnpm golden:update`.
  */

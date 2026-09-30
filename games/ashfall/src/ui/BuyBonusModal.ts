@@ -36,7 +36,7 @@ export function openBuyModal(
     const lines =
       tier === "free"
         ? [
-            "10–20 Dragonfire Free Spins",
+            "10 to 20 Dragonfire Free Spins",
             "Meter starts ×1, +1 every 3rd win",
             "Retriggers active",
           ]

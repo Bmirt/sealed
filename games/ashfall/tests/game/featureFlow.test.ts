@@ -171,7 +171,7 @@ describe('Dragonfire feature presentation', () => {
     expect(b.deps.totalCalls[b.deps.totalCalls.length - 1] ?? 0).toBe(a.deps.totalCalls[a.deps.totalCalls.length - 1] ?? 0);
   });
 
-  it('spin presses during the feature only skip — they never queue a base spin', async () => {
+  it('spin presses during the feature only skip - they never queue a base spin', async () => {
     const seed = 'feat-nospin';
     const n = findFeatureNonce(seed);
     const r = rig(seed);

@@ -51,21 +51,21 @@ export function openPaytableModal(
     ]);
 
   const rows: HTMLElement[] = [];
-  rows.push(symbolRow("W", ["Appears on reels 2–5", "No pay of its own"]));
+  rows.push(symbolRow("W", ["Appears on reels 2 to 5", "No pay of its own"]));
   rows.push(
     symbolRow("S", [
-      `3× — ${pay(config.scatterPays[0])} + ${config.freeSpins.awards[3]} free spins`,
-      `4× — ${pay(config.scatterPays[1])} + ${config.freeSpins.awards[4]} free spins`,
-      `5× — ${pay(config.scatterPays[2])} + ${config.freeSpins.awards[5]} free spins`,
+      `3× pays ${pay(config.scatterPays[0])} + ${config.freeSpins.awards[3]} free spins`,
+      `4× pays ${pay(config.scatterPays[1])} + ${config.freeSpins.awards[4]} free spins`,
+      `5× pays ${pay(config.scatterPays[2])} + ${config.freeSpins.awards[5]} free spins`,
     ]),
   );
   for (const id of PAY_ORDER) {
     const line = config.paytable[id];
     rows.push(
       symbolRow(id, [
-        `3× — ${pay(line[0])}`,
-        `4× — ${pay(line[1])}`,
-        `5× — ${pay(line[2])}`,
+        `3× pays ${pay(line[0])}`,
+        `4× pays ${pay(line[1])}`,
+        `5× pays ${pay(line[2])}`,
       ]),
     );
   }
@@ -121,7 +121,7 @@ export function openPaytableModal(
     ),
     el("p", {
       class: "modal-note",
-      text: "Demo build with a mock balance — no real-money play. Malfunction voids all plays.",
+      text: "Demo build with a mock balance. No real-money play. Malfunction voids all plays.",
     }),
   );
   modal.open();

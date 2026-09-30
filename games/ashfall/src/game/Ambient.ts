@@ -10,7 +10,7 @@ import { PerfGovernor } from './perf';
 export const fxBus: { ambient: AmbientLife | null } = { ambient: null };
 
 /**
- * Ambient life — the slot must never sit perfectly still:
+ * Ambient life - the slot must never sit perfectly still:
  *  - embers drifting up from the bottom of the screen, always
  *  - firelight flicker on the backdrop's lava glow and the reel frame
  *  - a distant dragon crossing the sky every half minute or so

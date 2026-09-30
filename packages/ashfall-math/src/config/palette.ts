@@ -1,5 +1,5 @@
 /**
- * "Obsidian & Ember" — the single colour source for Pixi (numbers) and CSS (strings).
+ * "Obsidian & Ember" - the single colour source for Pixi (numbers) and CSS (strings).
  * Keep it small: every colour on screen should come from here.
  */
 export const PALETTE = {
@@ -32,7 +32,7 @@ export function hex(key: PaletteKey): string {
   return `#${PALETTE[key].toString(16).padStart(6, '0')}`;
 }
 
-/** `rgba()` string for a packed colour — gradient colour stops carry alpha this way. */
+/** `rgba()` string for a packed colour - gradient colour stops carry alpha this way. */
 export function rgba(color: number, alpha: number): string {
   const r = (color >> 16) & 0xff;
   const g = (color >> 8) & 0xff;

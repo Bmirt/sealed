@@ -29,7 +29,7 @@ export interface BurstOptions {
 }
 
 /**
- * Fixed-pool particle system on a ParticleContainer. Nothing allocates after construction —
+ * Fixed-pool particle system on a ParticleContainer. Nothing allocates after construction -
  * bursts and emitters reuse dead slots. One update per ticker frame.
  */
 export class ParticleSystem {
@@ -41,7 +41,7 @@ export class ParticleSystem {
   constructor(renderer: Renderer, capacity = 320, seed = 12345) {
     this.seed = seed >>> 0 || 1;
     this.rng = () => {
-      // xorshift — deterministic, cheap, no allocation.
+      // xorshift - deterministic, cheap, no allocation.
       let s = this.seed;
       s ^= s << 13;
       s >>>= 0;
@@ -54,7 +54,7 @@ export class ParticleSystem {
     this.view = new ParticleContainer({
       dynamicProperties: { position: true, scale: true, rotation: true, color: true },
     });
-    // ParticleContainer requires every particle to share ONE texture source — bake a tiny sheet.
+    // ParticleContainer requires every particle to share ONE texture source - bake a tiny sheet.
     const { sparkTex, emberTex } = bakeSheet(renderer);
     for (let i = 0; i < capacity; i++) {
       const particle = new Particle({ texture: i % 2 === 0 ? emberTex : sparkTex, x: 0, y: 0, anchorX: 0.5, anchorY: 0.5 });
@@ -95,7 +95,7 @@ export class ParticleSystem {
     }
   }
 
-  /** Continuous drift (ambient embers) — call per frame with a spawn budget. */
+  /** Continuous drift (ambient embers) - call per frame with a spawn budget. */
   drift(x: number, y: number, w: number, upSpeed: number, count: number): void {
     let spawned = 0;
     for (const slot of this.slots) {
@@ -119,7 +119,7 @@ export class ParticleSystem {
 
   /** Advance the simulation. Hook onto the app ticker. */
   update = (ticker: Ticker): void => {
-    // ParticleContainer only re-uploads its buffers when flagged — flag every frame.
+    // ParticleContainer only re-uploads its buffers when flagged - flag every frame.
     this.view.update();
     const dt = Math.min(0.05, ticker.deltaMS / 1000);
     for (const slot of this.slots) {

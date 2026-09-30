@@ -1,11 +1,5 @@
 node_modules/
 dist/
-target/
-.anchor/
-test-ledger/
 .DS_Store
 *.log
-server/data/
-watchdog/data/
 .env
-.validator.pid

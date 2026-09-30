@@ -37,7 +37,7 @@ export interface CinematicDeps {
 
 /**
  * Everything the presenter needs from the rendering side, Pixi-free.
- * `PixiPresenterDeps` adapts the real scene; tests provide fakes — so the REAL presentation
+ * `PixiPresenterDeps` adapts the real scene; tests provide fakes - so the REAL presentation
  * flow (sequencing, skip, abort, stage tracking) is what the tests exercise.
  */
 export interface PresenterDeps {
@@ -316,7 +316,7 @@ export class AnimatedPresenter implements OutcomePresenter {
     const out = [...wins];
     if (scatter.pay > 0 || scatter.count >= 3) {
       out.push({
-        symbol: 'H1', // synthetic entry — only its positions are used
+        symbol: 'H1', // synthetic entry - only its positions are used
         length: 3,
         ways: 0,
         payPerWay: 0,

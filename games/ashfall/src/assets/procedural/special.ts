@@ -3,7 +3,7 @@ import { PALETTE, rgba } from '@config/palette';
 import { flat, jitter, pt, xform } from './shapes';
 import { OUTLINE, dropShadow, part, vGrad } from './style';
 
-/** The Molten Throne — wild. Obsidian spires veined with lava, a burning seat. */
+/** The Molten Throne - wild. Obsidian spires veined with lava, a burning seat. */
 export function drawMoltenThrone(g: Graphics): void {
   dropShadow(g, 0, 60, 54, 9, 0.55);
   // Fire aura.
@@ -69,7 +69,7 @@ export function drawMoltenThrone(g: Graphics): void {
   part(g, flat([pt(30, 40), pt(44, 40), pt(46, 52), pt(32, 54)]), glass, 3.5);
 }
 
-/** Dragon Egg — scatter. Obsidian-scaled egg on a gold claw stand, light leaking out. */
+/** Dragon Egg - scatter. Obsidian-scaled egg on a gold claw stand, light leaking out. */
 export function drawDragonEgg(g: Graphics): void {
   dropShadow(g, 0, 62, 44, 8, 0.55);
   // Inner-light aura.

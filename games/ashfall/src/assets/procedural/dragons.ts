@@ -5,10 +5,10 @@ import type { Poly, Pt } from './shapes';
 import { OUTLINE, dropShadow, part, vGrad } from './style';
 
 /**
- * The three house dragons — head emblems in profile, facing left.
+ * The three house dragons - head emblems in profile, facing left.
  * One parameterised painter so all three share the same craft level; each house differs in
  * silhouette (horns / broken horn + smoke / crest fins), snout and palette. Bold outline,
- * layered gradients, rim light, baked shadow — no stone tile, the emblem floats.
+ * layered gradients, rim light, baked shadow - no stone tile, the emblem floats.
  */
 
 interface HouseStyle {
@@ -138,7 +138,7 @@ function horn(g: Graphics, s: HouseStyle, p0: Pt, c0: Pt, c1: Pt, p1: Pt, w0: nu
   }
 }
 
-/** Gold Dragon — House Vaelor. Proud crest of two great swept horns. */
+/** Gold Dragon - House Vaelor. Proud crest of two great swept horns. */
 export function drawGoldDragon(g: Graphics): void {
   const s = GOLD;
   horn(g, s, pt(26, -42), pt(46, -76), pt(76, -76), pt(86, -46), 15);
@@ -149,7 +149,7 @@ export function drawGoldDragon(g: Graphics): void {
   g.moveTo(-30, 24).quadraticCurveTo(-16, 28, -2, 26).stroke({ width: 2, color: OUTLINE, alpha: 0.5 });
 }
 
-/** Ash Dragon — House Cindrath. A broken horn, ember-cracked hide, smoke on the breath. */
+/** Ash Dragon - House Cindrath. A broken horn, ember-cracked hide, smoke on the breath. */
 export function drawAshDragon(g: Graphics): void {
   const s = ASH;
   horn(g, s, pt(24, -42), pt(42, -72), pt(66, -80), pt(80, -70), 14);
@@ -170,7 +170,7 @@ export function drawAshDragon(g: Graphics): void {
   g.moveTo(-50, -32).quadraticCurveTo(-56, -42, -50, -50).stroke({ width: 2, color: PALETTE.ash, alpha: 0.4 });
 }
 
-/** Emerald Dragon — House Myrrowen. Sleek, crested with fins, gold-eyed night hunter. */
+/** Emerald Dragon - House Myrrowen. Sleek, crested with fins, gold-eyed night hunter. */
 export function drawEmeraldDragon(g: Graphics): void {
   const s = EMERALD;
   // Crest fins over skull → neck (drawn behind).
@@ -190,7 +190,7 @@ export function drawEmeraldDragon(g: Graphics): void {
 }
 
 /**
- * Flyby dragon — side view, mid-flap, streaming right. Used by the buy-bonus cinematic
+ * Flyby dragon - side view, mid-flap, streaming right. Used by the buy-bonus cinematic
  * and the ambient sky pass. Box ≈ 220×140 centred on (0,0).
  */
 export function drawFlybyDragon(g: Graphics): void {

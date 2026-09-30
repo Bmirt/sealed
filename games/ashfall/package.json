@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Ashfall Dynasty — 5x3, 243-ways video slot. Dark medieval dragon-dynasty theme.",
+  "description": "Ashfall Dynasty - 5x3, 243-ways video slot. Dark medieval dragon-dynasty theme.",
   "scripts": {
     "dev": "vite --port 5174",
     "build": "tsc --noEmit -p tsconfig.json && vite build",

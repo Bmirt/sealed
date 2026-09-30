@@ -1,4 +1,4 @@
-# ASHFALL DYNASTY — Build Plan
+# ASHFALL DYNASTY - Build Plan
 
 A 5×3, 243-ways video slot. Dark medieval dragon-dynasty theme. Target RTP 96.5 %, high volatility, max win 5,000× bet.
 
@@ -8,11 +8,11 @@ This document is the contract for the build. Anything that deviates from the bri
 
 ## 1. Art direction (one sentence, then the rules)
 
-**"Obsidian & Ember"** — a volcanic keep at night, lit from below by lava and from above by nothing; everything is black stone, carved relief, and molten gold, with drifting ash and ember as the only motion when the player is idle.
+**"Obsidian & Ember"** - a volcanic keep at night, lit from below by lava and from above by nothing; everything is black stone, carved relief, and molten gold, with drifting ash and ember as the only motion when the player is idle.
 
 - **Palette (fixed, exported from one file):** obsidian `#0B0A0D`, charcoal stone `#1D1B22`, ash `#8A8690`, molten gold `#F2B134` → highlight `#FFD66B`, ember `#FF6A1F`, garnet accent `#8F1D2C`, emerald `#2EC27E` (used *only* by the Emerald Dragon). Free-spins sky adds a deep indigo `#141A33` and cold starlight `#C9D4FF`.
 - **Light model:** warm key-light from *below* (lava) in the base game; in free spins the keep is backlit by a cold night sky while the reel frame still glows warm from underneath. This contrast is the visual signature of the feature.
-- **Symbols:** every symbol is a heavy stone tile with a carved inner relief. Highs are heraldic dragon silhouettes (stylised, rim-lit in gold — imposing, not cute). Mids are gold-metal objects on stone. Lows are **monochrome carved sigils** — readable by silhouette alone (flame / wolf head / kraken / rose), never by colour.
+- **Symbols:** every symbol is a heavy stone tile with a carved inner relief. Highs are heraldic dragon silhouettes (stylised, rim-lit in gold - imposing, not cute). Mids are gold-metal objects on stone. Lows are **monochrome carved sigils** - readable by silhouette alone (flame / wolf head / kraken / rose), never by colour.
 - **Motion language:** heavy. Reels have mass (overshoot + settle), wins *burn* rather than sparkle, big wins shake the camera. Nothing bounces cheerfully.
 - **Type:** heavy serif display via a system stack (`"Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif`), all-caps with wide tracking for titles. No external font files (see §10). A licensed display font can be dropped in through the asset manifest later.
 - **Names (all original):** game title *Ashfall Dynasty*. Houses: **House Vaelor** (Gold Dragon), **House Cindrath** (Ash Dragon), **House Myrrowen** (Emerald Dragon). Wild: *The Molten Throne*. Scatter: *Dragon Egg*. Feature: *Dragonfire Free Spins*; multiplier: *Dragonfire Meter*. Buy tiers: *Summon the Dragons* (100×) and *Wake the Elder* (300×).
@@ -25,12 +25,12 @@ This document is the contract for the build. Anything that deviates from the bri
 |---|---|
 | Build | Vite 6, TypeScript 5 (`strict`, `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, no `any`, ESLint rule `@typescript-eslint/no-explicit-any: error`) |
 | Canvas | PixiJS v8 (WebGL preferred, WebGPU not relied on) |
-| Tweening | GSAP 3 — *all* timed animation goes through GSAP timelines (this is what makes skipping tractable, §7) |
+| Tweening | GSAP 3 - *all* timed animation goes through GSAP timelines (this is what makes skipping tractable, §7) |
 | Audio | Howler 2 for playback/mixing/mobile-unlock; Web Audio `OfflineAudioContext` to synthesise every sound into WAV blobs at boot |
 | UI chrome | Plain DOM + CSS (custom properties, `clamp()`), no framework |
 | Tests | Vitest (+ jsdom for DOM/GSAP tests), golden JSON fixtures |
-| Sim | `tsx` CLI scripts under `scripts/` — pure Node, import only `src/math` and `src/config` |
-| Package manager | pnpm (via `corepack` — see §10) |
+| Sim | `tsx` CLI scripts under `scripts/` - pure Node, import only `src/math` and `src/config` |
+| Package manager | pnpm (via `corepack` - see §10) |
 
 Single app, single `package.json`, no monorepo.
 
@@ -86,9 +86,9 @@ src/
     BuyBonusModal.ts  PaytableModal.ts  SettingsPanel.ts  Modal.ts  styles/*.css
   main.ts
 scripts/
-  sim.ts             pnpm sim — 1M headless spins, report
-  exact-rtp.ts       pnpm rtp:exact — analytic base RTP
-  update-golden.ts   pnpm golden:update — regenerate fixtures (explicit, never automatic)
+  sim.ts             pnpm sim - 1M headless spins, report
+  exact-rtp.ts       pnpm rtp:exact - analytic base RTP
+  update-golden.ts   pnpm golden:update - regenerate fixtures (explicit, never automatic)
 tests/
   math/*.test.ts     rng, grid, ways, feature, buy, cap, validate, exact-vs-sim
   golden/*.json      fixed (seed, nonce) → full outcome
@@ -120,7 +120,7 @@ Strips use numeric codes (fast sim); config exposes the names.
 
 **Money model (integers only, no floats in math):** total bet = **20 coins**. Paytable is coins per way. The UI maps coins → currency with `coinValue = bet / 20` and keeps all money in integer cents. Bet levels (currency): 0.20 · 0.50 · 1 · 2 · 5 · 10 · 20 · 50 · 100. Max win cap = 5,000 × 20 = 100,000 coins. Golden files compare integer outcomes, so they are exact.
 
-**Draft paytable (coins per way; 3 / 4 / 5 of a kind) — starting point, the sim tunes it:**
+**Draft paytable (coins per way; 3 / 4 / 5 of a kind) - starting point, the sim tunes it:**
 
 | Symbol | 3 | 4 | 5 | 5-oak in ×bet per way |
 |---|---|---|---|---|
@@ -133,7 +133,7 @@ Strips use numeric codes (fast sim); config exposes the names.
 | L3, L4 | 1 | 3 | 6 | 0.3× |
 | S (scatter pay, total, not per way) | 40 | 200 | 1000 | 2× / 10× / 50× |
 
-Full screen of H1 = 243 × 60 = 14,580 coins = 729× bet; with Dragonfire ×7+ it hits the 5,000× cap — so the cap is reachable without being common.
+Full screen of H1 = 243 × 60 = 14,580 coins = 729× bet; with Dragonfire ×7+ it hits the 5,000× cap - so the cap is reachable without being common.
 
 ---
 
@@ -217,8 +217,8 @@ interface FreeSpinResult extends SpinResult {
 ## 6. Reel-strip tuning approach
 
 1. **Targets** (high-volatility profile): base hit-rate ≈ 25–28 % of spins; feature frequency ≈ 1 in 180–220; RTP split ≈ 60 % base / 36.5 % feature; buy-free RTP 96–97 %; buy-super RTP 96–97 %; max win reachable (≥ 1 hit per ~3M spins, uncapped distribution must exceed 5,000× occasionally); cap hits logged.
-2. **Strips are explicit arrays** in `game.config.ts` (auditable, golden-stable). They are *authored* by `scripts/strip-gen.ts` from a per-reel symbol-count table + constraints (no two scatters within 3 positions so ≤1 visible per reel; wild never adjacent to scatter; same high symbol not adjacent to itself on reels 1–2 to control "near miss" frequency), with a fixed internal seed so re-running gives the same strip. The generated arrays are pasted/written into the config — the game never generates strips at runtime.
-3. **Fast loop:** `pnpm rtp:exact` computes base-game line+scatter RTP in closed form (reels are independent, so `E[ways of exactly n reels] = Π_{r≤n} E[count_r] · P(count_{n+1}=0)`) — instant feedback while adjusting counts/paytable.
+2. **Strips are explicit arrays** in `game.config.ts` (auditable, golden-stable). They are *authored* by `scripts/strip-gen.ts` from a per-reel symbol-count table + constraints (no two scatters within 3 positions so ≤1 visible per reel; wild never adjacent to scatter; same high symbol not adjacent to itself on reels 1–2 to control "near miss" frequency), with a fixed internal seed so re-running gives the same strip. The generated arrays are pasted/written into the config - the game never generates strips at runtime.
+3. **Fast loop:** `pnpm rtp:exact` computes base-game line+scatter RTP in closed form (reels are independent, so `E[ways of exactly n reels] = Π_{r≤n} E[count_r] · P(count_{n+1}=0)`) - instant feedback while adjusting counts/paytable.
 4. **Truth loop:** `pnpm sim` (1M spins, seeded, ~3–5 s) reports total RTP, base/feature split, hit frequency, feature frequency, avg feature win, meter distribution, win-distribution buckets (×bet), max win, cap hits, volatility (std-dev). `pnpm sim --mode buy|super` does the same for bought features.
 5. **Levers, in order:** free-strip scatter density (feature length/retriggers) → free-strip high-symbol density (feature RTP) → base-strip scatter density (feature frequency) → low-pay values (hit rate without moving RTP much) → high-pay values (volatility/max-win reach).
 6. The tuned numbers are written into `config.rtp.declared*` and locked by the 200k-spin deterministic test. Changing maths = bump `config.version` + `pnpm golden:update` (a conscious act, reviewed in diff).
@@ -229,8 +229,8 @@ interface FreeSpinResult extends SpinResult {
 
 Every timed thing on screen is a **Presentation**: `{ play(): Promise<void>; skip(): void; readonly done: boolean }` wrapping one GSAP timeline. `skip()` = `timeline.progress(1)` which runs every `onComplete`, so the end state is *guaranteed identical* to letting it finish (balance credited once, symbols un-dimmed, counter at the final value). A **Sequencer** runs presentations in order and exposes:
 
-- `skipCurrent()` — bound to click-on-canvas and Space.
-- `abortToEndState()` — synchronously skips the current *and* every queued presentation, then resolves. Used when Spin is pressed during a win presentation: the win is fully credited, the screen is reset, and the next spin starts on the next frame.
+- `skipCurrent()` - bound to click-on-canvas and Space.
+- `abortToEndState()` - synchronously skips the current *and* every queued presentation, then resolves. Used when Spin is pressed during a win presentation: the win is fully credited, the screen is reset, and the next spin starts on the next frame.
 
 **Controller state machine:** `IDLE → SPINNING → STOPPING → PRESENTING_WINS → (FEATURE_INTRO → FEATURE_SPIN…→ FEATURE_OUTRO) → IDLE`.
 
@@ -262,12 +262,12 @@ Every timed thing on screen is a **Presentation**: `{ play(): Promise<void>; ski
 
 ## 8. Rendering & performance budget
 
-- Symbols are **baked textures**: each procedural painter draws into Graphics once and `renderer.generateTexture()`s it (and a vertically-stretched "blur" variant) at boot. Reels render plain Sprites — no Graphics, no filters in the spin loop.
+- Symbols are **baked textures**: each procedural painter draws into Graphics once and `renderer.generateTexture()`s it (and a vertically-stretched "blur" variant) at boot. Reels render plain Sprites - no Graphics, no filters in the spin loop.
 - Reel mask = one rect mask; reel blur = swap to the pre-baked blur texture, not BlurFilter.
 - Particles on `ParticleContainer` with a fixed pool (≈ 400 embers, 200 sparks); emitters reuse, never allocate in `ticker`.
 - One `ticker` update per frame with a frame budget; ambient effects degrade first (ember count halves if the 1-s rolling FPS < 50).
 - Resolution capped at `min(devicePixelRatio, 2)`; canvas sized to a 1600×900 landscape / 900×1600 portrait design space letterboxed into the viewport; DOM HUD reflows with CSS (360 px → desktop).
-- Dev overlay (`?dev`): FPS, draw calls, seed/nonce entry, force-outcome buttons (which just call `spin` with a chosen seed — still never bypassing the maths).
+- Dev overlay (`?dev`): FPS, draw calls, seed/nonce entry, force-outcome buttons (which just call `spin` with a chosen seed - still never bypassing the maths).
 - Physical-device 60 fps validation is on the reviewer's side (§10).
 
 ---
@@ -293,17 +293,17 @@ Commits: `stage-1: maths`, `stage-2: static reels`, … on `main` of a fresh rep
 1. **pnpm is not installed** on this machine (Node 22, corepack 0.34 present). I will run `corepack enable pnpm` (machine-level shim in the Node bin dir) unless you'd rather I use `corepack pnpm …` per command. Say which.
 2. **Howler + synthesised audio.** Howler plays from URLs, not raw buffers. I'll render every sound with `OfflineAudioContext` → WAV → `Blob` URL and feed those to Howler, keeping Howler's bus/fade/pitch/mobile-unlock. This satisfies both "Howler for audio" and "synthesise all sound with Web Audio".
 3. **Fonts.** "No external assets" read strictly → system serif stack, no Google Fonts / bundled font files. Swappable via the manifest.
-4. **Dragonfire Meter step size.** "Steps up every third win, capped at ×10" — implemented as +1 per three winning spins (×1→×10 needs 27 winning spins; realistically reached only in long retriggered features, which is the high-volatility payoff). `step`, `winsPerStep`, `cap` are config so a ladder like 1→2→3→5→8→10 is a one-line change if the sim says the meter is too cold.
-5. **Max-win cap** is applied to the whole round (base + feature) and ends the feature when hit — standard practice; the alternative (per-spin cap) is a one-line change in `cap.ts`.
+4. **Dragonfire Meter step size.** "Steps up every third win, capped at ×10" - implemented as +1 per three winning spins (×1→×10 needs 27 winning spins; realistically reached only in long retriggered features, which is the high-volatility payoff). `step`, `winsPerStep`, `cap` are config so a ladder like 1→2→3→5→8→10 is a one-line change if the sim says the meter is too cold.
+5. **Max-win cap** is applied to the whole round (base + feature) and ends the feature when hit - standard practice; the alternative (per-spin cap) is a one-line change in `cap.ts`.
 6. **Buy-bonus triggering** uses deterministic rejection sampling of the base strips rather than a special strip set, so the bought feature's 3/4/5-scatter distribution matches the natural one. Super tier forces exactly 3.
 7. **Skip vs. turbo.** Turbo never auto-skips anticipation or Big Win+; a deliberate click/Space does (the brief requires every animation to be skippable). Both rules are tested.
 8. **60 fps on a mid-range phone** cannot be measured from this machine. I'll build to the budget in §8 and expose the FPS overlay; please run it on a real device at stage 5 review.
 9. **Wild reel availability**: reels 2–5 to start (config); the sim may push this to 2–4 for volatility.
-10. **Autoplay** ships with 10/25/50/100 + stop-on-feature + stop-on-insufficient-balance. Loss-limit / single-win-limit controls are not in the brief; I'll add them only if you ask (some jurisdictions require them — noted in README).
+10. **Autoplay** ships with 10/25/50/100 + stop-on-feature + stop-on-insufficient-balance. Loss-limit / single-win-limit controls are not in the brief; I'll add them only if you ask (some jurisdictions require them - noted in README).
 
 ---
 
-## 11. Open questions — answered
+## 11. Open questions - answered
 
 - Currency / locale: `€`, `en-GB`, starting balance 1,000.00.
 - Scatter pays: on.
@@ -317,14 +317,14 @@ Commits: `stage-1: maths`, `stage-2: static reels`, … on `main` of a fresh rep
 **Stage 3**
 
 0. The presenter was put behind a Pixi-free `PresenterDeps` interface so the real sequencing/skip
-   logic runs in tests against fake visuals — a structural addition, not a behaviour change.
+   logic runs in tests against fake visuals - a structural addition, not a behaviour change.
 
 **Stage 5**
 
 0. Audio cues piggyback on the visual callbacks (via `audioBus`) instead of a parallel cue
-   channel in the presenter — audio cannot desynchronise from what is on screen, and skipped
+   channel in the presenter - audio cannot desynchronise from what is on screen, and skipped
    beats fire their cue exactly once for free. Pixi v8's `ParticleContainer` turned out to need
-   a shared texture source **and** a per-frame `update()` — both handled inside `ParticleSystem`.
+   a shared texture source **and** a per-frame `update()` - both handled inside `ParticleSystem`.
 
 **Post-ship art & animation pass (user feedback, 2026-08-25)**
 
@@ -332,13 +332,13 @@ Commits: `stage-1: maths`, `stage-2: static reels`, … on `main` of a fresh rep
    layered gradients, rim light, baked drop shadow) over recessed cell slots; the full-body
    dragons became dragon-HEAD emblems (far stronger silhouettes); lows moved onto four distinct
    plate shapes. Animation move-set extended to the premium set (win pop with flash + wiggle,
-   landing squash-and-stretch, spin-up pull-back, win plume, cell sprays, tier ember fountain) —
+   landing squash-and-stretch, spin-up pull-back, win plume, cell sprays, tier ember fountain) -
    modelled on the Stake Engine reference bar (idle breathe / win pop / anticipation shake).
 
 **Stage 1**
 
 1. **Super tier meter rules.** At 300× the super feature must be worth ≈ 3× the regular one; "×3 start, fewer spins" on the same reels is worth ≈ 1.1× and cannot reach 96.5 %. Shipped: super = 8 spins, meter **starts ×3 and steps +2 on every win** (cap ×10). `buy.super.meter` is a full `MeterRules` object, so this is data, not code. Same free strips are used. Documented in README.
 2. **`cap.ts` folded in.** The round cap lives inside `feature.ts`/`spin.ts` (three lines each); a separate module added nothing.
-3. **Strip builder gained block placement** (`blocks` per reel recipe) — stacking lows was needed to bring hit frequency into the high-volatility range. Strips remain explicit committed arrays.
-4. **Paytable retuned** from the draft: highs 3/4/5 = 1.0/3.25/8.0× … lows 0.15/0.45/1.1× (see README). Final hit frequency 22 % (plan said 25–28 %; lower was required to make the bought feature and base RTP close simultaneously — standard for a Hacksaw-style profile).
+3. **Strip builder gained block placement** (`blocks` per reel recipe) - stacking lows was needed to bring hit frequency into the high-volatility range. Strips remain explicit committed arrays.
+4. **Paytable retuned** from the draft: highs 3/4/5 = 1.0/3.25/8.0× … lows 0.15/0.45/1.1× (see README). Final hit frequency 22 % (plan said 25–28 %; lower was required to make the bought feature and base RTP close simultaneously - standard for a Hacksaw-style profile).
 5. **Declared RTP uses exact base + precise feature EV** (200k bought features), because a 1M Monte-Carlo still has ±1 % noise on the feature share. The 1M sim remains the headline check (96.46 %).

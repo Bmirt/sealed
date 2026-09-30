@@ -1,5 +1,5 @@
 /**
- * Small Web-Audio synthesis helpers. Every sound in the game is rendered offline through these —
+ * Small Web-Audio synthesis helpers. Every sound in the game is rendered offline through these -
  * no audio files anywhere. All functions build nodes into an OfflineAudioContext.
  */
 
@@ -26,7 +26,7 @@ export function osc(ctx: OfflineAudioContext, type: OscillatorType, freq: number
   return o;
 }
 
-/** Deterministic noise buffer (xorshift — same seed, same noise). */
+/** Deterministic noise buffer (xorshift - same seed, same noise). */
 export function noiseBuffer(ctx: OfflineAudioContext, seconds: number, seed = 1234567): AudioBuffer {
   const buf = ctx.createBuffer(1, Math.ceil(seconds * ctx.sampleRate), ctx.sampleRate);
   const data = buf.getChannelData(0);

@@ -20,7 +20,7 @@ export class FakeDepsReel implements SpinnableReel {
   }
 }
 
-/** Pixi-free presenter deps that record everything — shared by the flow/feature tests. */
+/** Pixi-free presenter deps that record everything - shared by the flow/feature tests. */
 export class FakeDeps implements PresenterDeps {
   readonly reelViews = GAME_CONFIG.strips.base.map((s) => new FakeDepsReel(s.length));
   counterValue = -1;

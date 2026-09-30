@@ -31,7 +31,7 @@ export function openSettingsModal(host: HTMLElement, config: GameConfig, store: 
   const soundToggle = el('input', { type: 'checkbox', id: 'set-sound', checked: store.get().soundOn ? true : undefined });
   soundToggle.addEventListener('change', () => store.set({ soundOn: soundToggle.checked }));
 
-  const resetBtn = button('Reset balance to €1,000', 'btn btn-confirm btn-reset', () => {
+  const resetBtn = button('Reset balance to $1,000', 'btn btn-confirm btn-reset', () => {
     store.resetBalance();
     modal.close();
   });

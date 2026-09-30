@@ -18,7 +18,7 @@ type BgKey = `${BackgroundVariant}-${Orientation}`;
 
 /**
  * Root of the Pixi side: application, backdrop, world (design-space box), reels.
- * Owns resize/letterboxing. Knows nothing about outcomes — the controller drives it.
+ * Owns resize/letterboxing. Knows nothing about outcomes - the controller drives it.
  */
 export class GameScene {
   readonly app: Application;
@@ -158,10 +158,6 @@ export class GameScene {
 
     const d = DESIGN[layout.orientation];
     host.style.setProperty('--world-scale', String(layout.scale));
-    // Also on :root so DOM chrome outside the stage (trust bar, admin card) can size itself
-    // relative to the reels: reels span 950 design px × --world-scale, centred.
-    document.documentElement.style.setProperty('--world-scale', String(layout.scale));
-    document.documentElement.style.setProperty('--reels-scale', String(layout.reelsScale));
     host.style.setProperty('--design-w', String(d.w));
     host.style.setProperty('--design-h', String(d.h));
     this.opts.onLayout?.(layout);

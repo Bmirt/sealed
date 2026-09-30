@@ -189,7 +189,7 @@ export class Hud {
     this.balanceEl.textContent = formatCents(s.balanceCents);
     this.betEl.textContent = formatCents(Math.round(bet * 100));
     this.winEl.textContent =
-      s.lastWinCents > 0 ? formatCents(s.lastWinCents) : "—";
+      s.lastWinCents > 0 ? formatCents(s.lastWinCents) : formatCents(0);
     this.winEl.classList.toggle("has-win", s.lastWinCents > 0);
 
     const idle = s.phase === "idle";

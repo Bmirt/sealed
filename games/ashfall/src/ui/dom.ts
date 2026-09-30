@@ -1,4 +1,4 @@
-/** Tiny DOM helpers — no framework. */
+/** Tiny DOM helpers - no framework. */
 export function el<K extends keyof HTMLElementTagNameMap>(
   tag: K,
   attrs: Record<string, string | boolean | undefined> = {},

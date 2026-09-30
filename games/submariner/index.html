@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#062033" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23062033'/%3E%3Cellipse cx='15' cy='19' rx='10' ry='5' fill='%23f26b1d'/%3E%3Crect x='12' y='10' width='6' height='6' rx='1.5' fill='%23e9edf0'/%3E%3Ccircle cx='23' cy='19' r='2.2' fill='%239fe8ff'/%3E%3C/svg%3E" />
+    <title>Submariner</title>
+  </head>
+  <body>
+    <main id="app">
+      <canvas id="game-canvas" aria-label="Submarine dive"></canvas>
+      <div id="fade" aria-hidden="true"></div>
+      <div id="flash" aria-hidden="true"></div>
+
+      <header id="topbar">
+        <a id="lobby" class="chip-btn" href="/" aria-label="Back to all games">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+          <span>Games</span>
+        </a>
+        <div id="brand" aria-hidden="true">
+          <svg viewBox="0 0 40 24"><ellipse cx="19" cy="15" rx="15" ry="6.5" /><rect x="14" y="4" width="8" height="8" rx="2" /><circle cx="31" cy="15" r="2.6" class="glass" /></svg>
+          <span>SUBMARINER</span>
+        </div>
+        <ol id="history" aria-label="Recent dives, newest first"></ol>
+        <div id="wallet">
+          <span class="caption">Balance</span>
+          <strong id="balance">$1,000.00</strong>
+          <button id="refill" type="button" hidden>Refill</button>
+        </div>
+        <button id="sound" class="chip-btn icon" type="button" aria-label="Mute sound" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path class="speaker" d="M4 9h4l5-4v14l-5-4H4z" /><path class="wave" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" /><path class="cross" d="M17 9l5 6M22 9l-5 6" /></svg>
+        </button>
+      </header>
+
+      <section id="readout" aria-live="polite">
+        <div id="phase-label">Next dive in</div>
+        <div id="multiplier">6.0<small>s</small></div>
+        <div id="depth-line"><span id="depth">0 m</span><span class="dot"></span><span id="zone">Sunlit zone</span></div>
+        <div id="countdown"><i></i></div>
+      </section>
+
+      <aside id="gauge" aria-hidden="true">
+        <div class="track">
+          <div class="band sunlit"></div>
+          <div class="band twilight"></div>
+          <div class="band midnight"></div>
+          <div class="band abyss"></div>
+          <div id="gauge-marker"><span id="gauge-depth">0 m</span></div>
+        </div>
+        <ul class="ticks"></ul>
+      </aside>
+
+      <div id="toasts" aria-live="assertive"></div>
+
+      <section id="bet-panel" class="riveted" aria-label="Your bet">
+        <div class="field stake">
+          <label for="stake">Stake</label>
+          <div class="stake-row">
+            <button type="button" class="step" data-step="down" aria-label="Halve stake">½</button>
+            <span class="money-input"><span aria-hidden="true">$</span><input id="stake" inputmode="decimal" autocomplete="off" value="1.00" /></span>
+            <button type="button" class="step" data-step="up" aria-label="Double stake">2×</button>
+          </div>
+          <div class="quick">
+            <button type="button" data-quick="100">$1</button>
+            <button type="button" data-quick="500">$5</button>
+            <button type="button" data-quick="1000">$10</button>
+            <button type="button" data-quick="5000">$50</button>
+          </div>
+        </div>
+        <div class="field auto">
+          <label class="toggle"><input type="checkbox" id="auto-cashout-on" /><span class="knob"></span>Auto cash out at</label>
+          <span class="mult-input"><input id="auto-cashout" inputmode="decimal" autocomplete="off" value="2.00" /><span aria-hidden="true">×</span></span>
+          <label class="toggle"><input type="checkbox" id="auto-bet" /><span class="knob"></span>Bet every dive</label>
+        </div>
+        <button id="action" type="button" class="action bet">
+          <span class="verb">BET</span>
+          <span class="sub">$1.00</span>
+        </button>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

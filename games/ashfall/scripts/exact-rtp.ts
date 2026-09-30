@@ -1,6 +1,6 @@
 /**
- * pnpm rtp:exact — closed-form base-game RTP (line + scatter pays) for both strip sets.
- * Free-spin RTP is path dependent (meter, retriggers, cap) — use `pnpm sim` for the full picture.
+ * pnpm rtp:exact - closed-form base-game RTP (line + scatter pays) for both strip sets.
+ * Free-spin RTP is path dependent (meter, retriggers, cap) - use `pnpm sim` for the full picture.
  */
 import { GAME_CONFIG } from '../../../packages/ashfall-math/src/config/game.config';
 import { exactRtp } from '../../../packages/ashfall-math/src/math/exact';

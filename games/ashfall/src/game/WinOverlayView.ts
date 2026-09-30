@@ -39,7 +39,7 @@ function ensureFont(): void {
       },
       stroke: { color: PALETTE.black, width: 5 },
     },
-    chars: [['a', 'z'], ['A', 'Z'], ['0', '9'], '€.,×—+ '],
+    chars: [['a', 'z'], ['A', 'Z'], ['0', '9'], '$.,×·+ '],
     resolution: 2,
   });
   fontInstalled = true;
@@ -269,7 +269,7 @@ export class WinOverlayView implements WinShowSurface {
       }
     }
     const winCents = (win.win * betCents) / coinsPerBet;
-    this.cycleLabel.text = `${SYMBOL_COPY[win.symbol].title.toUpperCase()} ×${win.length} — ${win.ways} WAYS — ${formatCents(winCents)}`;
+    this.cycleLabel.text = `${SYMBOL_COPY[win.symbol].title.toUpperCase()} ×${win.length} · ${win.ways} WAYS · ${formatCents(winCents)}`;
     this.cycleLabel.visible = true;
   }
 
@@ -291,7 +291,7 @@ export class WinOverlayView implements WinShowSurface {
     this.plume.visible = false;
   }
 
-  // ---- TierSurface (adapter — the tier builder gets the tier counter, not the line counter) ----
+  // ---- TierSurface (adapter - the tier builder gets the tier counter, not the line counter) ----
 
   tierSurface(): TierSurface {
     return {

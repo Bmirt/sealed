@@ -38,5 +38,5 @@ export function buySpin(config: GameConfig, seed: string, nonce: number, tier: F
       });
     }
   }
-  throw new Error('buySpin: could not find a triggering spin — check scatter placement on the base strips');
+  throw new Error('buySpin: could not find a triggering spin; check scatter placement on the base strips');
 }

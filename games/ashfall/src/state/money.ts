@@ -1,8 +1,8 @@
 /**
  * Money helpers. All amounts are integer cents; the maths speaks in coins (20 per bet).
  */
-export const CURRENCY = 'EUR';
-export const LOCALE = 'en-GB';
+export const CURRENCY = 'USD';
+export const LOCALE = 'en-US';
 
 const fmt = new Intl.NumberFormat(LOCALE, { style: 'currency', currency: CURRENCY, minimumFractionDigits: 2 });
 

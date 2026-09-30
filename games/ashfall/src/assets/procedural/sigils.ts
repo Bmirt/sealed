@@ -5,7 +5,7 @@ import type { Poly } from './shapes';
 import { OUTLINE, dropShadow, part, vGrad } from './style';
 
 /**
- * Low-pay symbols: sigils carved into stone plates. Distinct by SILHOUETTE twice over —
+ * Low-pay symbols: sigils carved into stone plates. Distinct by SILHOUETTE twice over -
  * the sigil itself and the plate it is cut into (shard / shield / medallion / diamond).
  * A faint colour wash tints each stone, but shape stays the primary read.
  */
@@ -49,7 +49,7 @@ function medallion(g: Graphics, wash: number): void {
   }
 }
 
-/** Flame Sigil — a fire tongue carved into a pointed shard. */
+/** Flame Sigil - a fire tongue carved into a pointed shard. */
 export function drawFlameSigil(g: Graphics): void {
   plate(g, SHARD, PALETTE.ember);
   const outer = flat([
@@ -63,7 +63,7 @@ export function drawFlameSigil(g: Graphics): void {
   g.poly([...xform(inner, 0, 3, 0.5)]).fill({ color: rgba(0xffd9a8, 0.5) });
 }
 
-/** Wolf Sigil — a howling head carved into a shield. */
+/** Wolf Sigil - a howling head carved into a shield. */
 export function drawWolfSigil(g: Graphics): void {
   plate(g, SHIELD, 0x7a90c8);
   const head = flat([
@@ -76,7 +76,7 @@ export function drawWolfSigil(g: Graphics): void {
   g.poly([4, -16, 13, -14, 8, -10]).fill({ color: 0x16141b });
 }
 
-/** Kraken Sigil — the deep one carved into a round medallion. */
+/** Kraken Sigil - the deep one carved into a round medallion. */
 export function drawKrakenSigil(g: Graphics): void {
   medallion(g, 0x3fae9e);
   const polys: Poly[] = [];
@@ -94,7 +94,7 @@ export function drawKrakenSigil(g: Graphics): void {
   g.circle(11, -16, 1.4).fill({ color: 0xc4f0e8, alpha: 0.8 });
 }
 
-/** Rose Sigil — the ash rose carved into a diamond plate. */
+/** Rose Sigil - the ash rose carved into a diamond plate. */
 export function drawRoseSigil(g: Graphics): void {
   plate(g, DIAMOND, 0xc86a86);
   const polys: Poly[] = [];

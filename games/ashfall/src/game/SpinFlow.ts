@@ -9,7 +9,7 @@ export interface FlowPresenter {
 }
 
 /**
- * Input semantics — the part of a slot front-end that usually breaks:
+ * Input semantics - the part of a slot front-end that usually breaks:
  *
  *  SPIN (button / Space):
  *    idle        → start a spin

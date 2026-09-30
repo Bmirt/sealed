@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Ashfall Dynasty pure maths + config — shared by the game, the SEALED server and the browser verifier.",
+  "description": "Ashfall Dynasty pure maths + config (RNG, reel strips, ways evaluation, free-spin feature).",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "exports": {

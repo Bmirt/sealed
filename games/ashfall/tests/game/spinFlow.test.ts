@@ -50,7 +50,7 @@ const cpb = GAME_CONFIG.coinsPerBet;
 /**
  * Interleave clock ticks and microtask flushes until the round settles.
  * (A later presentation's timeline is only created after the previous one's promise resolves,
- * so time must advance in slices with microtasks flushed between them — like a real frame loop.)
+ * so time must advance in slices with microtasks flushed between them - like a real frame loop.)
  */
 async function playOut(controller: GameController, store: GameStore, maxSeconds = 120): Promise<void> {
   for (let i = 0; i < maxSeconds * 2; i++) {
@@ -61,7 +61,7 @@ async function playOut(controller: GameController, store: GameStore, maxSeconds 
   throw new Error('round did not settle');
 }
 
-describe('spin flow — skip & interrupt semantics', () => {
+describe('spin flow - skip & interrupt semantics', () => {
   it('a full spin runs reels → wins → idle and credits exactly the outcome', async () => {
     const seed = 'full';
     const n = findNonce(seed, (o) => o.base.totalWinCoins > 0 && !o.feature);
@@ -201,7 +201,7 @@ describe('spin flow — skip & interrupt semantics', () => {
     flow.holdEnd();
     await playOut(controller, store);
     await new Promise((r) => setTimeout(r, 80));
-    expect(store.get().nonce).toBe(2); // released — no third spin
+    expect(store.get().nonce).toBe(2); // released - no third spin
   });
 
   it('anticipation plays in turbo mode (never auto-skipped) but a deliberate skip cuts it', async () => {
@@ -217,7 +217,7 @@ describe('spin flow — skip & interrupt semantics', () => {
 
     flow.spinPressed();
     await flushMicrotasks();
-    clock.tick(3, 60); // way past the turbo reel time — anticipation must still be running
+    clock.tick(3, 60); // way past the turbo reel time - anticipation must still be running
     expect(deps.log).toContain('ant:start');
     expect(store.get().phase).toBe('spinning');
     expect(presenter.stage).toBe('reels');

@@ -7,7 +7,7 @@ export const FRAME_THICKNESS = 26;
 
 export interface FrameParts {
   readonly root: Container;
-  /** Title plaque + text — hidden while the feature HUD takes its place. */
+  /** Title plaque + text - hidden while the feature HUD takes its place. */
   readonly plaque: Container;
 }
 

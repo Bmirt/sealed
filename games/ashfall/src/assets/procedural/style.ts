@@ -16,14 +16,14 @@ export function vGrad(stops: readonly (readonly [number, number])[], y0: number,
   });
 }
 
-/** Soft baked drop shadow under an emblem (no filters — three stacked ellipses). */
+/** Soft baked drop shadow under an emblem (no filters - three stacked ellipses). */
 export function dropShadow(g: Graphics, cx: number, cy: number, rx: number, ry: number, alpha = 0.5): void {
   g.ellipse(cx, cy, rx * 1.25, ry * 1.35).fill({ color: rgba(0x000000, alpha * 0.25) });
   g.ellipse(cx, cy, rx, ry).fill({ color: rgba(0x000000, alpha * 0.45) });
   g.ellipse(cx, cy, rx * 0.65, ry * 0.7).fill({ color: rgba(0x000000, alpha * 0.6) });
 }
 
-/** Fill + bold outline in one call — the cartoon-cut look every part shares. */
+/** Fill + bold outline in one call - the cartoon-cut look every part shares. */
 export function part(g: Graphics, poly: readonly number[], fill: FillGradient | number, width = OUTLINE_WIDTH): void {
   g.poly([...poly]).fill(typeof fill === 'number' ? { color: fill } : fill);
   g.poly([...poly]).stroke({ width, color: OUTLINE, join: 'round', cap: 'round' });

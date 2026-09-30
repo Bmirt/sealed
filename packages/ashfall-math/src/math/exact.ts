@@ -12,7 +12,7 @@ export interface ExactBaseRtp {
   readonly bySymbol: Readonly<Record<PayingSymbolId, number>>;
   /** P(exactly k scatters visible), k = 0..5. */
   readonly scatterDist: readonly number[];
-  /** P(≥ 3 scatters) — feature trigger probability per spin. */
+  /** P(≥ 3 scatters) - feature trigger probability per spin. */
   readonly triggerProb: number;
 }
 

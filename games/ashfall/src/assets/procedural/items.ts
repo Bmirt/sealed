@@ -3,7 +3,7 @@ import { PALETTE } from '@config/palette';
 import { flat, pt, star } from './shapes';
 import { OUTLINE, dropShadow, part, vGrad } from './style';
 
-/** Obsidian Crown — black-glass arches on a jewelled gold band. Floating emblem, bold outline. */
+/** Obsidian Crown - black-glass arches on a jewelled gold band. Floating emblem, bold outline. */
 export function drawCrown(g: Graphics): void {
   dropShadow(g, 0, 54, 52, 9, 0.5);
 
@@ -46,7 +46,7 @@ export function drawCrown(g: Graphics): void {
   }
 }
 
-/** Ancestral Blade — a rune-lit greatsword, winged guard, wrapped grip. */
+/** Ancestral Blade - a rune-lit greatsword, winged guard, wrapped grip. */
 export function drawBlade(g: Graphics): void {
   dropShadow(g, 0, 62, 34, 8, 0.5);
 

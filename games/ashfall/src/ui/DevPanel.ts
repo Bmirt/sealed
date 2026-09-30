@@ -8,7 +8,7 @@ import { button, el } from './dom';
 
 /**
  * Dev overlay (`?dev`): FPS, seed/nonce entry and "find me an outcome" buttons.
- * Everything here still goes through the maths — it only picks seeds.
+ * Everything here still goes through the maths - it only picks seeds.
  */
 export class DevPanel {
   readonly root: HTMLElement;
@@ -20,7 +20,7 @@ export class DevPanel {
   private last = performance.now();
 
   constructor(host: HTMLElement, config: GameConfig, store: GameStore, controller: GameController, scene: GameScene) {
-    this.fpsEl = el('span', { class: 'dev-fps', text: '— fps' });
+    this.fpsEl = el('span', { class: 'dev-fps', text: '-- fps' });
     this.seedInput = el('input', { type: 'text', value: store.get().seed, 'aria-label': 'seed' });
     this.nonceInput = el('input', { type: 'number', value: String(store.get().nonce), 'aria-label': 'nonce', min: '0' });
     this.infoEl = el('pre', { class: 'dev-info' });
@@ -59,7 +59,7 @@ export class DevPanel {
       night = !night;
       scene.setBackground(night ? 'free' : 'base');
     });
-    const addBalance = button('+€1000', 'btn btn-dev', () => store.credit(100_000));
+    const addBalance = button('+$1000', 'btn btn-dev', () => store.credit(100_000));
 
     this.root = el('div', { class: 'dev-panel' }, [
       el('div', { class: 'dev-row' }, [this.fpsEl, el('span', { text: ' seed ' }), this.seedInput, el('span', { text: ' nonce ' }), this.nonceInput]),
@@ -76,7 +76,6 @@ export class DevPanel {
       ]),
       this.infoEl,
     ]);
-    if (controller.source.kind === 'sealed') this.root.prepend(el('div', { class: 'dev-row', text: 'SEALED mode: outcomes come from the server; the find/seed buttons only work in local mode.' }));
     host.append(this.root);
 
     scene.app.ticker.add(() => {

@@ -151,7 +151,7 @@ describe('tier sequence', () => {
     expect(tierFor(5000)?.name).toBe('legendary');
   });
 
-  it('the roll length is fixed per tier — the same in every speed mode (turbo never shortens it)', () => {
+  it('the roll length is fixed per tier - the same in every speed mode (turbo never shortens it)', () => {
     const tier = WIN_TIERS[3];
     if (!tier) throw new Error('tier');
     const dur = (): number => {
@@ -159,7 +159,7 @@ describe('tier sequence', () => {
       buildTierRoll(tl, new FakeTier(), tier, 0, 100_000);
       return tl.duration();
     };
-    // The builder takes no speed profile at all — assert the length matches the fixed config.
+    // The builder takes no speed profile at all - assert the length matches the fixed config.
     expect(dur()).toBeCloseTo(FIXED_TIMING.tier.introTime + (FIXED_TIMING.tier.rollupTimes[0] ?? 0), 3);
   });
 
@@ -190,7 +190,7 @@ describe('tier sequence', () => {
     await flushMicrotasks();
     expect(s.counter.value).toBe(777_00);
     expect(s.progress).toBe(1);
-    expect(s.visible).toBe(true); // still up — dismissing is the hold presentation's job
+    expect(s.visible).toBe(true); // still up - dismissing is the hold presentation's job
     expect(s.bursts.length).toBeGreaterThanOrEqual(2); // entry + fountain(s) + completion
   });
 

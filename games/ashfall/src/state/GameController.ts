@@ -22,7 +22,7 @@ export interface ControllerEvents {
   onRoundStart?: (outcome: SpinOutcome) => void;
   onRoundEnd?: (outcome: SpinOutcome, winCents: number) => void;
   onInsufficientBalance?: (neededCents: number) => void;
-  /** The outcome source (e.g. the SEALED server) failed; the bet was refunded. */
+  /** The outcome source failed; the bet was refunded. */
   onSourceError?: (error: Error) => void;
 }
 
@@ -76,7 +76,7 @@ export class GameController {
     try {
       outcome = await this.source.spin(bet);
     } catch (e) {
-      this.store.credit(cost); // nothing was played — refund
+      this.store.credit(cost); // nothing was played - refund
       this.events.onSourceError?.(e as Error);
       return false;
     }

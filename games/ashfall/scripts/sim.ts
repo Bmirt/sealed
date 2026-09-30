@@ -18,7 +18,7 @@ const seed = arg('seed', 'sim-2026');
 const modeArg = arg('mode', 'base');
 const isMode = (m: string): m is SimMode => m === 'base' || m === 'buy' || m === 'super';
 if (!isMode(modeArg)) {
-  console.error(`unknown mode "${modeArg}" — use base | buy | super`);
+  console.error(`unknown mode "${modeArg}" - use base | buy | super`);
   process.exit(1);
 }
 const mode: SimMode = modeArg;

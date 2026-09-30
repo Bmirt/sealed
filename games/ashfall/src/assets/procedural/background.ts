@@ -8,9 +8,9 @@ export interface BackgroundLayers {
   readonly root: Container;
   readonly width: number;
   readonly height: number;
-  /** Lava glow at the bottom — animated (flicker) from stage 5. */
+  /** Lava glow at the bottom - animated (flicker) from stage 5. */
   readonly lavaGlow: Graphics;
-  /** Distant keep silhouette — a dragon passes behind it later. */
+  /** Distant keep silhouette - a dragon passes behind it later. */
   readonly keep: Graphics;
   readonly sky: Graphics;
   /** Volcano mouth centre (for ember emitters). */

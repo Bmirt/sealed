@@ -74,7 +74,7 @@ export class AnticipationView {
     if (this.columnTweens.every((t) => t === null)) this.stopFramePulse();
   }
 
-  /** Hard reset — also the skip/abort end state. */
+  /** Hard reset - also the skip/abort end state. */
   reset(): void {
     for (let r = 0; r < REELS; r++) this.end(r);
     this.stopFramePulse();

@@ -22,7 +22,7 @@ afterEach(() => {
 describe('buy modal', () => {
   it('shows both tiers with the exact cost at the current stake and the feature RTPs', () => {
     const store = makeStore();
-    store.betUp(); // €2
+    store.betUp(); // $2
     const bet = store.bet;
     openBuyModal(document.body, GAME_CONFIG, store, () => undefined);
     const text = document.body.textContent ?? '';

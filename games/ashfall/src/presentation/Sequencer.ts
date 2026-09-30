@@ -53,7 +53,7 @@ export class Sequencer {
   }
 
   /**
-   * Everything — current and queued — to its end state, now. Side effects all fire.
+   * Everything - current and queued - to its end state, now. Side effects all fire.
    * While the loop drains, newly dequeued items are skipped as they start.
    */
   abortToEndState(): void {

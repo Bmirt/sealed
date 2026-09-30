@@ -3,10 +3,10 @@ import { gsap } from 'gsap';
 /**
  * One skippable beat of on-screen time. `skip()` jumps the underlying GSAP timeline to its end,
  * which fires every callback on the way, so the end state is IDENTICAL to letting it play out.
- * This is the invariant the whole skip system rests on — never bypass it with manual cleanup.
+ * This is the invariant the whole skip system rests on - never bypass it with manual cleanup.
  */
 export interface Presentation {
-  /** Start (idempotent — repeated calls return the same promise). */
+  /** Start (idempotent - repeated calls return the same promise). */
   play(): Promise<void>;
   /** Jump to the end state. Safe to call before play() (marks it pre-skipped) or after completion (no-op). */
   skip(): void;
@@ -68,7 +68,7 @@ export class TimelinePresentation implements Presentation {
     this.timeline.progress(1, false);
   }
 
-  /** Kill without completing — only for teardown (never during normal flow). */
+  /** Kill without completing - only for teardown (never during normal flow). */
   destroy(): void {
     this.timeline?.kill();
     this.finished = true;

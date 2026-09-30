@@ -1,4 +1,4 @@
-/** Inline SVG glyphs (original, minimal). Paths only — wrapped by ui/dom.icon(). */
+/** Inline SVG glyphs (original, minimal). Paths only - wrapped by ui/dom.icon(). */
 export const ICONS = {
   spin: '<path d="M12 3.2a8.8 8.8 0 0 1 8.4 6.1" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/><path d="M21.8 3.6v6.6h-6.6z" fill="currentColor"/><path d="M12 20.8a8.8 8.8 0 0 1-8.4-6.1" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/><path d="M2.2 20.4v-6.6h6.6z" fill="currentColor"/>',
   bolt: '<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" fill="currentColor"/>',

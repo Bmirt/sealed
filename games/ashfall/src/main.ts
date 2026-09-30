@@ -17,9 +17,7 @@ import { formatCents } from './state/money';
 import { openAutoplayModal } from './ui/AutoplayModal';
 import { openBuyModal } from './ui/BuyBonusModal';
 import { DevPanel } from './ui/DevPanel';
-import { AdminCorner } from './ui/AdminCorner';
-import { TrustBar } from './ui/TrustBar';
-import { SealedOutcomeSource } from './state/OutcomeSource';
+import { el } from './ui/dom';
 import { Hud } from './ui/Hud';
 import { Modal } from './ui/Modal';
 import { openPaytableModal } from './ui/PaytableModal';
@@ -89,36 +87,9 @@ async function boot(): Promise<void> {
   const presenter = new AnimatedPresenter(new PixiPresenterDeps(scene, particles), store, GAME_CONFIG);
 
   let hud: Hud | null = null;
-  // Provably fair mode: outcomes come from the SEALED server (seed committed on Solana before play).
-  const sealedUrl = (import.meta.env['VITE_SEALED_SERVER'] as string | undefined) ?? '';
-  const playerId = localStorage.getItem('ashfall.player') ?? `player-${Math.random().toString(36).slice(2, 8)}`;
-  localStorage.setItem('ashfall.player', playerId);
-  const clientSeedKey = 'ashfall.clientSeed';
-  if (!localStorage.getItem(clientSeedKey)) localStorage.setItem(clientSeedKey, Math.random().toString(16).slice(2, 12));
-  // A deployed slot must never be un-spinnable: if the server is configured but unreachable, play
-  // locally (same maths, but NOT provable) and say so instead of failing every spin.
-  let sealed = sealedUrl ? new SealedOutcomeSource(sealedUrl, playerId, () => localStorage.getItem(clientSeedKey) ?? 'seed') : null;
-  let fallbackNote: string | null = null;
-  if (sealed) {
-    try {
-      const res = await fetch(`${sealedUrl}/state`, { signal: AbortSignal.timeout(6000) });
-      if (!res.ok) throw new Error(`${res.status}`);
-    } catch (e) {
-      sealed = null;
-      fallbackNote = `Provably-fair server unreachable (${sealedUrl}) — playing locally; spins are NOT sealed on-chain.`;
-      console.warn(fallbackNote, e);
-    }
-  }
-  const controller = new GameController(
-    GAME_CONFIG,
-    store,
-    presenter,
-    {
-      onInsufficientBalance: (needed) => hud?.showMessage(`Insufficient balance — need ${formatCents(needed)}`),
-      onSourceError: (e) => hud?.showMessage(`Provably-fair server unavailable: ${e.message}`, 5000),
-    },
-    sealed ?? undefined,
-  );
+  const controller = new GameController(GAME_CONFIG, store, presenter, {
+    onInsufficientBalance: (needed) => hud?.showMessage(`Insufficient balance: you need ${formatCents(needed)}`),
+  });
 
   const flow = new SpinFlow(store, controller, presenter);
   const autoplay = new Autoplay(store, controller);
@@ -142,7 +113,9 @@ async function boot(): Promise<void> {
     openSettings: () => openSettingsModal(uiHost, GAME_CONFIG, store),
   });
 
-  if (fallbackNote) hud.showMessage(fallbackNote, 8000);
+  // Back to the game lobby (the web app at "/" in a deployed build; its own dev server locally).
+  const lobbyUrl = (import.meta.env['VITE_LOBBY_URL'] as string | undefined) ?? (import.meta.env.PROD ? '/' : 'http://localhost:5173/');
+  uiHost.appendChild(el('a', { class: 'lobby-link', href: lobbyUrl, 'aria-label': 'Back to all games', text: '← Games' }));
 
   // Keyboard: Space = the spin button (ignored while a dialog is open).
   window.addEventListener('keydown', (e) => {
@@ -164,11 +137,6 @@ async function boot(): Promise<void> {
   // Opening screen: a deterministic, win-free stop so the first frame is calm.
   scene.reels.showStops([0, 0, 0, 0, 0], 'base');
   store.set({ phase: 'idle' });
-
-  if (sealed) {
-    const trust = new TrustBar(uiHost, sealed, clientSeedKey, store);
-    new AdminCorner(uiHost, sealed, store, () => void trust.refresh());
-  }
 
   if (new URLSearchParams(location.search).has('dev')) {
     new DevPanel(uiHost, GAME_CONFIG, store, controller, scene);

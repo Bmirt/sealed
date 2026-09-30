@@ -7,7 +7,7 @@ import type { OutcomePresenter } from '@/state/GameController';
 import { GameStore, MemoryPersistence } from '@/state/GameStore';
 import { betCents } from '@/state/money';
 
-/** Instant presenter — rounds resolve immediately. */
+/** Instant presenter - rounds resolve immediately. */
 const instant: OutcomePresenter = {
   presentBase: () => Promise.resolve(),
   presentFeature: () => Promise.resolve(),

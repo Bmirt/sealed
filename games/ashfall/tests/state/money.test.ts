@@ -14,9 +14,9 @@ describe('money', () => {
     }
   });
 
-  it('formats en-GB euro', () => {
-    expect(formatCents(100_000)).toBe('€1,000.00');
-    expect(formatCents(5)).toBe('€0.05');
+  it('formats en-US dollars', () => {
+    expect(formatCents(100_000)).toBe('$1,000.00');
+    expect(formatCents(5)).toBe('$0.05');
   });
 
   it('computes win multiples of the bet', () => {

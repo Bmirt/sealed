@@ -6,7 +6,7 @@
  * Tuning notes (see README § Maths):
  *  - lows stacked in blocks (3 on reel 1, 2 on reels 2–3) lower hit frequency and raise ways-per-hit
  *  - base scatter counts set feature frequency (≈ 1 in 240); free scatter counts set the retrigger rate (≈ 1 in 100 / spin)
- *  - free strips are deliberately "hot": more highs, more wilds, fewer lows — a bought feature returns ≈ 97× bet
+ *  - free strips are deliberately "hot": more highs, more wilds, fewer lows - a bought feature returns ≈ 97× bet
  *  - high-symbol pays drive ~90 % of feature value, so tune base RTP with the low/mid paytable, not the highs
  */
 import type { StripRecipe } from './lib/strip-builder';

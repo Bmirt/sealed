@@ -1,0 +1,7 @@
+node_modules/
+dist/
+test-results/
+artifacts/*
+!artifacts/*.md
+*.log
+.DS_Store

@@ -1,5 +1,5 @@
 /**
- * pnpm golden:update — regenerate tests/golden/outcomes.json from the current config.
+ * pnpm golden:update - regenerate tests/golden/outcomes.json from the current config.
  * Run ONLY after an intentional maths change (and bump config.version first). Review the diff.
  */
 import { writeFileSync } from 'node:fs';

@@ -3,7 +3,7 @@ import { FIXED_TIMING } from '@config/speeds';
 import type { SpeedProfile } from '@config/speeds';
 import { landingPosition } from '../reelMath';
 
-/** What the spin animation needs from a reel — ReelView satisfies this; tests use fakes. */
+/** What the spin animation needs from a reel - ReelView satisfies this; tests use fakes. */
 export interface SpinnableReel {
   readonly stripLength: number;
   getPos(): number;

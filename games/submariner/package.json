@@ -1,0 +1,29 @@
+{
+  "name": "submariner",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Submariner: a crash game. The sub dives, the multiplier climbs, cash out before the hull implodes.",
+  "scripts": {
+    "dev": "vite --port 5175",
+    "build": "tsc --noEmit -p tsconfig.json && vite build",
+    "preview": "vite preview --port 4175",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "audio": "node scripts/generate-audio.mjs",
+    "inspect:canvas": "node scripts/inspect-threejs-canvas.mjs"
+  },
+  "dependencies": {
+    "lil-gui": "^0.21.0",
+    "three": "^0.184.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "@types/three": "^0.184.1",
+    "pngjs": "^7.0.0",
+    "playwright-core": "^1.62.1",
+    "typescript": "^5.9.3",
+    "vite": "^8.2.2",
+    "vitest": "^4.1.11"
+  }
+}

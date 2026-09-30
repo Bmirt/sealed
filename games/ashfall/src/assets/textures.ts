@@ -8,7 +8,7 @@ export const SYMBOL_IDS: readonly SymbolId[] = ['H1', 'H2', 'H3', 'M1', 'M2', 'L
 
 /**
  * Bakes every visual in the manifest into a GPU texture once at boot.
- * Reels render plain Sprites from these — no live Graphics, no filters in the spin loop.
+ * Reels render plain Sprites from these - no live Graphics, no filters in the spin loop.
  */
 export class TextureBank {
   private readonly symbols = new Map<SymbolId, Texture>();

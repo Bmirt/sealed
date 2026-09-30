@@ -7,7 +7,7 @@ const SAMPLE_RATE = 22050;
 
 /**
  * All playback runs through Howler; every sound is synthesised offline at boot into a WAV blob
- * (see assets/sfx/recipes.ts — the audio half of the asset manifest).
+ * (see assets/sfx/recipes.ts - the audio half of the asset manifest).
  *
  * Channels: one-shots fire and forget; named loops (music, ambient, drone, roll-up) are managed
  * so they can crossfade, duck and stop cleanly.
@@ -109,7 +109,7 @@ export class AudioEngine {
     h.fade(h.volume() as number, on ? base * 0.25 : base, 350);
   }
 
-  // ---- roll-up (rate ramps with elapsed time — no total needed) ----
+  // ---- roll-up (rate ramps with elapsed time - no total needed) ----
 
   rollupStart(): void {
     if (this.rollupPlaying) return;

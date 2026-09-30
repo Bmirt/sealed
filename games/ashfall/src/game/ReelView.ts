@@ -14,7 +14,7 @@ const VIEWS = ROWS + BUFFER_ABOVE + BUFFER_BELOW;
  * One reel. Shows a window of its strip at a continuous position `pos` (in symbol units).
  * Symbol with strip index j is drawn at y = (j − pos) · SYMBOL_H, so decreasing `pos` moves the
  * symbols DOWN (the spin direction). At rest, pos === the maths stop index and the visible window
- * is strip[stop], strip[stop+1], strip[stop+2] — exactly what the maths evaluated.
+ * is strip[stop], strip[stop+1], strip[stop+2] - exactly what the maths evaluated.
  */
 export class ReelView extends Container {
   readonly reelIndex: number;
@@ -68,7 +68,7 @@ export class ReelView extends Container {
     this.render();
   }
 
-  /** The symbol view currently showing a visible row (0..2) — for win highlighting. */
+  /** The symbol view currently showing a visible row (0..2) - for win highlighting. */
   viewAtRow(row: number): SymbolView {
     const v = this.views[row + BUFFER_ABOVE];
     if (!v) throw new Error(`row ${row} out of range`);

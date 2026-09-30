@@ -1,7 +1,7 @@
 import { FIXED_TIMING, rollupTime } from '@config/speeds';
 import type { SpeedProfile, WinTierDef } from '@config/speeds';
 
-/** A tweenable win-animation target — SymbolView satisfies this; tests use fakes. */
+/** A tweenable win-animation target - SymbolView satisfies this; tests use fakes. */
 export interface PulseTarget {
   /** Gentle scale pulse (idle win cycle). */
   setPulse(scale: number): void;
@@ -90,12 +90,12 @@ export interface TierSurface {
   readonly counter: CounterLike;
   shake(intensity: number): void;
   burst(strength: number): void;
-  /** 0..1 progress of the roll-up — drives counter scale/pitch ramps. */
+  /** 0..1 progress of the roll-up - drives counter scale/pitch ramps. */
   setRollProgress(p: number): void;
 }
 
 /**
- * Big/Mega/Epic/Legendary — the roll-up half. Fixed length per tier, independent of turbo.
+ * Big/Mega/Epic/Legendary - the roll-up half. Fixed length per tier, independent of turbo.
  * End state: overlay visible, counter at the full amount. (The hold/dismiss is a separate
  * presentation so a first skip snaps the counter and a second skip dismisses.)
  */

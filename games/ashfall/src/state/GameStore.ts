@@ -45,7 +45,7 @@ export class LocalStoragePersistence implements Persistence {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch {
-      /* storage may be unavailable (private mode) — the game still works */
+      /* storage may be unavailable (private mode) - the game still works */
     }
   }
 }

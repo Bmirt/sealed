@@ -1,9 +1,9 @@
 /**
- * Asset manifest — the ONLY place the game looks up art and sound.
+ * Asset manifest - the ONLY place the game looks up art and sound.
  *
  * Every entry is either `procedural` (drawn with Pixi Graphics / synthesised with Web Audio at boot)
  * or a file reference. To drop in real art later, change the entry to `{ kind: 'texture', url }`
- * (or `{ kind: 'file', url }` for audio) — nothing in src/game or src/state needs to change.
+ * (or `{ kind: 'file', url }` for audio) - nothing in src/game or src/state needs to change.
  */
 import type { Graphics } from 'pixi.js';
 import type { SymbolId } from '@math/types';
@@ -31,7 +31,7 @@ export interface TextureVisual {
 export type VisualAsset = ProceduralVisual | TextureVisual;
 
 /**
- * Symbols are floating emblems (bold outline, layered shading, baked drop shadow) — no tile
+ * Symbols are floating emblems (bold outline, layered shading, baked drop shadow) - no tile
  * backing; the reel well draws the cell slots. `scale` fits each emblem's art box to the cell.
  */
 function symbol(art: (g: Graphics) => void, scale = 1): ProceduralVisual {

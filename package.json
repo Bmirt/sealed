@@ -1,30 +1,17 @@
 {
   "name": "sealed",
   "private": true,
-  "version": "0.1.0",
-  "description": "SEALED \u2014 provably fair casino demo: seed commitments, reveals and round Merkle roots on Solana localnet.",
+  "version": "0.2.0",
+  "description": "SEALED: three browser casino games (Dice, the Ashfall Dynasty slot and the Submariner crash game) behind one game lobby. Play money only.",
   "scripts": {
-    "dev": "bash scripts/dev.sh",
-    "dev:devnet": "CLUSTER=devnet bash scripts/dev.sh",
-    "server": "pnpm --filter server dev",
+    "dev": "pnpm --parallel --filter web --filter ashfall --filter submariner dev",
     "web": "pnpm --filter web dev",
-    "watchdog": "pnpm --filter watchdog dev",
-    "seed": "pnpm --filter scripts seed",
-    "test:server": "pnpm --filter server test",
-    "test:anchor": "anchor test",
+    "ashfall": "pnpm --filter ashfall dev",
+    "test": "pnpm --filter ashfall --filter submariner test",
     "typecheck": "pnpm -r typecheck",
     "build": "pnpm build:site",
-    "build:site": "pnpm --filter web build && pnpm --filter ashfall build && node scripts/build-site.mjs"
-  },
-  "devDependencies": {
-    "@coral-xyz/anchor": "^0.31.1",
-    "@solana/web3.js": "^1.98.0",
-    "@types/chai": "^4.3.20",
-    "@types/mocha": "^10.0.10",
-    "chai": "^4.5.0",
-    "mocha": "^10.8.2",
-    "ts-mocha": "^10.1.0",
-    "typescript": "^5.9.3"
+    "build:site": "pnpm --filter web build && pnpm --filter ashfall build && pnpm --filter submariner build && node scripts/build-site.mjs",
+    "submariner": "pnpm --filter submariner dev"
   },
   "packageManager": "pnpm@11.23.0",
   "engines": {

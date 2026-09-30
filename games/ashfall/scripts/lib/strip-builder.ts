@@ -1,9 +1,9 @@
 /**
  * Deterministic reel-strip builder used by `pnpm strips:gen`.
- * Never used at runtime — the generated arrays are committed to src/config/strips.ts.
+ * Never used at runtime - the generated arrays are committed to src/config/strips.ts.
  *
  * Symbols are placed as "units": a unit is a run of `blocks[id]` identical symbols (default 1).
- * Stacking lows in blocks lowers hit frequency while raising the ways count when they do hit —
+ * Stacking lows in blocks lowers hit frequency while raising the ways count when they do hit -
  * the main volatility lever. Units are shuffled, then a repair loop swaps units until every
  * placement rule holds.
  */
@@ -140,7 +140,7 @@ export function buildStrip(
     if (i === undefined) break;
     swap(i, rng.nextInt(units.length));
   }
-  throw new Error(`reel ${reelIndex}: could not satisfy strip rules — relax the constraints or change counts`);
+  throw new Error(`reel ${reelIndex}: could not satisfy strip rules - relax the constraints or change counts`);
 }
 
 export function buildStripSet(recipe: StripRecipe, symbols: Readonly<Record<SymbolId, SymbolMeta>>): SymbolCode[][] {

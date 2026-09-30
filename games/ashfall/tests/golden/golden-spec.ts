@@ -15,7 +15,7 @@ export interface GoldenCase {
 export interface GoldenFile {
   readonly configVersion: string;
   readonly cases: readonly { readonly id: string; readonly outcome: SpinOutcome }[];
-  /** FNV-1a digest over a long run of outcomes — cheap drift detection without huge fixtures. */
+  /** FNV-1a digest over a long run of outcomes - cheap drift detection without huge fixtures. */
   readonly digest: { readonly seed: string; readonly spins: number; readonly value: string };
 }
 
