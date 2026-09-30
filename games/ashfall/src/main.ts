@@ -12,7 +12,7 @@ import { ParticleSystem } from './game/Particles';
 import { SpinFlow } from './game/SpinFlow';
 import { Autoplay } from './state/Autoplay';
 import { GameController } from './state/GameController';
-import { GameStore, LocalStoragePersistence } from './state/GameStore';
+import { BrowserPersistence, GameStore } from './state/GameStore';
 import { formatCents } from './state/money';
 import { openAutoplayModal } from './ui/AutoplayModal';
 import { openBuyModal } from './ui/BuyBonusModal';
@@ -34,7 +34,7 @@ async function boot(): Promise<void> {
   const uiHost = document.getElementById('ui');
   if (!stageHost || !uiHost) throw new Error('missing #stage / #ui');
 
-  const store = new GameStore(GAME_CONFIG, new LocalStoragePersistence());
+  const store = new GameStore(GAME_CONFIG, new BrowserPersistence());
   const scene = await GameScene.create({
     host: stageHost,
     config: GAME_CONFIG,

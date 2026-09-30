@@ -33,6 +33,7 @@ export type SoundId =
   | 'fanfare'
   | 'roar'
   | 'igniteHit'
+  | 'fireBreath'
   | 'stingerIntro'
   | 'retriggerArp'
   | 'meterStep'
@@ -180,6 +181,21 @@ export const SOUNDS: Readonly<Record<SoundId, SoundAsset>> = {
       drum(ctx, ctx.destination, 0, 150, 110, 0.5, 1.1);
       whoosh(ctx, ctx.destination, 0, 0.7, 400, 3200, 0.7, 66);
       bell(ctx, ctx.destination, 0.05, 440, 0.9, 0.4);
+    },
+  },
+
+  fireBreath: {
+    kind: 'synth',
+    duration: 1.5,
+    volume: 0.85,
+    render: (ctx) => {
+      // The jet: broadband roar swept down as the stream lengthens, plus a second darker layer.
+      whoosh(ctx, ctx.destination, 0, 1.35, 2600, 700, 0.9, 311);
+      whoosh(ctx, ctx.destination, 0.04, 1.3, 900, 260, 0.7, 733);
+      // Crackle: short noise clacks scattered through the burn.
+      for (let i = 0; i < 16; i++) clack(ctx, ctx.destination, 0.08 + i * 0.075 + (i % 3) * 0.013, 1800 + (i % 5) * 420, 0.05, 0.35, 90 + i);
+      // Body: a low rumble under the jet so it has weight on big speakers.
+      drum(ctx, ctx.destination, 0, 90, 55, 1.2, 0.45);
     },
   },
 

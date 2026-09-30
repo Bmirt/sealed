@@ -21,8 +21,9 @@ Opening the site shows the lobby: one card per game. Clicking a card opens that 
 Dice audio is synthesized live with the Web Audio API (`web/src/audio/`: sound effects and a soft lounge
 music loop, no audio files); "Sound on/off" and "Music on/off" sit above the dice, and M toggles sound.
 
-Every game keeps its own play-money balance in the browser's `localStorage` (each starts at
-$1,000.00 and can be refilled).
+Every game keeps its own play-money balance in the tab's `sessionStorage`: it survives a reload,
+but closing the tab resets it to $1,000.00 (each game can also be refilled). Preferences such as
+sound, stake and bet size stay in `localStorage`.
 
 ## Develop
 

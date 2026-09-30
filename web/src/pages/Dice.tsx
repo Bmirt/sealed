@@ -22,17 +22,20 @@ const signed = (cents: number): string => `${cents > 0 ? "+" : cents < 0 ? "−"
 const toCents = (text: string): number => Math.round(Number(text.replace(/[$,\s]/g, "")) * 100);
 const easeOutQuint = (t: number): number => 1 - Math.pow(1 - t, 5);
 
+// The balance lives in sessionStorage: it survives a reload, but closing the tab resets it.
 function readNumber(key: string, fallback: number): number {
   try {
-    const v = Number(localStorage.getItem(key));
-    return localStorage.getItem(key) !== null && Number.isFinite(v) ? v : fallback;
+    localStorage.removeItem(key); // older versions kept the balance across visits
+    const raw = sessionStorage.getItem(key);
+    const v = Number(raw);
+    return raw !== null && Number.isFinite(v) ? v : fallback;
   } catch {
     return fallback;
   }
 }
 function write(key: string, value: string): void {
   try {
-    localStorage.setItem(key, value);
+    sessionStorage.setItem(key, value);
   } catch {
     /* private mode: the session still works, it just isn't remembered */
   }

@@ -24,10 +24,12 @@ const secureRandom = (): number => {
   return (buf[0] ?? 0) / 0x1_0000_0000;
 };
 
+/** The balance lives in sessionStorage: it survives a reload, but closing the tab resets it. */
 const balanceStore = {
   load(): number | null {
     try {
-      const v = localStorage.getItem('submariner.balance');
+      localStorage.removeItem('submariner.balance'); // older versions kept it across visits
+      const v = sessionStorage.getItem('submariner.balance');
       return v === null ? null : Number(v);
     } catch {
       return null;
@@ -35,7 +37,7 @@ const balanceStore = {
   },
   save(cents: number): void {
     try {
-      localStorage.setItem('submariner.balance', String(cents));
+      sessionStorage.setItem('submariner.balance', String(cents));
     } catch {
       /* private mode */
     }

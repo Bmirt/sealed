@@ -1,7 +1,6 @@
-import { Container, Rectangle, Sprite } from 'pixi.js';
-import type { Renderer, Texture, Ticker } from 'pixi.js';
-import { Graphics } from 'pixi.js';
-import { drawFlybyDragon } from '@/assets/procedural/dragons';
+import type { Renderer, Ticker } from 'pixi.js';
+import { bakeElderDragon } from '@/assets/procedural/elderDragon';
+import { DragonRig } from './DragonRig';
 import type { GameScene } from './GameScene';
 import type { ParticleSystem } from './Particles';
 import { PerfGovernor } from './perf';
@@ -20,7 +19,7 @@ export class AmbientLife {
   private readonly scene: GameScene;
   private readonly particles: ParticleSystem;
   readonly governor = new PerfGovernor();
-  private readonly skyDragon: Sprite;
+  private readonly skyDragon: DragonRig;
   private dragonT = -1; // -1 = grounded
   private nextFlight = 12; // seconds until the next pass
   private flightSeed = 2718;
@@ -31,8 +30,8 @@ export class AmbientLife {
   constructor(scene: GameScene, particles: ParticleSystem, renderer: Renderer) {
     this.scene = scene;
     this.particles = particles;
-    this.skyDragon = new Sprite(bakeSilhouette(renderer));
-    this.skyDragon.anchor.set(0.5);
+    // The same rigged Elder Dragon as the buy-bonus cinematic, far away: a dark flapping silhouette.
+    this.skyDragon = new DragonRig(bakeElderDragon(renderer));
     this.skyDragon.visible = false;
     this.skyDragon.tint = 0x14090c;
     this.skyDragon.alpha = 0.85;
@@ -85,7 +84,7 @@ export class AmbientLife {
         if (this.nextFlight <= 0) {
           this.dragonT = 0;
           this.skyDragon.visible = true;
-          this.skyDragon.scale.set(0.16 + this.rand() * 0.1);
+          this.skyDragon.scale.set(0.09 + this.rand() * 0.06);
           this.flightY = 90 + this.rand() * 160;
           this.flightDir = this.rand() > 0.4 ? 1 : -1;
           this.flightSpeed = 0.028 + this.rand() * 0.02;
@@ -98,6 +97,7 @@ export class AmbientLife {
         // Track the backdrop's transform so the sprite sits in sky-space.
         const s = this.scene.backdropScale;
         this.skyDragon.position.set(bg.root.x + x * s, bg.root.y + (this.flightY + Math.sin(this.dragonT * 14) * 16) * s);
+        this.skyDragon.pose({ time: this.time, flap: (this.time * 1.3) % 1, headPitch: 0.1, jaw: 0, throat: 0 });
         if (this.dragonT >= 1) {
           this.dragonT = -1;
           this.skyDragon.visible = false;
@@ -119,15 +119,4 @@ export class AmbientLife {
     this.scene.app.ticker.remove(this.tick);
     this.skyDragon.destroy();
   }
-}
-
-function bakeSilhouette(renderer: Renderer): Texture {
-  const g = new Graphics();
-  drawFlybyDragon(g);
-  g.position.set(115, 80);
-  const wrap = new Container();
-  wrap.addChild(g);
-  const tex = renderer.generateTexture({ target: wrap, frame: new Rectangle(0, 0, 230, 160), resolution: 1 });
-  wrap.destroy({ children: true });
-  return tex;
 }

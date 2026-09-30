@@ -28,22 +28,32 @@ export interface Persistence {
 }
 
 export const STORAGE_KEY = 'ashfall-dynasty.v1';
+export const BALANCE_KEY = 'ashfall-dynasty.balance';
 export const STARTING_BALANCE_CENTS = 100_000;
 
-export class LocalStoragePersistence implements Persistence {
+/**
+ * Browser persistence. The balance lives in sessionStorage, so it survives a reload but a closed
+ * tab starts again from the default; preferences (bet, turbo, sound, RNG seed/nonce) stay in
+ * localStorage across visits.
+ */
+export class BrowserPersistence implements Persistence {
   load(): Partial<PersistedState> | null {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return null;
-      const parsed: unknown = JSON.parse(raw);
-      return typeof parsed === 'object' && parsed !== null ? (parsed as Partial<PersistedState>) : null;
+      const parsed: unknown = raw ? JSON.parse(raw) : {};
+      const prefs = typeof parsed === 'object' && parsed !== null ? { ...(parsed as Partial<PersistedState>) } : {};
+      delete prefs.balanceCents; // older versions kept the balance here
+      const balance = sessionStorage.getItem(BALANCE_KEY);
+      return balance === null ? prefs : { ...prefs, balanceCents: Number(balance) };
     } catch {
       return null;
     }
   }
   save(state: PersistedState): void {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      const { balanceCents, ...prefs } = state;
+      sessionStorage.setItem(BALANCE_KEY, String(balanceCents));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs));
     } catch {
       /* storage may be unavailable (private mode) - the game still works */
     }
