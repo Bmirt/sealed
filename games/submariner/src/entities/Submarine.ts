@@ -7,7 +7,7 @@ import { canvasTexture, glowTexture, type Materials } from '../world/palette';
  * searchlights, rivets and decals) so the silhouette reads as a submarine before any lighting.
  *
  * States: idle bob at the surface, dive (nose-down pitch, fast prop, searchlight), stress
- * (warning lamp blinks faster and the hull trembles with depth), implode (crush then hide).
+ * (warning lamp blinks faster with depth), implode (crush then hide).
  */
 export class Submarine {
   readonly root = new THREE.Group();
@@ -28,7 +28,6 @@ export class Submarine {
   readonly hatch = new THREE.Object3D();
   private propSpeed = 0.6;
   private crush = 0;
-  private time = 0;
 
   constructor(m: Materials) {
     this.root.name = 'submarine';
@@ -341,7 +340,6 @@ export class Submarine {
    * @param dark       0..1 how dark the water is (searchlight strength)
    */
   update(delta: number, elapsed: number, diving: boolean, stress: number, dark: number): void {
-    this.time = elapsed;
     const targetProp = diving ? 22 : 3;
     this.propSpeed += (targetProp - this.propSpeed) * Math.min(1, delta * 2);
     this.prop.rotation.x += this.propSpeed * delta;
@@ -352,10 +350,10 @@ export class Submarine {
     this.body.rotation.z += (pitchTarget - this.body.rotation.z) * Math.min(1, delta * 1.5);
     this.body.rotation.x = Math.sin(elapsed * 0.7) * 0.025;
     this.body.position.y = Math.sin(elapsed * 1.3) * bob;
-    // Tremble under pressure (visual only; it says nothing about when the hull gives).
-    const tremble = stress * stress * 0.025;
-    this.body.position.x = Math.sin(elapsed * 61) * tremble;
-    this.body.position.z = Math.cos(elapsed * 47) * tremble;
+    // Pressure shows through the warning lamp and the hull creaks, never through jitter: the
+    // hull stays steady so the view never shakes.
+    this.body.position.x = 0;
+    this.body.position.z = 0;
     this.lightRig.position.copy(this.body.position);
     this.lightRig.rotation.copy(this.body.rotation);
 
@@ -377,9 +375,13 @@ export class Submarine {
     const p = Math.min(1, progress);
     const squeeze = 1 - p * 0.75;
     this.body.scale.set(1 - p * 0.35, squeeze, squeeze);
-    this.body.position.x = Math.sin(this.time * 90) * 0.06 * (1 - p);
     this.body.visible = p < 1;
     this.searchlight.intensity *= 1 - p;
+  }
+
+  /** Horizontal offset of the hull from its anchor (0 when steady). */
+  get bodyOffsetX(): number {
+    return this.body.position.x;
   }
 
   get crushed(): boolean {

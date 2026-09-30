@@ -8,6 +8,8 @@ interface ThreeGameDiagnostics {
   depth: number;
   balanceCents: number;
   round: number;
+  /** Camera position and roll, and the hull's horizontal offset (steadiness checks). */
+  camera?: { x: number; y: number; roll: number; subX: number };
   /** CPU ms of the last frame's simulation and render calls. */
   timing?: { update: number; render: number };
   renderer: {

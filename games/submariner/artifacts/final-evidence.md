@@ -98,3 +98,9 @@ Both reported problems were reproduced first, then fixed and re-measured.
 - `renderer.info` timing fields (`timing.update`, `timing.render`) in the diagnostics.
 
 Evidence: manifest run `pass-8`, 11/11 captures PASS within budget; `check_evidence.py` passed (15 artifacts); production playtest: every check PASS, no errors.
+
+## Steady view, 2026-10-01
+Report: the scene "from time to time" moved fast left-right-left-right. Measured per frame (camera x, camera roll, hull offset) through a deep dive and a dive into an implosion:
+- Before: implosion camera shake stepped up to 0.36 units per frame with 20 direction reversals in 3 s and up to 2.84° roll; the hull jittered at ~60 Hz at depth and 90 Hz while crushing; the camera swayed during dives.
+- Fix: no camera shake, sway or roll; the camera shares the sub's x so it only pitches; no hull jitter (pressure shows through the warning lamp and creaks). The sub keeps its gentle bob and pitch, and the scene stays fully 3D.
+- After: camera horizontal step 0, direction reversals 0, roll 0° (range 0°), hull offset 0, in both runs.

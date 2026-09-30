@@ -265,7 +265,6 @@ export class Game {
       if (!this.imploded && this.implodeT >= IMPLODE_CRUSH * 0.7) {
         this.imploded = true;
         this.vfx.implode(this.sub.root.position);
-        this.cameraRig.addTrauma(0.95);
       }
     }
     this.sub.update(delta, t, diving, stress, this.look.dark);
@@ -283,7 +282,7 @@ export class Game {
     this.creatures.update(t, this.camera.position.y);
     this.cameraRig.reducedMotion = this.reducedMotion;
     this.cameraRig.screenY = this.hud.subScreenY;
-    this.cameraRig.update(delta, this.sub.root.position, diving);
+    this.cameraRig.update(delta, this.sub.root.position);
 
     // audio beds and tension
     this.audio.loop('ambience-loop', 0.7);
@@ -499,6 +498,7 @@ export class Game {
       depth: this.renderDepth,
       balanceCents: this.state.balanceCents,
       round: this.state.round,
+      camera: { x: this.camera.position.x, y: this.camera.position.y, roll: this.camera.rotation.z, subX: this.sub.root.position.x + this.sub.bodyOffsetX },
       renderer: {
         calls: info.render.calls,
         triangles: info.render.triangles,
